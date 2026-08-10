@@ -3,8 +3,8 @@
 <head>
     @php
         $siteName = config('app.name', 'PT JASA IBNU DEVELOPMENT');
-        $title = trim($__env->yieldContent('title', $siteName));
-        $description = trim($__env->yieldContent('meta_description', 'IT Solutions, Software Development, SaaS, and AI Integration for better business.'));
+        $title = html_entity_decode(trim($__env->yieldContent('title', $siteName)), ENT_QUOTES, 'UTF-8');
+        $description = html_entity_decode(trim($__env->yieldContent('meta_description', 'IT Solutions, Software Development, SaaS, and AI Integration for better business.')), ENT_QUOTES, 'UTF-8');
         $canonical = trim($__env->yieldContent('canonical', url()->current()));
         $robots = trim($__env->yieldContent('robots', 'index,follow'));
         $ogType = trim($__env->yieldContent('og_type', 'website'));
@@ -32,8 +32,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
+    @include('partials.header')
+
     <main>
         @yield('content')
     </main>
+
+    @include('partials.footer')
 </body>
 </html>
