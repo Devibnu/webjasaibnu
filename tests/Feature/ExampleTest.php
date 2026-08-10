@@ -41,7 +41,7 @@ class ExampleTest extends TestCase
         $this->withoutVite();
 
         $pages = [
-            route('services.index') => 'Solusi IT untuk Kebutuhan Bisnis Anda',
+            route('services.index') => 'Layanan Digital untuk Membangun dan Mengembangkan Bisnis Anda',
             route('solutions.index') => 'Technology Solutions for Modern Business',
             route('portfolio.index') => 'Selected Work',
             route('insights.index') => 'Insights untuk Bisnis Digital Modern',
