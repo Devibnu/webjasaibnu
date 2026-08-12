@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     @php
-        $siteName = config('app.name', 'PT JASA IBNU DEVELOPMENT');
+        $siteName = $siteSettings->company_legal_name ?? config('app.name', 'PT JASA IBNU DEVELOPMENT');
         $title = html_entity_decode(trim($__env->yieldContent('title', $siteName)), ENT_QUOTES, 'UTF-8');
         $description = html_entity_decode(trim($__env->yieldContent('meta_description', 'IT Solutions, Software Development, SaaS, and AI Integration for better business.')), ENT_QUOTES, 'UTF-8');
         $canonical = trim($__env->yieldContent('canonical', url()->current()));
@@ -30,8 +30,9 @@
     <title>{{ $title }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('head')
 </head>
-<body>
+<body class="@yield('body_class')">
     @include('partials.header')
 
     <main>
@@ -39,5 +40,6 @@
     </main>
 
     @include('partials.footer')
+    @stack('scripts')
 </body>
 </html>

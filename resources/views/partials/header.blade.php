@@ -10,13 +10,154 @@
     ];
 @endphp
 
+@if (request()->routeIs('home') || request()->routeIs('services.index') || request()->routeIs('solutions.index') || request()->routeIs('portfolio.index') || request()->routeIs('insights.*') || request()->routeIs('about') || request()->routeIs('contact'))
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="container-fluid bg-dark px-5 d-none d-lg-block">
+        <div class="row gx-0">
+            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <small class="me-3 text-light"><span class="ji-topbar-icon me-2">⌖</span>{{ $siteSettings->contactAddress() }}</small>
+                    <small class="me-3 text-light"><span class="ji-topbar-icon me-2">☎</span>{{ $siteSettings->phone }}</small>
+                    <small class="text-light"><span class="ji-topbar-icon me-2">✉</span>{{ $siteSettings->email }}</small>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    @foreach ($siteSettings->socialLinks() as $social)
+                        @if ($social['value'])
+                            <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="{{ $social['value'] }}" aria-label="{{ $social['label'] }}"><span aria-hidden="true">{{ $social['text'] }}</span></a>
+                        @endif
+                    @endforeach
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle" href="{{ route('contact') }}" aria-label="Contact"><span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid position-relative p-0 startup-inner-shell">
+        <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+            <a href="{{ route('home') }}" class="navbar-brand p-0">
+                <h1 class="m-0"><span class="ji-brand-icon me-2">JI</span>{{ $siteSettings->company_name }}</h1>
+                <small>{{ $siteSettings->company_legal_name }}</small>
+            </a>
+            <button class="navbar-toggler" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" data-startup-nav-toggle>
+                <span class="ji-bars">☰</span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse" data-startup-nav>
+                <div class="navbar-nav ms-auto py-0">
+                    @foreach ($navigation as $item)
+                        <a href="{{ route($item['route']) }}" class="nav-item nav-link @if (request()->routeIs($item['route']) || ($item['route'] === 'services.index' && request()->routeIs('services.*')) || ($item['route'] === 'solutions.index' && request()->routeIs('solutions.*')) || ($item['route'] === 'portfolio.index' && request()->routeIs('portfolio.*')) || ($item['route'] === 'insights.index' && request()->routeIs('insights.*'))) active @endif">{{ $item['label'] }}</a>
+                    @endforeach
+                </div>
+                <a href="{{ route('contact') }}" class="btn btn-primary py-2 px-4 ms-3 nav-contact">Konsultasi Gratis</a>
+            </div>
+        </nav>
+
+        @if (request()->routeIs('services.index'))
+            <section class="services-page-hero" aria-labelledby="services-page-title">
+                <div class="services-page-hero-content">
+                    <h1 id="services-page-title">Services</h1>
+                    <nav aria-label="Breadcrumb">
+                        <ol class="services-breadcrumb">
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li aria-hidden="true"><span>○</span></li>
+                            <li><a href="{{ route('services.index') }}" aria-current="page">Services</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </section>
+        @elseif (request()->routeIs('solutions.index'))
+            <section class="solutions-page-hero" aria-labelledby="solutions-page-title">
+                <div class="solutions-page-hero-content">
+                    <h1 id="solutions-page-title">Solutions</h1>
+                    <nav aria-label="Breadcrumb">
+                        <ol class="solutions-breadcrumb">
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li aria-hidden="true"><span>○</span></li>
+                            <li><a href="{{ route('solutions.index') }}" aria-current="page">Solutions</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </section>
+        @elseif (request()->routeIs('portfolio.index'))
+            <section class="portfolio-page-hero" aria-labelledby="portfolio-page-title">
+                <div class="portfolio-page-hero-content">
+                    <h1 id="portfolio-page-title">Portfolio</h1>
+                    <nav aria-label="Breadcrumb">
+                        <ol class="portfolio-breadcrumb">
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li aria-hidden="true"><span>○</span></li>
+                            <li><a href="{{ route('portfolio.index') }}" aria-current="page">Portfolio</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </section>
+        @elseif (request()->routeIs('insights.index'))
+            <section class="insights-page-hero" aria-labelledby="insights-page-title">
+                <div class="insights-page-hero-content">
+                    <h1 id="insights-page-title">Insights</h1>
+                    <nav aria-label="Breadcrumb">
+                        <ol class="insights-breadcrumb">
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li aria-hidden="true"><span>○</span></li>
+                            <li><a href="{{ route('insights.index') }}" aria-current="page">Insights</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </section>
+        @elseif (request()->routeIs('insights.show'))
+            <section class="insights-page-hero" aria-labelledby="insights-page-title">
+                <div class="insights-page-hero-content">
+                    <h1 id="insights-page-title">Insight Detail</h1>
+                    <nav aria-label="Breadcrumb">
+                        <ol class="insights-breadcrumb">
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li aria-hidden="true"><span>○</span></li>
+                            <li><a href="{{ route('insights.index') }}">Insights</a></li>
+                            <li aria-hidden="true"><span>○</span></li>
+                            <li><span aria-current="page">Detail</span></li>
+                        </ol>
+                    </nav>
+                </div>
+            </section>
+        @elseif (request()->routeIs('about'))
+            <section class="about-page-hero" aria-labelledby="about-page-title">
+                <div class="about-page-hero-content">
+                    <h1 id="about-page-title">About Us</h1>
+                    <nav aria-label="Breadcrumb">
+                        <ol class="about-breadcrumb">
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li aria-hidden="true"><span>○</span></li>
+                            <li><a href="{{ route('about') }}" aria-current="page">About Us</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </section>
+        @elseif (request()->routeIs('contact'))
+            <section class="contact-page-hero" aria-labelledby="contact-page-title">
+                <div class="contact-page-hero-content">
+                    <h1 id="contact-page-title">Contact Us</h1>
+                    <nav aria-label="Breadcrumb">
+                        <ol class="contact-breadcrumb">
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li aria-hidden="true"><span>○</span></li>
+                            <li><a href="{{ route('contact') }}" aria-current="page">Contact Us</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </section>
+        @endif
+    </div>
+@else
 <header class="site-header" data-site-header>
     <div class="container header-inner">
-        <a class="brand" href="{{ route('home') }}" aria-label="PT JASA IBNU DEVELOPMENT home">
+        <a class="brand" href="{{ route('home') }}" aria-label="{{ $siteSettings->company_legal_name }} home">
             <span class="brand-mark" aria-hidden="true">JI</span>
             <span class="brand-text">
-                <strong>JASAIBNU</strong>
-                <span>PT JASA IBNU DEVELOPMENT</span>
+                <strong>{{ $siteSettings->company_name }}</strong>
+                <span>{{ $siteSettings->company_legal_name }}</span>
             </span>
         </a>
 
@@ -34,3 +175,4 @@
         </nav>
     </div>
 </header>
+@endif

@@ -1,125 +1,196 @@
 @extends('layouts.app')
 
-@section('title', 'Layanan Digital JASAIBNU — Website, SEO, Software, SaaS & AI')
-@section('meta_description', 'Layanan PT JASA IBNU DEVELOPMENT untuk website development, SEO services, web application, mobile application, SaaS development, dan AI integration yang scalable, aman, dan siap dikembangkan.')
+@section('title', 'Services | PT JASA IBNU DEVELOPMENT')
+@section('meta_description', 'Layanan PT JASA IBNU DEVELOPMENT untuk website development, SEO services, web application, mobile application, SaaS development, dan AI integration.')
+@section('body_class', 'services-page startup2-home')
+
+@push('head')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('assets/startup2/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/startup2/css/style.css') }}" rel="stylesheet">
+    <style>
+        .startup2-home {
+            font-family: "Rubik", sans-serif;
+            overflow-x: hidden;
+        }
+
+        .startup2-home .navbar-dark .navbar-brand h1 {
+            font-size: 1.9rem;
+            line-height: 1.02;
+            letter-spacing: 0;
+        }
+
+        .startup2-home .navbar-brand small {
+            display: block;
+            margin-top: 2px;
+            color: rgba(255, 255, 255, .72);
+            font-family: "Nunito", sans-serif;
+            font-size: .7rem;
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        .startup2-home .navbar-dark .navbar-nav .nav-link {
+            margin-left: 18px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .startup2-home .navbar .btn {
+            font-size: .9rem;
+            padding: .48rem 1.05rem !important;
+        }
+
+        .startup2-home .sticky-top.navbar-dark .navbar-brand small {
+            color: var(--dark);
+        }
+
+        @media (max-width: 991.98px) {
+            .startup2-home .navbar-dark .navbar-brand small {
+                color: var(--dark);
+            }
+        }
+
+        .startup2-home .ji-brand-icon {
+            display: inline-grid;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            border-radius: 2px;
+            background: var(--primary);
+            color: #fff;
+            font-size: .92rem;
+            vertical-align: middle;
+        }
+
+        .startup2-home .ji-bars,
+        .startup2-home .ji-topbar-icon {
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        @media (max-width: 1199.98px) {
+            .startup2-home .navbar-dark .navbar-brand h1 {
+                font-size: 1.72rem;
+            }
+
+            .startup2-home .navbar-dark .navbar-nav .nav-link {
+                margin-left: 12px;
+                font-size: 13.5px;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .startup2-home .navbar-dark .navbar-brand h1 {
+                font-size: 1.65rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .startup2-home .jasaibnu-startup-footer .container,
+            .startup2-home .jasaibnu-startup-copyright .container {
+                width: min(100% - 28px, 362px);
+                padding-right: 0;
+                padding-left: 0;
+            }
+
+            .startup2-home .jasaibnu-startup-footer .row,
+            .startup2-home .jasaibnu-startup-copyright .row {
+                --bs-gutter-x: 0;
+                margin-right: 0;
+                margin-left: 0;
+            }
+
+            .startup2-home .jasaibnu-startup-footer [class*="col-"],
+            .startup2-home .jasaibnu-startup-copyright [class*="col-"] {
+                min-width: 0;
+                padding-right: 0;
+                padding-left: 0;
+            }
+
+            .startup2-home .jasaibnu-startup-footer .footer-about > div {
+                padding-right: 20px !important;
+                padding-left: 20px !important;
+            }
+
+            .startup2-home .jasaibnu-startup-footer .footer-about p {
+                max-width: 280px;
+                margin-right: auto;
+                margin-left: auto;
+                overflow-wrap: anywhere;
+            }
+
+            .startup2-home .jasaibnu-startup-copyright p {
+                max-width: 260px;
+                margin-right: auto;
+                margin-left: auto;
+                font-size: .92rem;
+                overflow-wrap: anywhere;
+            }
+        }
+    </style>
+@endpush
 
 @section('content')
-    <section class="page-hero page-hero-dark services-hero">
-        <div class="container page-hero-grid">
-            <div>
-                <p class="eyebrow">LAYANAN JASAIBNU</p>
-                <h1>Layanan Digital untuk Membangun dan Mengembangkan Bisnis Anda</h1>
-                <p>JASAIBNU membantu bisnis membangun website, aplikasi, SaaS, SEO, dan integrasi AI dengan fondasi teknis yang scalable, aman, dan siap dikembangkan jangka panjang.</p>
-
-                <div class="button-row">
-                    <a class="button button-primary" href="{{ route('contact') }}">Konsultasi Gratis</a>
-                    <a class="button button-ghost" href="{{ route('solutions.index') }}">Lihat Solusi</a>
-                </div>
+    <section class="services-intro" aria-labelledby="services-overview-heading">
+        <div class="services-shell">
+            <div class="services-section-title">
+                <p>LAYANAN KAMI</p>
+                <h1 id="services-overview-heading">Solusi Digital untuk Mendukung Pertumbuhan Bisnis Anda</h1>
             </div>
 
-            <div class="services-hero-panel" aria-label="JASAIBNU service focus">
-                <span>IT Solutions</span>
-                <span>Software Development</span>
-                <span>SaaS</span>
-                <span>AI Integration</span>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-pad services-parent-section" aria-labelledby="services-overview-heading">
-        <div class="container">
-            <div class="section-heading">
-                <p class="section-kicker">Services Overview</p>
-                <h2 id="services-overview-heading">Layanan Utama untuk Fondasi Digital Perusahaan</h2>
-                <p>Setiap layanan dapat dimulai sebagai project terpisah atau digabungkan menjadi sistem digital yang saling terhubung.</p>
-            </div>
-
-            <div class="services-parent-grid">
-                @foreach ([
-                    [
-                        'title' => 'Website Development',
-                        'body' => 'Website perusahaan yang cepat, responsive, SEO-ready, dan dibangun dengan struktur yang mudah dikembangkan.',
-                        'benefits' => ['Corporate profile rapi', 'Struktur SEO lebih siap', 'Performa dan responsive layout'],
-                        'featured' => true,
-                    ],
-                    [
-                        'title' => 'SEO Services',
-                        'body' => 'Optimasi teknis dan struktur konten untuk membantu website lebih mudah dipahami mesin pencari.',
-                        'benefits' => ['Technical SEO foundation', 'On-page structure', 'Content architecture'],
-                    ],
-                    [
-                        'title' => 'Web Application',
-                        'body' => 'Aplikasi web custom untuk merapikan workflow, data, approval, panel operasional, dan proses internal.',
-                        'benefits' => ['Workflow bisnis custom', 'Role dan akses pengguna', 'Data operasional terstruktur'],
-                    ],
-                    [
-                        'title' => 'Mobile Application',
-                        'body' => 'Aplikasi mobile untuk kebutuhan internal, layanan pelanggan, atau operasional lapangan yang membutuhkan akses cepat.',
-                        'benefits' => ['Customer-facing app', 'Internal mobile workflow', 'Integrasi API backend'],
-                    ],
-                    [
-                        'title' => 'SaaS Development',
-                        'body' => 'Pengembangan platform SaaS dengan fondasi produk, akun pengguna, subscription flow, dan roadmap fitur.',
-                        'benefits' => ['Multi-user platform', 'Subscription-ready flow', 'Modular product roadmap'],
-                    ],
-                    [
-                        'title' => 'AI Integration',
-                        'body' => 'Integrasi AI dan automation yang relevan untuk mempercepat pekerjaan, pencarian informasi, dan proses tim.',
-                        'benefits' => ['Automation workflow', 'AI assistant internal', 'Integrasi data dan API'],
-                    ],
-                ] as $service)
-                    <article class="services-parent-card @if (! empty($service['featured'])) services-parent-card-featured @endif">
-                        <div>
-                            <span class="service-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                            <h2>{{ $service['title'] }}</h2>
-                            <p>{{ $service['body'] }}</p>
-                        </div>
-
-                        <ul>
-                            @foreach ($service['benefits'] as $benefit)
-                                <li>{{ $benefit }}</li>
-                            @endforeach
-                        </ul>
-
-                        <a class="text-link" href="{{ route('contact') }}">Diskusikan Layanan Ini</a>
+            <div class="services-grid">
+                @foreach ($services as $service)
+                    <article class="services-card">
+                        <div class="services-card-icon" aria-hidden="true"><span>{{ $service->icon }}</span></div>
+                        <h2>{{ $service->title }}</h2>
+                        <p>{{ $service->description }}</p>
+                        <a class="services-card-link" href="{{ route('contact') }}" aria-label="Diskusikan {{ $service->title }}">
+                            <span aria-hidden="true">→</span>
+                        </a>
                     </article>
                 @endforeach
             </div>
         </div>
     </section>
 
-    <section class="section-pad services-method-section" aria-labelledby="how-we-help-heading">
-        <div class="container">
-            <div class="section-heading">
-                <p class="section-kicker">How We Help</p>
-                <h2 id="how-we-help-heading">Pendekatan Kerja yang Rapi dari Awal sampai Maintenance</h2>
-                <p>JASAIBNU memulai dari kebutuhan bisnis, lalu menerjemahkannya menjadi solusi digital yang realistis, terukur, dan siap dirawat.</p>
+    <section class="services-proof-section" aria-labelledby="services-proof-heading">
+        <div class="services-shell">
+            <div class="services-section-title services-section-title-tight">
+                <p>PENDEKATAN KERJA</p>
+                <h1 id="services-proof-heading">Dari Kebutuhan Bisnis sampai Sistem Siap Dirawat</h1>
             </div>
 
-            <div class="services-method-grid">
+            <div class="services-proof-row" aria-label="Tahapan kerja JASAIBNU">
                 @foreach ([
-                    ['step' => '01', 'title' => 'Discovery kebutuhan bisnis'],
-                    ['step' => '02', 'title' => 'Desain solusi'],
-                    ['step' => '03', 'title' => 'Development'],
-                    ['step' => '04', 'title' => 'Testing'],
-                    ['step' => '05', 'title' => 'Deployment'],
-                    ['step' => '06', 'title' => 'Maintenance'],
+                    ['step' => '01', 'title' => 'Discovery', 'body' => 'Memetakan kebutuhan bisnis, pengguna, target, dan batasan teknis sebelum desain solusi.'],
+                    ['step' => '02', 'title' => 'Development', 'body' => 'Membangun website, aplikasi, SaaS, SEO, atau AI integration dengan fondasi teknis yang rapi.'],
+                    ['step' => '03', 'title' => 'Maintenance', 'body' => 'Menyiapkan testing, deployment, dan perawatan agar sistem tetap stabil setelah rilis.'],
                 ] as $item)
-                    <article class="services-method-item">
-                        <span>{{ $item['step'] }}</span>
-                        <h3>{{ $item['title'] }}</h3>
+                    <article class="services-proof-card">
+                        <div class="services-proof-card-head">
+                            <span class="services-proof-step">{{ $item['step'] }}</span>
+                            <div>
+                                <h2>{{ $item['title'] }}</h2>
+                                <small>JASAIBNU Process</small>
+                            </div>
+                        </div>
+                        <p>{{ $item['body'] }}</p>
                     </article>
                 @endforeach
             </div>
         </div>
     </section>
 
-    <section class="final-cta services-cta" aria-labelledby="services-contact-heading">
-        <div class="container cta-panel">
-            <p class="section-kicker">Consultation</p>
-            <h2 id="services-contact-heading">Butuh Layanan Digital yang Sesuai dengan Kebutuhan Bisnis?</h2>
-            <p>Ceritakan kebutuhan website, aplikasi, SaaS, SEO, integrasi AI, atau sistem internal yang ingin Anda bangun.</p>
-            <a class="button button-light" href="{{ route('contact') }}">Konsultasi Gratis</a>
+    <section class="services-vendor-section" aria-label="Fokus layanan JASAIBNU">
+        <div class="services-shell">
+            <div class="services-vendor-strip">
+                @foreach (['Website', 'SEO', 'Web App', 'Mobile App', 'SaaS', 'AI', 'Automation', 'Maintenance', 'Consulting'] as $item)
+                    <span>{{ $item }}</span>
+                @endforeach
+            </div>
         </div>
     </section>
 @endsection
