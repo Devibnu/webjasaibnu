@@ -1,12 +1,21 @@
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3" id="sidenav-main">
+    @php
+        $adminLogoPath = $siteSettings->logo_dark_path ?: $siteSettings->logo_path;
+        $adminSiteName = $siteSettings->company_name ?? 'JASAIBNU';
+        $adminLegalName = $siteSettings->company_legal_name ?? 'PT JASA IBNU DEVELOPMENT';
+    @endphp
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
         <a class="align-items-center d-flex m-0 navbar-brand text-wrap" href="{{ route('admin.dashboard') }}">
-            <span class="admin-brand-mark">JI</span>
-            <span class="ms-3">
-                <span class="font-weight-bold d-block">JASAIBNU</span>
-                <span class="text-xs text-uppercase font-weight-bold opacity-7">Admin Panel</span>
-            </span>
+            @if ($adminLogoPath)
+                <img class="admin-brand-logo" src="{{ asset('storage/' . $adminLogoPath) }}" alt="{{ $adminSiteName }}">
+            @else
+                <span class="admin-brand-mark">JI</span>
+                <span class="ms-3">
+                    <span class="font-weight-bold d-block">{{ $adminSiteName }}</span>
+                    <span class="text-xs text-uppercase font-weight-bold opacity-7">Admin Panel</span>
+                </span>
+            @endif
         </a>
     </div>
     <hr class="horizontal dark mt-0">
@@ -16,7 +25,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-shop text-white text-sm opacity-10"></i>
+                        <i class="ni ni-shop {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-dark' }} text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
@@ -24,6 +33,14 @@
 
             <li class="nav-item mt-2">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Content</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/hero-slides*') ? 'active' : '' }}" href="{{ route('admin.hero-slides.index') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-camera-compact {{ request()->is('admin/hero-slides*') ? 'text-white' : 'text-dark' }} text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Hero Slider</span>
+                </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/insights*') ? 'active' : '' }}" href="{{ route('admin.insights.index') }}">
@@ -66,6 +83,14 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/solutions') || request()->is('admin/solutions/*') ? 'active' : '' }}" href="{{ route('admin.solutions.index') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-bulb-61 {{ request()->is('admin/solutions') || request()->is('admin/solutions/*') ? 'text-white' : 'text-dark' }} text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Solutions</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/about') ? 'active' : '' }}" href="{{ route('admin.about.edit') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-single-02 {{ request()->is('admin/about') ? 'text-white' : 'text-dark' }} text-sm opacity-10"></i>
@@ -97,6 +122,14 @@
                     @endif
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/administrators*') ? 'active' : '' }}" href="{{ route('admin.administrators.index') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-circle-08 {{ request()->is('admin/administrators*') ? 'text-white' : 'text-dark' }} text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Administrators</span>
+                </a>
+            </li>
         </ul>
     </div>
 
@@ -108,7 +141,7 @@
                     <i class="ni ni-diamond text-dark text-gradient text-lg top-0" aria-hidden="true"></i>
                 </div>
                 <div class="docs-info">
-                    <h6 class="text-white up mb-0">PT JASA IBNU</h6>
+                    <h6 class="text-white up mb-0">{{ $adminLegalName }}</h6>
                     <p class="text-xs font-weight-bold">CMS foundation</p>
                 </div>
             </div>

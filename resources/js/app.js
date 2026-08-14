@@ -11,23 +11,95 @@ if (spinner) {
 const startupNavbar = document.querySelector('.startup2-home .navbar');
 
 if (startupNavbar) {
+    let navbarTicking = false;
     const toggleStickyNavbar = () => {
         startupNavbar.classList.toggle('sticky-top', window.scrollY > 45);
         startupNavbar.classList.toggle('shadow-sm', window.scrollY > 45);
     };
+    const scheduleStickyNavbar = () => {
+        if (navbarTicking) {
+            return;
+        }
+
+        navbarTicking = true;
+        window.requestAnimationFrame(() => {
+            toggleStickyNavbar();
+            navbarTicking = false;
+        });
+    };
 
     toggleStickyNavbar();
-    window.addEventListener('scroll', toggleStickyNavbar, { passive: true });
+    window.addEventListener('scroll', scheduleStickyNavbar, { passive: true });
 }
 
 const startupNavToggle = document.querySelector('[data-startup-nav-toggle]');
 const startupNav = document.querySelector('[data-startup-nav]');
+const startupNavClose = document.querySelector('[data-startup-nav-close]');
+const startupNavBackdrop = document.querySelector('[data-startup-nav-backdrop]');
 
 if (startupNavToggle && startupNav) {
+    const startupNavMedia = window.matchMedia('(max-width: 991.98px)');
+    const syncStartupNavA11y = () => {
+        if (startupNavMedia.matches && ! startupNav.classList.contains('show')) {
+            startupNav.setAttribute('aria-hidden', 'true');
+            return;
+        }
+
+        startupNav.removeAttribute('aria-hidden');
+    };
+
+    const openStartupNav = () => {
+        startupNav.classList.add('show');
+        startupNav.removeAttribute('aria-hidden');
+        startupNavToggle.setAttribute('aria-expanded', 'true');
+        startupNavToggle.setAttribute('aria-label', 'Close navigation');
+        startupNavBackdrop?.removeAttribute('hidden');
+        window.requestAnimationFrame(() => startupNavBackdrop?.classList.add('is-visible'));
+        document.body.classList.add('startup-nav-open');
+        startupNavClose?.focus({ preventScroll: true });
+    };
+
+    const closeStartupNav = () => {
+        startupNav.classList.remove('show');
+        syncStartupNavA11y();
+        startupNavToggle.setAttribute('aria-expanded', 'false');
+        startupNavToggle.setAttribute('aria-label', 'Open navigation');
+        startupNavBackdrop?.classList.remove('is-visible');
+        document.body.classList.remove('startup-nav-open');
+        window.setTimeout(() => {
+            if (! startupNav.classList.contains('show')) {
+                startupNavBackdrop?.setAttribute('hidden', '');
+            }
+        }, 280);
+    };
+
     startupNavToggle.addEventListener('click', () => {
-        const isOpen = startupNav.classList.toggle('show');
-        startupNavToggle.setAttribute('aria-expanded', String(isOpen));
+        if (startupNav.classList.contains('show')) {
+            closeStartupNav();
+            return;
+        }
+
+        openStartupNav();
     });
+
+    startupNavClose?.addEventListener('click', closeStartupNav);
+    startupNavBackdrop?.addEventListener('click', closeStartupNav);
+
+    startupNav.addEventListener('click', (event) => {
+        if (event.target instanceof HTMLAnchorElement) {
+            closeStartupNav();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && startupNav.classList.contains('show')) {
+            closeStartupNav();
+            startupNavToggle.focus({ preventScroll: true });
+        }
+    });
+
+    startupNavMedia.addEventListener('change', syncStartupNavA11y);
+    syncStartupNavA11y();
 }
 
 const startupCarousel = document.querySelector('#header-carousel');
@@ -54,12 +126,24 @@ if (startupCarousel) {
 const backToTop = document.querySelector('[data-back-to-top]');
 
 if (backToTop) {
+    let backToTopTicking = false;
     const toggleBackToTop = () => {
         backToTop.classList.toggle('is-visible', window.scrollY > 100);
     };
+    const scheduleBackToTop = () => {
+        if (backToTopTicking) {
+            return;
+        }
+
+        backToTopTicking = true;
+        window.requestAnimationFrame(() => {
+            toggleBackToTop();
+            backToTopTicking = false;
+        });
+    };
 
     toggleBackToTop();
-    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+    window.addEventListener('scroll', scheduleBackToTop, { passive: true });
 
     backToTop.addEventListener('click', (event) => {
         event.preventDefault();

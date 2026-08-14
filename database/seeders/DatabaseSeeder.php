@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            LocalAdministratorSeeder::class,
             SiteSettingSeeder::class,
             AboutPageSeeder::class,
             ServiceSeeder::class,
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
             InsightSeeder::class,
             PortfolioCategorySeeder::class,
             PortfolioItemSeeder::class,
+            HeroSlideSeeder::class,
         ]);
     }
 }

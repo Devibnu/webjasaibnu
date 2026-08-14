@@ -61,6 +61,72 @@
                     </div>
                 </div>
 
+                <hr class="horizontal dark my-4">
+                <h6 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Homepage About Section</h6>
+                <p class="text-sm text-muted">Manage the About JASAIBNU block displayed on the homepage.</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Homepage About Label</label>
+                        <input name="homepage_about_label" class="form-control mb-3" value="{{ old('homepage_about_label', $about->homepageAboutValue('homepage_about_label')) }}" required>
+                    </div>
+                    <div class="col-md-8">
+                        <label>Homepage About Title</label>
+                        <input name="homepage_about_title" class="form-control mb-3" value="{{ old('homepage_about_title', $about->homepageAboutValue('homepage_about_title')) }}" required>
+                    </div>
+                </div>
+
+                <label>Homepage About Description</label>
+                <textarea name="homepage_about_description" class="form-control mb-3" rows="3" required>{{ old('homepage_about_description', $about->homepageAboutValue('homepage_about_description')) }}</textarea>
+
+                <div class="row">
+                    @for ($i = 1; $i <= 4; $i++)
+                        <div class="col-md-6">
+                            <label>Checklist {{ $i }}</label>
+                            <input name="homepage_checklist_{{ $i }}" class="form-control mb-3" value="{{ old('homepage_checklist_' . $i, $about->homepageAboutValue('homepage_checklist_' . $i)) }}" required>
+                        </div>
+                    @endfor
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>CTA Small Text</label>
+                        <input name="homepage_cta_small_text" class="form-control mb-3" value="{{ old('homepage_cta_small_text', $about->homepageAboutValue('homepage_cta_small_text')) }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label>CTA Main Text</label>
+                        <input name="homepage_cta_main_text" class="form-control mb-3" value="{{ old('homepage_cta_main_text', $about->homepageAboutValue('homepage_cta_main_text')) }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label>WhatsApp URL / Destination</label>
+                        <input name="homepage_cta_url" class="form-control mb-3" value="{{ old('homepage_cta_url', $about->homepageAboutValue('homepage_cta_url')) }}" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Button Label</label>
+                        <input name="homepage_button_label" class="form-control mb-3" value="{{ old('homepage_button_label', $about->homepageAboutValue('homepage_button_label')) }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Button URL / Route</label>
+                        <input name="homepage_button_url" class="form-control mb-3" value="{{ old('homepage_button_url', $about->homepageAboutValue('homepage_button_url')) }}" required>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label>Homepage About Image (optional)</label>
+                        <input type="file" name="homepage_about_image" class="form-control mb-3" accept="image/jpeg,image/png,image/jpg,image/webp">
+                        <small class="text-muted d-block mb-3">Upload a new image only for the homepage About section.</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="d-block">Current Homepage About Image</label>
+                        <div class="border rounded p-2 bg-light text-center" style="max-width: 240px;">
+                            <img src="{{ $about->homepageAboutImageUrl() }}" alt="Homepage About Visual" class="img-fluid rounded" style="max-height: 120px; object-fit: cover;">
+                        </div>
+                    </div>
+                </div>
+
                 <h6 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 mt-4">Core Values (4 Items)</h6>
                 <div class="row">
                     <div class="col-md-6">

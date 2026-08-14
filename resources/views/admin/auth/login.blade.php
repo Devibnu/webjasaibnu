@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    @php
+        $adminLogoPath = $siteSettings->logo_dark_path ?: $siteSettings->logo_path;
+        $adminSiteName = $siteSettings->company_name ?? 'JASAIBNU';
+        $adminLegalName = $siteSettings->company_legal_name ?? 'PT JASA IBNU DEVELOPMENT';
+        $adminFavicon = $siteSettings->favicon_path
+            ? asset('storage/' . $siteSettings->favicon_path)
+            : asset('assets/admin/img/logo-ct.png');
+    @endphp
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin Login - JASAIBNU</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logo-ct.png') }}">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Login - {{ $adminSiteName }}</title>
+    <link rel="icon" href="{{ $adminFavicon }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="{{ asset('assets/admin/css/nucleo-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet">
@@ -33,6 +42,14 @@
             font-weight: 700;
             box-shadow: 0 4px 12px rgba(0, 174, 239, .25);
         }
+
+        .admin-login-logo {
+            display: block;
+            width: auto;
+            max-width: 178px;
+            max-height: 54px;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -45,14 +62,18 @@
                             <div class="card card-plain mt-8">
                                 <div class="card-header pb-0 text-left bg-transparent">
                                     <div class="d-flex align-items-center mb-4">
-                                        <span class="admin-brand-mark me-3">JI</span>
-                                        <div>
-                                            <h4 class="font-weight-bolder mb-0">JASAIBNU</h4>
-                                            <p class="text-xs text-uppercase font-weight-bold mb-0">Admin Panel</p>
-                                        </div>
+                                        @if ($adminLogoPath)
+                                            <img class="admin-login-logo" src="{{ asset('storage/' . $adminLogoPath) }}" alt="{{ $adminSiteName }}">
+                                        @else
+                                            <span class="admin-brand-mark me-3">JI</span>
+                                            <div>
+                                                <h4 class="font-weight-bolder mb-0">{{ $adminSiteName }}</h4>
+                                                <p class="text-xs text-uppercase font-weight-bold mb-0">Admin Panel</p>
+                                            </div>
+                                        @endif
                                     </div>
                                     <h3 class="font-weight-bolder text-info text-gradient">Welcome back</h3>
-                                    <p class="mb-0">PT JASA IBNU DEVELOPMENT</p>
+                                    <p class="mb-0">{{ $adminLegalName }}</p>
                                 </div>
                                 <div class="card-body">
                                     @if ($errors->any())

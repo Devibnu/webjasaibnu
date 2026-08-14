@@ -31,6 +31,9 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
+        preg_match_all('/<h1(\s|>)/i', $response->getContent(), $homepageH1Matches);
+        $this->assertSame(1, count($homepageH1Matches[0]));
+        $response->assertSee('<h1 class="display-1 text-white mb-md-4 animated zoomIn startup2-hero-title">Solusi Digital untuk Bisnis yang Siap Bertumbuh</h1>', false);
         $response->assertSee('PT JASA IBNU DEVELOPMENT');
         $response->assertSee('Solusi Digital untuk Bisnis yang Siap Bertumbuh');
         $response->assertSee('JASAIBNU');
@@ -47,6 +50,19 @@ class ExampleTest extends TestCase
         $response->assertDontSee('href="#portfolio"', false);
         $response->assertDontSee('href="#about"', false);
         $response->assertDontSee('href="#contact"', false);
+    }
+
+    public function test_homepage_prioritizes_lcp_hero_and_lazy_loads_below_fold_images()
+    {
+        $this->withoutVite();
+
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('<link rel="preload" as="image" href="' . asset('assets/startup2/img/carousel-1.jpg') . '" fetchpriority="high">', false);
+        $this->assertMatchesRegularExpression('/src="' . preg_quote(asset('assets/startup2/img/carousel-1.jpg'), '/') . '"[^>]+width="1920"[^>]+height="1080"[^>]+fetchpriority="high"[^>]+decoding="sync"/', $response->getContent());
+        $this->assertMatchesRegularExpression('/src="' . preg_quote(asset('assets/startup2/img/carousel-2.jpg'), '/') . '"[^>]+width="1920"[^>]+height="1080"[^>]+loading="lazy"[^>]+decoding="async"/', $response->getContent());
+        $response->assertSee('src="' . asset('assets/startup2/img/feature.jpg') . '" alt="Perencanaan solusi software untuk bisnis" width="800" height="800" loading="lazy" decoding="async"', false);
     }
 
     public function test_public_pages_are_available()
@@ -75,13 +91,30 @@ class ExampleTest extends TestCase
     {
         $this->withoutVite();
 
-        $this->get(route('insights.show', 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun'))
+        $response = $this->get(route('insights.show', 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun'));
+
+        $response
             ->assertOk()
-            ->assertSee('Insight Detail')
+            ->assertSee('<body class="insights-page startup2-home">', false)
+            ->assertSee('<p class="insights-page-label">INSIGHT</p>', false)
+            ->assertSee('Fondasi SEO Teknis yang Perlu Dipersiapkan Sejak Website Dibangun')
+            ->assertSee('class="row g-5 insights-detail-layout"', false)
+            ->assertSee('class="col-lg-8"', false)
+            ->assertSee('class="col-lg-4"', false)
+            ->assertSee('class="insights-sidebar insights-detail-sidebar"', false)
+            ->assertSee('Categories')
+            ->assertSee('Recent Post')
+            ->assertSee('Home')
+            ->assertSee('Insights')
+            ->assertDontSee('Insight Detail')
             ->assertSee('Struktur Website yang Jelas')
             ->assertSee('Fondasi SEO sebaiknya dipikirkan sejak awal pembangunan website')
             ->assertSee('meta name="description"', false)
-            ->assertSee('rel="canonical"', false);
+            ->assertSee('rel="canonical"', false)
+            ->assertSee('"@type": "BlogPosting"', false);
+
+        preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
+        $this->assertSame(1, count($h1Matches[0]));
     }
 
     public function test_contact_form_accepts_valid_submission()
@@ -181,7 +214,7 @@ class ExampleTest extends TestCase
         $this->actingAs($adminUser)
             ->get('/admin')
             ->assertOk()
-            ->assertSee('Admin Foundation');
+            ->assertSee('Quick Actions');
     }
 
     public function test_admin_insights_are_protected_and_drafts_are_not_public()
@@ -606,8 +639,8 @@ class ExampleTest extends TestCase
                 'company_legal_name' => 'PT JASA IBNU TEST',
                 'email' => 'settings@example.com',
                 'phone' => 'Konsultasi via WhatsApp',
-                'whatsapp_number' => '',
-                'whatsapp_url' => '',
+                'whatsapp_number' => '+62 812-3456-7890',
+                'whatsapp_url' => 'https://wa.me/6281234567890',
                 'address' => 'Jakarta, Indonesia',
                 'city' => 'Jakarta',
                 'country' => 'Indonesia',
@@ -627,11 +660,14 @@ class ExampleTest extends TestCase
 
         $this->assertSame(1, SiteSetting::count());
         $this->assertDatabaseHas('site_settings', [
-            'id' => 1,
             'company_name' => 'JASAIBNU TEST',
             'email' => 'settings@example.com',
+            'whatsapp_number' => '+6281234567890',
+            'whatsapp_url' => 'https://wa.me/6281234567890',
             'facebook_url' => 'https://facebook.com/jasaibnu',
         ]);
+
+        $this->assertSame('https://wa.me/6281234567890', SiteSetting::current()->whatsappContactUrl('Halo JASAIBNU'));
     }
 
     public function test_site_settings_validation_rejects_invalid_email_and_urls()
@@ -647,11 +683,58 @@ class ExampleTest extends TestCase
             ->from(route('admin.site-settings.edit'))
             ->put(route('admin.site-settings.update'), array_merge(SiteSetting::defaults(), [
                 'email' => 'invalid-email',
+                'whatsapp_number' => 'hello whatsapp',
+                'whatsapp_url' => 'https://example.com/contact',
                 'google_maps_embed_url' => 'not-a-url',
                 'facebook_url' => 'not-a-url',
             ]))
             ->assertRedirect(route('admin.site-settings.edit'))
-            ->assertSessionHasErrors(['email', 'google_maps_embed_url', 'facebook_url']);
+            ->assertSessionHasErrors(['email', 'whatsapp_number', 'whatsapp_url', 'google_maps_embed_url', 'facebook_url']);
+    }
+
+    public function test_site_settings_accepts_only_whatsapp_url_domains()
+    {
+        $adminUser = User::create([
+            'name' => 'Admin WhatsApp URLs',
+            'email' => 'admin-whatsapp-urls@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+        ]);
+
+        $validUrls = [
+            'https://wa.link/s5wh92',
+            'https://wa.me/6281234567890',
+            'https://api.whatsapp.com/send?phone=6281234567890',
+            'https://whatsapp.com/channel/example',
+        ];
+
+        foreach ($validUrls as $index => $url) {
+            $this->actingAs($adminUser)
+                ->from(route('admin.site-settings.edit'))
+                ->put(route('admin.site-settings.update'), array_merge(SiteSetting::defaults(), [
+                    'email' => 'settings-valid-whatsapp-' . $index . '@example.com',
+                    'whatsapp_url' => $url,
+                ]))
+                ->assertRedirect(route('admin.site-settings.edit'))
+                ->assertSessionDoesntHaveErrors(['whatsapp_url']);
+
+            $this->assertSame($url, SiteSetting::current()->whatsapp_url);
+            $this->assertSame($url, SiteSetting::current()->whatsappContactUrl('Halo JASAIBNU'));
+        }
+
+        foreach ([
+            'https://example.com/contact',
+            'https://wa.link.example.com/s5wh92',
+        ] as $url) {
+            $this->actingAs($adminUser)
+                ->from(route('admin.site-settings.edit'))
+                ->put(route('admin.site-settings.update'), array_merge(SiteSetting::defaults(), [
+                    'email' => 'settings-invalid-whatsapp@example.com',
+                    'whatsapp_url' => $url,
+                ]))
+                ->assertRedirect(route('admin.site-settings.edit'))
+                ->assertSessionHasErrors(['whatsapp_url']);
+        }
     }
 
     public function test_public_pages_render_database_backed_global_settings_and_map()
@@ -662,6 +745,8 @@ class ExampleTest extends TestCase
             'company_legal_name' => 'PT JASA IBNU DB',
             'email' => 'db-contact@example.com',
             'phone' => 'Konsultasi via WhatsApp',
+            'whatsapp_number' => '6281234567890',
+            'whatsapp_url' => null,
             'address' => 'Jakarta, Indonesia',
             'google_maps_embed_url' => 'https://www.google.com/maps?q=Jakarta%2C%20Indonesia&output=embed',
             'footer_description' => 'Footer from database settings.',
@@ -669,7 +754,7 @@ class ExampleTest extends TestCase
         ]);
 
         $pages = [
-            route('home'),
+            rtrim(route('home'), '/'),
             route('services.index'),
             route('solutions.index'),
             route('portfolio.index'),
@@ -684,12 +769,19 @@ class ExampleTest extends TestCase
                 ->assertSee('JASAIBNU DB')
                 ->assertSee('PT JASA IBNU DB')
                 ->assertSee('db-contact@example.com')
-                ->assertSee('Footer from database settings.');
+                ->assertSee('Footer from database settings.')
+                ->assertSee('class="floating-whatsapp"', false)
+                ->assertSee('aria-label="Konsultasi via WhatsApp"', false)
+                ->assertSee('https://wa.me/6281234567890?text=Halo%20JASAIBNU%2C%20saya%20ingin%20konsultasi%20mengenai%20kebutuhan%20digital%20bisnis%20saya.', false);
         }
 
         $this->get(route('contact'))
             ->assertOk()
             ->assertSee('https://www.google.com/maps?q=Jakarta%2C%20Indonesia&amp;output=embed', false);
+
+        $this->get(route('admin.login'))
+            ->assertOk()
+            ->assertDontSee('class="floating-whatsapp"', false);
     }
 
     public function test_missing_optional_site_settings_do_not_crash_frontend_or_existing_cms()
@@ -759,6 +851,10 @@ class ExampleTest extends TestCase
 
         $payload = \App\Models\AboutPage::defaults();
         $payload['hero_title'] = 'Updated About Title For Testing';
+        $payload['homepage_about_title'] = 'Homepage About CMS Title For Testing';
+        $payload['homepage_checklist_1'] = 'Editable homepage checklist one';
+        $payload['homepage_cta_main_text'] = 'Editable homepage CTA';
+        $payload['homepage_button_label'] = 'Editable homepage button';
         $payload['visual_image'] = UploadedFile::fake()->image('about_updated.jpg', 900, 600);
 
         $this->actingAs($adminUser)
@@ -769,12 +865,23 @@ class ExampleTest extends TestCase
 
         $about = \App\Models\AboutPage::current();
         $this->assertSame('Updated About Title For Testing', $about->hero_title);
+        $this->assertSame('Homepage About CMS Title For Testing', $about->homepage_about_title);
+        $this->assertSame('Editable homepage checklist one', $about->homepage_checklist_1);
+        $this->assertSame('Editable homepage CTA', $about->homepage_cta_main_text);
+        $this->assertSame('Editable homepage button', $about->homepage_button_label);
         $this->assertNotNull($about->visual_image);
         Storage::disk('public')->assertExists($about->visual_image);
 
         $this->get(route('about'))
             ->assertOk()
             ->assertSee('Updated About Title For Testing');
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Homepage About CMS Title For Testing')
+            ->assertSee('Editable homepage checklist one')
+            ->assertSee('Editable homepage CTA')
+            ->assertSee('Editable homepage button');
     }
 
     public function test_admin_about_validation_rejects_empty_required_fields()
@@ -875,5 +982,278 @@ class ExampleTest extends TestCase
         $this->assertDatabaseMissing('services', [
             'id' => $service->id,
         ]);
+    }
+
+    public function test_admin_solutions_cms_requires_admin_crud_and_sorting()
+    {
+        $normalUser = User::create([
+            'name' => 'Normal Solutions User',
+            'email' => 'normal-solutions@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => false,
+        ]);
+
+        $adminUser = User::create([
+            'name' => 'Admin Solutions User',
+            'email' => 'admin-solutions@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+        ]);
+
+        $this->get(route('admin.solutions.index'))
+            ->assertRedirect('/weblogin');
+
+        $this->actingAs($normalUser)
+            ->get(route('admin.solutions.index'))
+            ->assertRedirect('/weblogin');
+
+        $this->actingAs($adminUser)
+            ->get(route('admin.solutions.index'))
+            ->assertOk()
+            ->assertSee('Solutions')
+            ->assertSee('Business Process Automation');
+
+        $this->actingAs($adminUser)
+            ->post(route('admin.solutions.store'), [
+                'title' => 'Custom Workflow Solution',
+                'slug' => 'custom-workflow-solution',
+                'icon' => 'CW',
+                'description' => 'Custom workflow orchestration for business units.',
+                'is_active' => '1',
+                'sort_order' => 8,
+            ])
+            ->assertRedirect(route('admin.solutions.index'));
+
+        $this->assertDatabaseHas('solutions', [
+            'slug' => 'custom-workflow-solution',
+            'icon' => 'CW',
+            'is_active' => true,
+            'sort_order' => 8,
+        ]);
+
+        $solution = \App\Models\Solution::where('slug', 'custom-workflow-solution')->firstOrFail();
+
+        $this->actingAs($adminUser)
+            ->put(route('admin.solutions.update', $solution), [
+                'title' => 'Updated Workflow Solution',
+                'slug' => 'updated-workflow-solution',
+                'icon' => 'CW',
+                'description' => 'Updated description for workflow solution.',
+                'is_active' => '0',
+                'sort_order' => 11,
+            ])
+            ->assertRedirect(route('admin.solutions.index'));
+
+        $this->assertDatabaseHas('solutions', [
+            'id' => $solution->id,
+            'slug' => 'updated-workflow-solution',
+            'is_active' => false,
+            'sort_order' => 11,
+        ]);
+
+        // Inactive solution should not be visible publicly
+        $this->get(route('solutions.index'))
+            ->assertOk()
+            ->assertDontSee('Updated Workflow Solution');
+
+        $this->actingAs($adminUser)
+            ->delete(route('admin.solutions.destroy', $solution))
+            ->assertRedirect(route('admin.solutions.index'));
+
+        $this->assertDatabaseMissing('solutions', [
+            'id' => $solution->id,
+        ]);
+    }
+
+    public function test_insight_focus_keyword_persistence_and_public_seo_metadata()
+    {
+        $this->withoutVite();
+
+        $category = InsightCategory::create([
+            'name' => 'SEO Insights',
+            'slug' => 'seo-insights',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $adminUser = User::factory()->create([
+            'is_admin' => true,
+        ]);
+
+        $this->actingAs($adminUser)
+            ->post(route('admin.insights.store'), [
+                'title' => 'Panduan Jasa Pembuatan Website Perusahaan Profesional',
+                'slug' => 'panduan-jasa-pembuatan-website-perusahaan',
+                'focus_keyword' => 'jasa pembuatan website perusahaan',
+                'insight_category_id' => $category->id,
+                'excerpt' => 'Pelajari cara memilih jasa pembuatan website perusahaan terbaik untuk bisnis Anda.',
+                'content' => '## Pendahuluan\n\njasa pembuatan website perusahaan sangat penting untuk kredibilitas bisnis modern di era digital.',
+                'status' => 'published',
+                'seo_title' => 'Jasa Pembuatan Website Perusahaan Terbaik & Profesional',
+                'seo_description' => 'Temukan layanan jasa pembuatan website perusahaan bergaransi, cepat, dan SEO ready.',
+                'sort_order' => 1,
+            ])
+            ->assertRedirect(route('admin.insights.index'));
+
+        $this->assertDatabaseHas('insights', [
+            'slug' => 'panduan-jasa-pembuatan-website-perusahaan',
+            'focus_keyword' => 'jasa pembuatan website perusahaan',
+            'seo_title' => 'Jasa Pembuatan Website Perusahaan Terbaik & Profesional',
+        ]);
+
+        $insight = Insight::where('slug', 'panduan-jasa-pembuatan-website-perusahaan')->firstOrFail();
+
+        $response = $this->get(route('insights.show', $insight->slug));
+        $response->assertOk();
+        $response->assertSee($insight->title);
+    }
+
+    public function test_technical_seo_endpoints_and_metadata()
+    {
+        $this->withoutVite();
+
+        $category = InsightCategory::firstOrCreate(
+            ['slug' => 'seo-technical-test'],
+            ['name' => 'SEO Technical Test', 'is_active' => true, 'sort_order' => 99]
+        );
+
+        $publishedInsight = Insight::create([
+            'title' => 'Published Sitemap Insight',
+            'slug' => 'published-sitemap-insight',
+            'insight_category_id' => $category->id,
+            'excerpt' => 'Published insight should appear in sitemap.',
+            'content' => 'Published content.',
+            'status' => Insight::STATUS_PUBLISHED,
+            'published_at' => now()->subDay(),
+            'sort_order' => 1,
+        ]);
+
+        Insight::create([
+            'title' => 'Draft Sitemap Insight',
+            'slug' => 'draft-sitemap-insight',
+            'insight_category_id' => $category->id,
+            'excerpt' => 'Draft insight should not appear in sitemap.',
+            'content' => 'Draft content.',
+            'status' => Insight::STATUS_DRAFT,
+            'published_at' => null,
+            'sort_order' => 2,
+        ]);
+
+        Insight::create([
+            'title' => 'Future Sitemap Insight',
+            'slug' => 'future-sitemap-insight',
+            'insight_category_id' => $category->id,
+            'excerpt' => 'Future insight should not appear in sitemap.',
+            'content' => 'Future content.',
+            'status' => Insight::STATUS_PUBLISHED,
+            'published_at' => now()->addDay(),
+            'sort_order' => 3,
+        ]);
+
+        $responseRobots = $this->get('/robots.txt');
+        $responseRobots->assertOk();
+        $responseRobots->assertHeader('Content-Type', 'text/plain; charset=UTF-8');
+        $responseRobots->assertSee("User-agent: *\nDisallow: /", false);
+        $responseRobots->assertDontSee('Sitemap:', false);
+
+        $responseSitemap = $this->get('/sitemap.xml');
+        $responseSitemap->assertOk();
+        $responseSitemap->assertHeader('Content-Type', 'application/xml; charset=UTF-8');
+        $responseSitemap->assertSee('<urlset', false);
+
+        $sitemapXml = simplexml_load_string($responseSitemap->getContent());
+        $this->assertNotFalse($sitemapXml, 'Sitemap must be valid XML.');
+        $sitemapXml->registerXPathNamespace('sitemap', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        $sitemapUrls = collect($sitemapXml->xpath('//sitemap:url') ?: [])
+            ->map(fn ($url) => (string) $url->loc)
+            ->all();
+
+        $this->assertCount(count(array_unique($sitemapUrls)), $sitemapUrls, 'Sitemap must not contain duplicate loc entries.');
+        $this->assertNotEmpty($sitemapUrls, 'Sitemap must contain public URLs.');
+
+        $sitemapPaths = collect($sitemapUrls)
+            ->map(function ($url) {
+                $path = parse_url($url, PHP_URL_PATH) ?: '/';
+                $path = $path === '/' ? '/' : rtrim($path, '/');
+
+                return $path === '' ? '/' : $path;
+            })
+            ->all();
+
+        $homePath = parse_url($sitemapUrls[0], PHP_URL_PATH);
+        $this->assertTrue($homePath === null || $homePath === false || $homePath === '' || $homePath === '/');
+
+        foreach ([
+            '/services',
+            '/solutions',
+            '/portfolio',
+            '/insights',
+            '/about',
+            '/contact',
+        ] as $publicPath) {
+            $this->assertContains($publicPath, $sitemapPaths);
+        }
+
+        $this->assertContains('/insights/' . $publishedInsight->slug, $sitemapPaths);
+        $this->assertNotContains('/insights/draft-sitemap-insight', $sitemapPaths);
+        $this->assertNotContains('/insights/future-sitemap-insight', $sitemapPaths);
+        $this->assertNotContains('/admin', $sitemapPaths);
+        $this->assertNotContains('/weblogin', $sitemapPaths);
+
+        foreach ($sitemapUrls as $sitemapUrl) {
+            $this->assertStringNotContainsString('?', $sitemapUrl);
+        }
+
+        $adminUser = User::factory()->create(['is_admin' => true]);
+        $this->actingAs($adminUser)
+            ->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+
+        auth()->logout();
+        $this->get(route('admin.login'))
+            ->assertOk()
+            ->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+
+        foreach ([
+            rtrim(route('home'), '/') => rtrim(route('home'), '/'),
+            route('services.index') => route('services.index'),
+            route('solutions.index') => route('solutions.index'),
+            route('portfolio.index') => route('portfolio.index'),
+            route('insights.index') => route('insights.index'),
+            route('about') => route('about'),
+            route('contact') => route('contact'),
+            route('insights.show', $publishedInsight->slug) => route('insights.show', $publishedInsight->slug),
+        ] as $url => $canonicalUrl) {
+            $page = $this->get($url . '?utm_source=test');
+            $page->assertOk();
+            preg_match_all('/<link rel="canonical" href="([^"]+)">/', $page->getContent(), $canonicalMatches);
+            $this->assertSame([$canonicalUrl], $canonicalMatches[1]);
+        }
+
+        $this->get('/missing-seo-audit-page')->assertNotFound();
+
+        $responseHome = $this->get('/');
+        $responseHome->assertOk();
+        $responseHome->assertSee('<link rel="canonical"', false);
+        $responseHome->assertSee('schema.org', false);
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $responseHome->getContent(), $jsonLdMatches);
+        $schemas = collect($jsonLdMatches[1])->map(function ($json) {
+            $decoded = json_decode($json, true);
+            $this->assertIsArray($decoded, 'Homepage JSON-LD must be valid JSON.');
+
+            return $decoded;
+        });
+
+        $homeUrl = rtrim(route('home'), '/');
+        $organizationSchema = $schemas->firstWhere('@type', 'Organization');
+        $websiteSchema = $schemas->firstWhere('@type', 'WebSite');
+
+        $this->assertNotNull($organizationSchema);
+        $this->assertNotNull($websiteSchema);
+        $this->assertSame($homeUrl . '#organization', $organizationSchema['@id'] ?? null);
+        $this->assertSame($homeUrl . '#website', $websiteSchema['@id'] ?? null);
+        $this->assertSame(['@id' => $homeUrl . '#organization'], $websiteSchema['publisher'] ?? null);
     }
 }

@@ -6,27 +6,71 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use App\Models\Insight;
 use App\Models\PortfolioItem;
+use App\Models\Service;
+use App\Models\Solution;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $stats = [
-            ['label' => 'Public Pages', 'value' => '7', 'icon' => 'ni ni-world-2', 'tone' => 'primary'],
-            ['label' => 'Total Insights', 'value' => Insight::count(), 'icon' => 'ni ni-single-copy-04', 'tone' => 'info'],
-            ['label' => 'Published', 'value' => Insight::where('status', Insight::STATUS_PUBLISHED)->count(), 'icon' => 'ni ni-check-bold', 'tone' => 'success'],
-            ['label' => 'Draft', 'value' => Insight::where('status', Insight::STATUS_DRAFT)->count(), 'icon' => 'ni ni-folder-17', 'tone' => 'secondary'],
-            ['label' => 'Portfolio Items', 'value' => PortfolioItem::count(), 'icon' => 'ni ni-briefcase-24', 'tone' => 'success'],
-            ['label' => 'Contact Inbox', 'value' => ContactMessage::count(), 'icon' => 'ni ni-email-83', 'tone' => 'warning'],
+            [
+                'label' => 'Total Insights',
+                'value' => Insight::count(),
+                'icon' => 'ni ni-single-copy-04',
+                'tone' => 'info',
+                'sub' => Insight::where('status', Insight::STATUS_PUBLISHED)->count() . ' Published'
+            ],
+            [
+                'label' => 'Portfolio Items',
+                'value' => PortfolioItem::count(),
+                'icon' => 'ni ni-briefcase-24',
+                'tone' => 'success',
+                'sub' => PortfolioItem::where('status', PortfolioItem::STATUS_PUBLISHED)->count() . ' Published'
+            ],
+            [
+                'label' => 'Services',
+                'value' => Service::count(),
+                'icon' => 'ni ni-app',
+                'tone' => 'primary',
+                'sub' => Service::where('is_active', true)->count() . ' Active'
+            ],
+            [
+                'label' => 'Solutions',
+                'value' => Solution::count(),
+                'icon' => 'ni ni-bulb-61',
+                'tone' => 'warning',
+                'sub' => Solution::where('is_active', true)->count() . ' Active'
+            ],
+            [
+                'label' => 'Contact Inbox',
+                'value' => ContactMessage::count(),
+                'icon' => 'ni ni-email-83',
+                'tone' => 'danger',
+                'sub' => ContactMessage::unread()->count() . ' Unread'
+            ],
+            [
+                'label' => 'Administrators',
+                'value' => User::where('is_admin', true)->count(),
+                'icon' => 'ni ni-circle-08',
+                'tone' => 'dark',
+                'sub' => 'Admin Access'
+            ],
         ];
 
-        $contentAreas = [
-            ['name' => 'Insights', 'source' => 'Database', 'status' => 'CMS enabled'],
-            ['name' => 'Portfolio', 'source' => 'Database', 'status' => 'CMS enabled'],
-            ['name' => 'Contact', 'source' => 'Database', 'status' => ContactMessage::unread()->count().' unread'],
-            ['name' => 'Site Settings', 'source' => 'Database managed', 'status' => 'READY'],
-        ];
+        $recentContacts = ContactMessage::latest()->take(5)->get();
+        $recentInsights = Insight::with('category')->latest('updated_at')->take(5)->get();
+        $recentPortfolio = PortfolioItem::with('category')->latest('updated_at')->take(5)->get();
+        $unreadMessagesCount = ContactMessage::unread()->count();
 
-        return view('admin.dashboard.index', compact('stats', 'contentAreas'));
+        return view('admin.dashboard.index', compact(
+            'stats',
+            'recentContacts',
+            'recentInsights',
+            'recentPortfolio',
+            'unreadMessagesCount'
+        ));
     }
 }
+

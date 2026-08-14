@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AboutPageController as AdminAboutPageController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\SolutionController as AdminSolutionController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -11,9 +12,16 @@ use App\Http\Controllers\Admin\InsightController as AdminInsightController;
 use App\Http\Controllers\Admin\PortfolioCategoryController as AdminPortfolioCategoryController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\SiteSettingController as AdminSiteSettingController;
+use App\Http\Controllers\Admin\AdministratorController;
+use App\Http\Controllers\Admin\HeroSlideController as AdminHeroSlideController;
 use App\Http\Controllers\InsightController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\RobotsController;
+
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 Route::view('/', 'home')->name('home');
 Route::get('/services', function () {
@@ -21,7 +29,11 @@ Route::get('/services', function () {
         'services' => \App\Models\Service::active()->ordered()->get(),
     ]);
 })->name('services.index');
-Route::view('/solutions', 'pages.solutions')->name('solutions.index');
+Route::get('/solutions', function () {
+    return view('pages.solutions', [
+        'solutions' => \App\Models\Solution::active()->ordered()->get(),
+    ]);
+})->name('solutions.index');
 Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
 Route::get('/insights', [InsightController::class, 'index'])->name('insights.index');
 Route::get('/insights/{slug}', [InsightController::class, 'show'])->name('insights.show');
@@ -43,6 +55,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::resource('hero-slides', AdminHeroSlideController::class)->except(['show']);
         Route::resource('insights', AdminInsightController::class)->except(['show']);
         Route::resource('insight-categories', AdminInsightCategoryController::class)
             ->parameters(['insight-categories' => 'insightCategory'])
@@ -54,6 +67,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->parameters(['portfolio-categories' => 'portfolioCategory'])
             ->except(['show']);
         Route::resource('services', AdminServiceController::class)->except(['show']);
+        Route::resource('solutions', AdminSolutionController::class)->except(['show']);
         Route::get('/contact', [AdminContactMessageController::class, 'index'])->name('contact.index');
         Route::get('/contact/{contactMessage}', [AdminContactMessageController::class, 'show'])->name('contact.show');
         Route::patch('/contact/{contactMessage}/read', [AdminContactMessageController::class, 'markRead'])->name('contact.read');
@@ -63,6 +77,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/site-settings', [AdminSiteSettingController::class, 'update'])->name('site-settings.update');
         Route::get('/about', [AdminAboutPageController::class, 'edit'])->name('about.edit');
         Route::put('/about', [AdminAboutPageController::class, 'update'])->name('about.update');
+        Route::resource('administrators', AdministratorController::class)->parameters(['administrators' => 'user'])->except(['show']);
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
     });
 });

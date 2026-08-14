@@ -184,11 +184,27 @@
         </div>
     </section>
 
-    <section class="services-vendor-section" aria-label="Fokus layanan JASAIBNU">
+    <section class="services-vendor-section" aria-labelledby="services-technology-heading">
         <div class="services-shell">
+            <div class="services-technology-heading">
+                <p>TECHNOLOGY &amp; EXPERTISE</p>
+                <h2 id="services-technology-heading">Teknologi yang kami gunakan untuk membangun solusi digital yang scalable dan maintainable.</h2>
+            </div>
             <div class="services-vendor-strip">
-                @foreach (['Website', 'SEO', 'Web App', 'Mobile App', 'SaaS', 'AI', 'Automation', 'Maintenance', 'Consulting'] as $item)
-                    <span>{{ $item }}</span>
+                @foreach ([
+                    ['name' => 'Laravel', 'mark' => 'Lv'],
+                    ['name' => 'PHP', 'mark' => 'PHP'],
+                    ['name' => 'JavaScript', 'mark' => 'JS'],
+                    ['name' => 'MySQL', 'mark' => 'SQL'],
+                    ['name' => 'PostgreSQL', 'mark' => 'PG'],
+                    ['name' => 'WordPress', 'mark' => 'WP'],
+                    ['name' => 'GitHub', 'mark' => 'GH'],
+                    ['name' => 'OpenAI', 'mark' => 'AI'],
+                ] as $item)
+                    <span class="services-technology-item" aria-label="{{ $item['name'] }}">
+                        <strong aria-hidden="true">{{ $item['mark'] }}</strong>
+                        <small>{{ $item['name'] }}</small>
+                    </span>
                 @endforeach
             </div>
         </div>

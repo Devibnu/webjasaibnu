@@ -18,6 +18,7 @@ class Insight extends Model
         'insight_category_id',
         'title',
         'slug',
+        'focus_keyword',
         'excerpt',
         'content',
         'featured_image',
@@ -81,7 +82,9 @@ class Insight extends Model
 
     public function contentBlocks(): array
     {
-        return collect(preg_split("/\R{2,}/", trim($this->content)) ?: [])
+        $raw = $this->content ?? '';
+        $normalized = str_replace(["\r\n", "\r"], "\n", trim($raw));
+        return collect(explode("\n\n", $normalized))
             ->map(fn ($block) => trim($block))
             ->filter()
             ->map(function ($block) {

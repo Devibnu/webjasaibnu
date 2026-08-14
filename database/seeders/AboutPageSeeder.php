@@ -11,12 +11,8 @@ class AboutPageSeeder extends Seeder
     {
         $about = AboutPage::query()->first();
 
-        if ($about) {
-            $about->update(AboutPage::defaults());
-
-            return;
+        if (! $about) {
+            AboutPage::query()->create(AboutPage::defaults());
         }
-
-        AboutPage::query()->create(AboutPage::defaults());
     }
 }

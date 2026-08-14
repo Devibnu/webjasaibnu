@@ -147,7 +147,7 @@
                     <article class="portfolio-card">
                         <div class="portfolio-card-media" aria-hidden="true">
                             @if ($item->imageUrl())
-                                <img src="{{ $item->imageUrl() }}" alt="">
+                                <img src="{{ $item->imageUrl() }}" alt="" width="500" height="350" loading="lazy" decoding="async">
                             @else
                                 <span><strong>{{ $item->code ?: Illuminate\Support\Str::of($item->title)->substr(0, 3)->upper() }}</strong></span>
                             @endif

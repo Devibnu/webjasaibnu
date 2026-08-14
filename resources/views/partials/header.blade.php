@@ -8,6 +8,8 @@
         ['label' => 'About', 'route' => 'about'],
         ['label' => 'Contact', 'route' => 'contact'],
     ];
+    $publicLogoPath = $siteSettings->logo_path;
+    $darkLogoPath = $siteSettings->logo_dark_path ?: $siteSettings->logo_path;
 @endphp
 
 @if (request()->routeIs('home') || request()->routeIs('services.index') || request()->routeIs('solutions.index') || request()->routeIs('portfolio.index') || request()->routeIs('insights.*') || request()->routeIs('about') || request()->routeIs('contact'))
@@ -39,19 +41,46 @@
     <div class="container-fluid position-relative p-0 startup-inner-shell">
         <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
             <a href="{{ route('home') }}" class="navbar-brand p-0">
-                <h1 class="m-0"><span class="ji-brand-icon me-2">JI</span>{{ $siteSettings->company_name }}</h1>
-                <small>{{ $siteSettings->company_legal_name }}</small>
+                @if ($siteSettings->logo_path)
+                    <span class="ji-header-logo-stack">
+                        <img class="ji-header-logo ji-header-logo-public" src="{{ asset('storage/' . $publicLogoPath) }}" alt="{{ $siteSettings->company_name }}" width="214" height="77" decoding="async">
+                        <img class="ji-header-logo ji-header-logo-dark" src="{{ asset('storage/' . $darkLogoPath) }}" alt="{{ $siteSettings->company_name }}" width="214" height="77" decoding="async">
+                    </span>
+                @else
+                    <div class="m-0 h1 ji-brand-heading"><span class="ji-brand-icon me-2">JI</span>{{ $siteSettings->company_name }}</div>
+                    <small>{{ $siteSettings->company_legal_name }}</small>
+                @endif
             </a>
-            <button class="navbar-toggler" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" data-startup-nav-toggle>
+            <button class="navbar-toggler" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Open navigation" data-startup-nav-toggle>
                 <span class="ji-bars">☰</span>
             </button>
+            <div class="startup-mobile-backdrop" data-startup-nav-backdrop hidden></div>
             <div class="collapse navbar-collapse" id="navbarCollapse" data-startup-nav>
+                <div class="startup-mobile-nav-head">
+                    <a href="{{ route('home') }}" class="startup-mobile-brand" aria-label="{{ $siteSettings->company_legal_name }} home">
+                        @if ($siteSettings->logo_path)
+                            <img src="{{ asset('storage/' . $darkLogoPath) }}" alt="{{ $siteSettings->company_name }}" width="214" height="77" decoding="async">
+                        @else
+                            <span class="ji-brand-icon me-2">JI</span>
+                            <span>{{ $siteSettings->company_name }}</span>
+                        @endif
+                    </a>
+                    <button class="startup-mobile-close" type="button" aria-label="Close navigation" data-startup-nav-close>
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
                 <div class="navbar-nav ms-auto py-0">
                     @foreach ($navigation as $item)
                         <a href="{{ route($item['route']) }}" class="nav-item nav-link @if (request()->routeIs($item['route']) || ($item['route'] === 'services.index' && request()->routeIs('services.*')) || ($item['route'] === 'solutions.index' && request()->routeIs('solutions.*')) || ($item['route'] === 'portfolio.index' && request()->routeIs('portfolio.*')) || ($item['route'] === 'insights.index' && request()->routeIs('insights.*'))) active @endif">{{ $item['label'] }}</a>
                     @endforeach
                 </div>
                 <a href="{{ route('contact') }}" class="btn btn-primary py-2 px-4 ms-3 nav-contact">Konsultasi Gratis</a>
+                <div class="startup-mobile-nav-footer">
+                    <strong>{{ $siteSettings->company_legal_name }}</strong>
+                    @if ($siteSettings->email)
+                        <span>{{ $siteSettings->email }}</span>
+                    @endif
+                </div>
             </div>
         </nav>
 
@@ -108,16 +137,17 @@
                 </div>
             </section>
         @elseif (request()->routeIs('insights.show'))
-            <section class="insights-page-hero" aria-labelledby="insights-page-title">
+            <section class="insights-page-hero insights-detail-hero" aria-labelledby="insights-page-title">
                 <div class="insights-page-hero-content">
-                    <h1 id="insights-page-title">Insight Detail</h1>
+                    <p class="insights-page-label">INSIGHT</p>
+                    <h1 id="insights-page-title">{{ $article->title ?? 'Insight' }}</h1>
                     <nav aria-label="Breadcrumb">
                         <ol class="insights-breadcrumb">
                             <li><a href="{{ route('home') }}">Home</a></li>
                             <li aria-hidden="true"><span>○</span></li>
                             <li><a href="{{ route('insights.index') }}">Insights</a></li>
                             <li aria-hidden="true"><span>○</span></li>
-                            <li><span aria-current="page">Detail</span></li>
+                            <li><span aria-current="page">{{ $article->title ?? 'Detail' }}</span></li>
                         </ol>
                     </nav>
                 </div>
@@ -154,11 +184,15 @@
 <header class="site-header" data-site-header>
     <div class="container header-inner">
         <a class="brand" href="{{ route('home') }}" aria-label="{{ $siteSettings->company_legal_name }} home">
-            <span class="brand-mark" aria-hidden="true">JI</span>
-            <span class="brand-text">
-                <strong>{{ $siteSettings->company_name }}</strong>
-                <span>{{ $siteSettings->company_legal_name }}</span>
-            </span>
+            @if ($siteSettings->logo_path)
+                <img src="{{ asset('storage/' . $siteSettings->logo_path) }}" alt="{{ $siteSettings->company_name }}" width="214" height="77" decoding="async" style="max-height: 45px;">
+            @else
+                <span class="brand-mark" aria-hidden="true">JI</span>
+                <span class="brand-text">
+                    <strong>{{ $siteSettings->company_name }}</strong>
+                    <span>{{ $siteSettings->company_legal_name }}</span>
+                </span>
+            @endif
         </a>
 
         <button class="menu-toggle" type="button" aria-label="Open navigation" aria-controls="primary-navigation" aria-expanded="false" data-menu-toggle>

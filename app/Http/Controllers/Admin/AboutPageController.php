@@ -31,6 +31,16 @@ class AboutPageController extends Controller
             unset($data['visual_image']);
         }
 
+        if ($request->hasFile('homepage_about_image')) {
+            if ($about->homepage_about_image && Storage::disk('public')->exists($about->homepage_about_image)) {
+                Storage::disk('public')->delete($about->homepage_about_image);
+            }
+
+            $data['homepage_about_image'] = $request->file('homepage_about_image')->store('about', 'public');
+        } else {
+            unset($data['homepage_about_image']);
+        }
+
         $about->update($data);
 
         return redirect()->route('admin.about.edit')

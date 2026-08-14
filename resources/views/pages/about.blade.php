@@ -165,7 +165,7 @@
                 </div>
 
                 <figure class="about-visual">
-                    <img src="{{ $about->visualImageUrl() }}" alt="Visual kerja teknologi dan bisnis JASAIBNU">
+                    <img src="{{ $about->visualImageUrl() }}" alt="Visual kerja teknologi dan bisnis JASAIBNU" width="800" height="800" loading="lazy" decoding="async">
                 </figure>
             </div>
         </div>

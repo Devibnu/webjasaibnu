@@ -143,18 +143,11 @@
             </div>
 
             <div class="solutions-grid">
-                @foreach ([
-                    ['icon' => 'BA', 'title' => 'Business Process Automation', 'body' => 'Digitalisasi dan otomasi workflow untuk mengurangi proses manual dan meningkatkan efisiensi operasional.'],
-                    ['icon' => 'SI', 'title' => 'System Integration', 'body' => 'Integrasi antar aplikasi, API, database, dan layanan eksternal agar data dan proses bisnis berjalan lebih terhubung.'],
-                    ['icon' => 'CL', 'title' => 'Cloud & Scalable Architecture', 'body' => 'Perancangan arsitektur aplikasi yang scalable, maintainable, dan siap berkembang mengikuti kebutuhan bisnis.'],
-                    ['icon' => 'AI', 'title' => 'AI-Powered Solutions', 'body' => 'Penerapan AI untuk automation, chatbot, intelligent search, document processing, dan peningkatan produktivitas.'],
-                    ['icon' => 'DP', 'title' => 'Digital Platform Development', 'body' => 'Pengembangan platform digital custom untuk mendukung operasional, customer experience, dan model bisnis baru.'],
-                    ['icon' => 'LM', 'title' => 'Legacy System Modernization', 'body' => 'Modernisasi aplikasi lama secara bertahap agar lebih aman, mudah dikembangkan, dan siap terintegrasi dengan teknologi baru.'],
-                ] as $solution)
+                @foreach ($solutions as $solution)
                     <article class="solution-card">
-                        <div class="solution-card-icon" aria-hidden="true"><span>{{ $solution['icon'] }}</span></div>
-                        <h2>{{ $solution['title'] }}</h2>
-                        <p>{{ $solution['body'] }}</p>
+                        <div class="solution-card-icon" aria-hidden="true"><span>{{ $solution->icon }}</span></div>
+                        <h2>{{ $solution->title }}</h2>
+                        <p>{{ $solution->description }}</p>
                     </article>
                 @endforeach
             </div>

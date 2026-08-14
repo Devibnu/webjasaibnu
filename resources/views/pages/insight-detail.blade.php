@@ -1,10 +1,34 @@
 @extends('layouts.app')
 
-@section('title', ($article->seo_title ?: $article->title) . ' | PT JASA IBNU DEVELOPMENT')
+@section('title', $article->seo_title ?: $article->title)
 @section('meta_description', $article->seo_description ?: $article->excerpt)
+@section('canonical', route('insights.show', $article->slug))
+@section('og_type', 'article')
+@section('twitter_card', 'summary_large_image')
 @section('body_class', 'insights-page startup2-home')
+@if($article->imageUrl())
+    @section('og_image', $article->imageUrl())
+@endif
 
 @push('head')
+    <meta property="article:published_time" content="{{ $article->published_at?->toIso8601String() }}">
+    @if($article->category)
+        <meta property="article:section" content="{{ $article->category->name }}">
+    @endif
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "BlogPosting",
+        "headline": @json($article->title),
+        "description": @json($article->seo_description ?: $article->excerpt),
+        "datePublished": @json($article->published_at?->toIso8601String()),
+        "dateModified": @json($article->updated_at->toIso8601String()),
+        "mainEntityOfPage": {
+            "@@type": "WebPage",
+            "@@id": @json(route('insights.show', $article->slug))
+        }
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -86,9 +110,88 @@
             .startup2-home .navbar-dark .navbar-brand h1 {
                 font-size: 1.65rem;
             }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero {
+                min-height: 0 !important;
+                height: auto !important;
+                padding: 44px 0 36px !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-page-hero-content {
+                width: 100%;
+                padding: 0 24px !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-page-label {
+                margin-bottom: 6px !important;
+                font-size: 1rem !important;
+                line-height: 1.25 !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero h1#insights-page-title {
+                max-width: 92% !important;
+                margin-right: auto !important;
+                margin-left: auto !important;
+                font-size: clamp(36px, 5.2vw, 42px) !important;
+                line-height: 1.1 !important;
+                letter-spacing: 0 !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-breadcrumb {
+                gap: 7px !important;
+                margin-top: 7px !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-breadcrumb a,
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-breadcrumb span {
+                font-size: clamp(15px, 2.1vw, 16px) !important;
+                line-height: 1.2 !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-breadcrumb li:last-child span {
+                max-width: min(520px, 58vw) !important;
+            }
         }
 
-        @media (max-width: 576px) {
+        @media (max-width: 575.98px) {
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero {
+                min-height: 0 !important;
+                height: auto !important;
+                padding: 28px 0 26px !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-page-hero-content {
+                padding: 0 16px !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-page-label {
+                margin-bottom: 5px !important;
+                font-size: 15px !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero h1#insights-page-title {
+                max-width: 94% !important;
+                margin-right: auto !important;
+                margin-left: auto !important;
+                font-size: clamp(30px, 8vw, 34px) !important;
+                line-height: 1.08 !important;
+                letter-spacing: 0 !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-breadcrumb {
+                gap: 6px !important;
+                margin-top: 6px !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-breadcrumb a,
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-breadcrumb span {
+                font-size: clamp(14px, 3.7vw, 16px) !important;
+            }
+
+            body.insights-page.startup2-home .startup-inner-shell .insights-detail-hero .insights-breadcrumb li:last-child span {
+                max-width: min(360px, 40vw) !important;
+            }
+
             .startup2-home .jasaibnu-startup-footer .container,
             .startup2-home .jasaibnu-startup-copyright .container {
                 width: min(100% - 28px, 362px);
@@ -134,73 +237,63 @@
 @endpush
 
 @section('content')
-    <section class="insights-blog-section insights-detail-section" aria-labelledby="insight-detail-heading">
+    <section class="insights-blog-section insights-detail-section" aria-label="Insight article">
         <div class="insights-shell">
-            <div class="insights-blog-layout">
-                <article class="insights-detail-main">
-                    <img class="insights-detail-image" src="{{ $article->imageUrl() }}" alt="{{ $article->title }}">
-                    <p class="insights-detail-category">{{ $article->categoryName() }}</p>
-                    <h1 id="insight-detail-heading">{{ $article->title }}</h1>
-
-                    <div class="insights-detail-content">
-                        @foreach ($article->contentBlocks() as $block)
-                            @if ($block['type'] === 'heading')
-                                <h2>{{ $block['text'] }}</h2>
-                            @else
-                                <p>{{ $block['text'] }}</p>
+            <div class="row g-5 insights-detail-layout">
+                <div class="col-lg-8">
+                    <article class="insights-detail-main">
+                        <img class="insights-detail-image" src="{{ $article->imageUrl() }}" alt="{{ $article->title }}" width="1200" height="675" fetchpriority="high" decoding="sync">
+                        <div class="insights-detail-meta" aria-label="Insight metadata">
+                            <span>{{ $article->categoryName() }}</span>
+                            @if ($article->published_at)
+                                <time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->translatedFormat('d M Y') }}</time>
                             @endif
-                        @endforeach
-                    </div>
-                </article>
-
-                <aside class="insights-sidebar" aria-label="Insights sidebar">
-                    <div class="insights-sidebar-block">
-                        <div class="insights-search-box">
-                            <input type="search" placeholder="Cari insight..." aria-label="Cari insight">
-                            <button type="button" aria-label="Search">⌕</button>
                         </div>
-                    </div>
 
-                    <div class="insights-sidebar-block">
-                        <div class="insights-sidebar-title">
-                            <h3>Categories</h3>
-                        </div>
-                        <div class="insights-category-list">
-                            @foreach ($categories as $category)
-                                <a href="{{ route('insights.index') }}"><span aria-hidden="true">›</span>{{ $category->name }}</a>
+                        <div class="insights-detail-content">
+                            @foreach ($article->contentBlocks() as $block)
+                                @if ($block['type'] === 'heading')
+                                    <h2>{{ $block['text'] }}</h2>
+                                @else
+                                    <p>{{ $block['text'] }}</p>
+                                @endif
                             @endforeach
                         </div>
-                    </div>
+                    </article>
+                </div>
 
-                    <div class="insights-sidebar-block">
-                        <div class="insights-sidebar-title">
-                            <h3>Recent Insights</h3>
-                        </div>
-                        <div class="insights-recent-list">
-                            @foreach ($recentArticles as $recent)
-                                <a class="insights-recent-item" href="{{ route('insights.show', $recent->slug) }}">
-                                    <img src="{{ $recent->imageUrl() }}" alt="">
-                                    <span>{{ $recent->title }}</span>
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
+                <div class="col-lg-4">
+                    <aside class="insights-sidebar insights-detail-sidebar" aria-label="Insight sidebar">
+                        @if ($categories->isNotEmpty())
+                            <div class="insights-sidebar-block">
+                                <div class="insights-sidebar-title">
+                                    <h3>Categories</h3>
+                                </div>
+                                <div class="insights-category-list insights-category-list-static">
+                                    @foreach ($categories as $category)
+                                        <span><b aria-hidden="true">›</b>{{ $category->name }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
 
-                    <div class="insights-sidebar-block">
-                        <img class="insights-sidebar-image" src="{{ asset('assets/startup2/img/blog-1.jpg') }}" alt="JASAIBNU insight visual">
-                    </div>
-
-                    <div class="insights-sidebar-block">
-                        <div class="insights-sidebar-title">
-                            <h3>Tag Cloud</h3>
-                        </div>
-                        <div class="insights-tag-list">
-                            @foreach (['Website', 'SEO', 'SaaS', 'AI', 'API', 'Security', 'Automation'] as $tag)
-                                <a href="{{ route('insights.index') }}">{{ $tag }}</a>
-                            @endforeach
-                        </div>
-                    </div>
-                </aside>
+                        @if ($recentArticles->isNotEmpty())
+                            <div class="insights-sidebar-block">
+                                <div class="insights-sidebar-title">
+                                    <h3>Recent Post</h3>
+                                </div>
+                                <div class="insights-recent-list">
+                                    @foreach ($recentArticles as $recent)
+                                        <a class="insights-recent-item" href="{{ route('insights.show', $recent->slug) }}">
+                                            <img src="{{ $recent->imageUrl() }}" alt="" width="100" height="100" loading="lazy" decoding="async">
+                                            <span>{{ $recent->title }}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    </aside>
+                </div>
             </div>
         </div>
     </section>

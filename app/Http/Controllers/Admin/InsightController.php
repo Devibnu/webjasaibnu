@@ -103,6 +103,7 @@ class InsightController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'max:220'],
             'slug' => ['required', 'string', 'max:240', Rule::unique('insights', 'slug')->ignore($insight)],
+            'focus_keyword' => ['nullable', 'string', 'max:255'],
             'insight_category_id' => ['nullable', 'exists:insight_categories,id'],
             'excerpt' => ['required', 'string', 'max:600'],
             'content' => ['required', 'string'],

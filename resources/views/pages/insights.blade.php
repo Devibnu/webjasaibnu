@@ -142,7 +142,7 @@
                         @foreach ($articles as $article)
                             <article class="startup-blog-card">
                                 <div class="startup-blog-image">
-                                    <img src="{{ $article->imageUrl() }}" alt="{{ $article->title }}">
+                                    <img src="{{ $article->imageUrl() }}" alt="{{ $article->title }}" width="500" height="350" loading="lazy" decoding="async">
                                     <a href="{{ route('insights.show', $article->slug) }}">{{ $article->categoryName() }}</a>
                                 </div>
                                 <div class="startup-blog-body">
@@ -207,7 +207,7 @@
                         <div class="insights-recent-list">
                             @foreach ($recentArticles as $recent)
                                 <a class="insights-recent-item" href="{{ route('insights.show', $recent->slug) }}">
-                                    <img src="{{ $recent->imageUrl() }}" alt="">
+                                    <img src="{{ $recent->imageUrl() }}" alt="" width="72" height="72" loading="lazy" decoding="async">
                                     <span>{{ $recent->title }}</span>
                                 </a>
                             @endforeach
@@ -215,7 +215,7 @@
                     </div>
 
                     <div class="insights-sidebar-block">
-                        <img class="insights-sidebar-image" src="{{ asset('assets/startup2/img/blog-1.jpg') }}" alt="JASAIBNU insight visual">
+                        <img class="insights-sidebar-image" src="{{ asset('assets/startup2/img/blog-1.jpg') }}" alt="JASAIBNU insight visual" width="500" height="350" loading="lazy" decoding="async">
                     </div>
 
                     <div class="insights-sidebar-block">

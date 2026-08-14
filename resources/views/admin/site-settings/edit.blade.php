@@ -24,7 +24,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.site-settings.update') }}" method="POST">
+            <form action="{{ route('admin.site-settings.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -40,7 +40,7 @@
                     </div>
                 </div>
 
-                <h6 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 mt-4">Contact Information</h6>
+                <h6 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 mt-4">Contact / WhatsApp</h6>
                 <div class="row">
                     <div class="col-md-6">
                         <label>Email</label>
@@ -52,11 +52,13 @@
                     </div>
                     <div class="col-md-6">
                         <label>WhatsApp Number</label>
-                        <input name="whatsapp_number" class="form-control mb-3" value="{{ old('whatsapp_number', $settings->whatsapp_number) }}">
+                        <input name="whatsapp_number" class="form-control mb-1" value="{{ old('whatsapp_number', $settings->whatsapp_number) }}" placeholder="6281234567890">
+                        <small class="text-muted d-block mb-3">Gunakan format 628xxxxxxxxxx tanpa spasi.</small>
                     </div>
                     <div class="col-md-6">
-                        <label>WhatsApp URL</label>
-                        <input type="url" name="whatsapp_url" class="form-control mb-3" value="{{ old('whatsapp_url', $settings->whatsapp_url) }}">
+                        <label>WhatsApp URL (optional)</label>
+                        <input type="url" name="whatsapp_url" class="form-control mb-1" value="{{ old('whatsapp_url', $settings->whatsapp_url) }}" placeholder="https://wa.link/s5wh92">
+                        <small class="text-muted d-block mb-3">Optional. Gunakan wa.me, wa.link, api.whatsapp.com, atau whatsapp.com. Jika kosong, URL akan dibuat dari WhatsApp Number.</small>
                     </div>
                     <div class="col-md-6">
                         <label>Address</label>
@@ -105,6 +107,54 @@
 
                 <label>Copyright Text</label>
                 <input name="copyright_text" class="form-control mb-4" value="{{ old('copyright_text', $settings->copyright_text) }}">
+
+                <h6 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 mt-4">Branding</h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Public Logo</label>
+                        @if ($settings->logo_path)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $settings->logo_path) }}" alt="Public Logo" style="max-height: 50px;" class="bg-dark p-1 rounded">
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="remove_logo" value="1" id="remove_logo">
+                                <label class="form-check-label text-danger" for="remove_logo">Remove Logo</label>
+                            </div>
+                        @endif
+                        <input type="file" name="logo_path" class="form-control mb-3" accept=".jpg,.jpeg,.png,.webp">
+                        <small class="text-muted d-block mb-3">Formats: jpg, jpeg, png, webp (max 2MB)</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Dark Logo (optional)</label>
+                        @if ($settings->logo_dark_path)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $settings->logo_dark_path) }}" alt="Dark Logo" style="max-height: 50px;" class="bg-dark p-1 rounded">
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="remove_logo_dark" value="1" id="remove_logo_dark">
+                                <label class="form-check-label text-danger" for="remove_logo_dark">Remove Dark Logo</label>
+                            </div>
+                        @endif
+                        <input type="file" name="logo_dark_path" class="form-control mb-3" accept=".jpg,.jpeg,.png,.webp">
+                        <small class="text-muted d-block mb-3">Formats: jpg, jpeg, png, webp (max 2MB)</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Favicon</label>
+                        @if ($settings->favicon_path)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $settings->favicon_path) }}" alt="Favicon" style="max-height: 32px;" class="bg-dark p-1 rounded">
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="remove_favicon" value="1" id="remove_favicon">
+                                <label class="form-check-label text-danger" for="remove_favicon">Remove Favicon</label>
+                            </div>
+                        @endif
+                        <input type="file" name="favicon_path" class="form-control mb-3" accept=".png,.ico,.webp">
+                        <small class="text-muted d-block mb-3">Formats: png, ico, webp (max 1MB)</small>
+                    </div>
+                </div>
 
                 <button class="btn bg-gradient-info" type="submit">Save Settings</button>
             </form>

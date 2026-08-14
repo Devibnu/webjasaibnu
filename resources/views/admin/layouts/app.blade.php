@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    @php
+        $adminSiteName = $siteSettings->company_name ?? 'JASAIBNU';
+        $adminFavicon = $siteSettings->favicon_path
+            ? asset('storage/' . $siteSettings->favicon_path)
+            : asset('assets/admin/img/logo-ct.png');
+    @endphp
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin Panel') - JASAIBNU</title>
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/admin/img/logo-ct.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logo-ct.png') }}">
+    <meta name="robots" content="noindex, nofollow">
+    <title>@yield('title', 'Admin Panel') - {{ $adminSiteName }}</title>
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ $adminFavicon }}">
+    <link rel="icon" href="{{ $adminFavicon }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="{{ asset('assets/admin/css/nucleo-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet">
@@ -40,6 +47,14 @@
             justify-content: center;
             font-weight: 700;
             box-shadow: 0 4px 12px rgba(0, 174, 239, .25);
+        }
+
+        .admin-brand-logo {
+            display: block;
+            width: auto;
+            max-width: 142px;
+            max-height: 42px;
+            object-fit: contain;
         }
     </style>
     @stack('head')

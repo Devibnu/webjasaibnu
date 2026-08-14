@@ -13,6 +13,19 @@ class AboutPage extends Model
         'content_p1',
         'content_p2',
         'visual_image',
+        'homepage_about_label',
+        'homepage_about_title',
+        'homepage_about_description',
+        'homepage_checklist_1',
+        'homepage_checklist_2',
+        'homepage_checklist_3',
+        'homepage_checklist_4',
+        'homepage_cta_small_text',
+        'homepage_cta_main_text',
+        'homepage_cta_url',
+        'homepage_button_label',
+        'homepage_button_url',
+        'homepage_about_image',
         'value_1_title',
         'value_1_body',
         'value_2_title',
@@ -41,6 +54,7 @@ class AboutPage extends Model
             'content_p1' => 'JASAIBNU melalui PT JASA IBNU DEVELOPMENT membantu bisnis membangun dan mengembangkan solusi digital mulai dari website, aplikasi web, SaaS, SEO, integrasi sistem, hingga penerapan AI.',
             'content_p2' => 'Kami berfokus pada solusi yang tidak hanya berjalan hari ini, tetapi juga memiliki fondasi teknis yang scalable, aman, mudah dipelihara, dan siap dikembangkan mengikuti kebutuhan bisnis.',
             'visual_image' => null,
+            ...static::homepageAboutDefaults(),
             'value_1_title' => 'Scalable Development',
             'value_1_body' => 'Arsitektur dan kode dipersiapkan agar dapat berkembang mengikuti kebutuhan bisnis.',
             'value_2_title' => 'Security Focused',
@@ -62,6 +76,25 @@ class AboutPage extends Model
         ];
     }
 
+    public static function homepageAboutDefaults(): array
+    {
+        return [
+            'homepage_about_label' => 'About JASAIBNU',
+            'homepage_about_title' => 'Partner Teknologi untuk Website, Aplikasi, SaaS, dan AI',
+            'homepage_about_description' => 'JASAIBNU membantu bisnis merancang dan membangun solusi digital yang tidak hanya terlihat rapi, tetapi juga memiliki struktur teknis yang siap dirawat dan dikembangkan.',
+            'homepage_checklist_1' => 'Business-first planning',
+            'homepage_checklist_2' => 'Scalable architecture',
+            'homepage_checklist_3' => 'SEO-ready foundation',
+            'homepage_checklist_4' => 'Maintenance support',
+            'homepage_cta_small_text' => 'Diskusikan kebutuhan digital Anda',
+            'homepage_cta_main_text' => 'Konsultasi via WhatsApp',
+            'homepage_cta_url' => '#',
+            'homepage_button_label' => 'Tentang JASAIBNU',
+            'homepage_button_url' => '/about',
+            'homepage_about_image' => null,
+        ];
+    }
+
     public static function current(): self
     {
         return static::query()->first() ?: static::query()->create(static::defaults());
@@ -79,6 +112,52 @@ class AboutPage extends Model
         }
 
         return asset('assets/startup2/img/about.jpg');
+    }
+
+    public function homepageAboutValue(string $key): ?string
+    {
+        return $this->{$key} ?: static::homepageAboutDefaults()[$key] ?? null;
+    }
+
+    public function homepageChecklist(): array
+    {
+        return [
+            $this->homepageAboutValue('homepage_checklist_1'),
+            $this->homepageAboutValue('homepage_checklist_2'),
+            $this->homepageAboutValue('homepage_checklist_3'),
+            $this->homepageAboutValue('homepage_checklist_4'),
+        ];
+    }
+
+    public function homepageAboutImageUrl(): string
+    {
+        if ($this->homepage_about_image && Storage::disk('public')->exists($this->homepage_about_image)) {
+            return asset('storage/' . $this->homepage_about_image);
+        }
+
+        return asset('assets/startup2/img/about.jpg');
+    }
+
+    public function homepageButtonUrl(): string
+    {
+        $url = $this->homepageAboutValue('homepage_button_url') ?: '/about';
+
+        return str_starts_with($url, 'http://') || str_starts_with($url, 'https://')
+            ? $url
+            : url($url);
+    }
+
+    public function homepageCtaUrl(): string
+    {
+        $url = $this->homepageAboutValue('homepage_cta_url') ?: '#';
+
+        if ($url === '#') {
+            return $url;
+        }
+
+        return str_starts_with($url, 'http://') || str_starts_with($url, 'https://')
+            ? $url
+            : url($url);
     }
 
     public function valuesList(): array

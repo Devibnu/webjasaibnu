@@ -9,6 +9,7 @@
         $robots = trim($__env->yieldContent('robots', 'index,follow'));
         $ogType = trim($__env->yieldContent('og_type', 'website'));
         $twitterCard = trim($__env->yieldContent('twitter_card', 'summary'));
+        $homeUrl = rtrim(route('home'), '/');
     @endphp
 
     <meta charset="utf-8">
@@ -29,8 +30,19 @@
 
     <title>{{ $title }}</title>
 
+    @if($siteSettings && !empty($siteSettings->favicon_path))
+        <link rel="icon" href="{{ asset('storage/' . $siteSettings->favicon_path) }}">
+    @endif
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
+
+    <script type="application/ld+json">
+    @json($siteSettings->organizationSchema($homeUrl), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+    </script>
+    <script type="application/ld+json">
+    @json($siteSettings->websiteSchema($homeUrl), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+    </script>
 </head>
 <body class="@yield('body_class')">
     @include('partials.header')
