@@ -9,12 +9,40 @@ use App\Models\PortfolioItem;
 use App\Models\Service;
 use App\Models\Solution;
 use App\Models\User;
+use App\Models\VisitorEvent;
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $hasVisitorEvents = Schema::hasTable('visitor_events');
+        $todayPageViews = $hasVisitorEvents ? VisitorEvent::today()->count() : 0;
+        $todayUniqueVisitors = $hasVisitorEvents ? VisitorEvent::today()->distinct('ip_hash')->count('ip_hash') : 0;
+        $totalPageViews = $hasVisitorEvents ? VisitorEvent::count() : 0;
+
         $stats = [
+            [
+                'label' => 'Page Views Today',
+                'value' => $todayPageViews,
+                'icon' => 'ni ni-world',
+                'tone' => 'info',
+                'sub' => 'Website visits today'
+            ],
+            [
+                'label' => 'Visitors Today',
+                'value' => $todayUniqueVisitors,
+                'icon' => 'ni ni-single-02',
+                'tone' => 'success',
+                'sub' => 'Unique visitors today'
+            ],
+            [
+                'label' => 'Total Page Views',
+                'value' => $totalPageViews,
+                'icon' => 'ni ni-chart-bar-32',
+                'tone' => 'primary',
+                'sub' => 'All public page views'
+            ],
             [
                 'label' => 'Total Insights',
                 'value' => Insight::count(),
@@ -73,4 +101,3 @@ class DashboardController extends Controller
         ));
     }
 }
-

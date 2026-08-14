@@ -10,6 +10,7 @@ use App\Models\PortfolioItem;
 use App\Models\PortfolioPageSetting;
 use App\Models\SiteSetting;
 use App\Models\User;
+use App\Models\VisitorEvent;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -218,6 +219,35 @@ class ExampleTest extends TestCase
             ->get('/admin')
             ->assertOk()
             ->assertSee('Quick Actions');
+    }
+
+    public function test_public_visits_are_tracked_on_admin_dashboard()
+    {
+        $this->withoutVite();
+
+        VisitorEvent::query()->delete();
+
+        $this->get(route('home'))->assertOk();
+        $this->get(route('portfolio.index'))->assertOk();
+        $this->get(route('robots'))->assertOk();
+
+        $this->assertSame(2, VisitorEvent::count());
+        $this->assertDatabaseHas('visitor_events', ['path' => '/']);
+        $this->assertDatabaseHas('visitor_events', ['path' => '/portfolio']);
+        $this->assertDatabaseMissing('visitor_events', ['path' => '/robots.txt']);
+
+        $adminUser = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($adminUser)
+            ->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertSee('Page Views Today')
+            ->assertSee('Visitors Today')
+            ->assertSee('Total Page Views')
+            ->assertSee('2');
+
+        $this->get(route('admin.dashboard'))->assertOk();
+        $this->assertSame(2, VisitorEvent::count());
     }
 
     public function test_admin_insights_are_protected_and_drafts_are_not_public()
