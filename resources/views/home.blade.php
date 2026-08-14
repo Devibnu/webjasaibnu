@@ -4,6 +4,10 @@
 @section('title', 'Jasa Pembuatan Website, Aplikasi & SEO | JASAIBNU')
 @section('meta_description', 'JASAIBNU menyediakan jasa pembuatan website, aplikasi bisnis, SaaS, SEO, integrasi sistem, dan AI untuk bisnis yang ingin tumbuh secara digital.')
 
+@php
+    $siteSettings = $siteSettings ?? \App\Models\SiteSetting::current();
+@endphp
+
 @push('head')
     @php
         $firstHeroImage = ($heroSlides ?? collect())->first()?->imageUrl() ?: asset('assets/startup2/img/carousel-1.jpg');
@@ -557,34 +561,34 @@
             <div class="row g-5">
                 <div class="col-lg-7">
                     <div class="section-title position-relative pb-3 mb-5">
-                        <h5 class="fw-bold text-primary text-uppercase">Consultation</h5>
-                        <h2 class="h1 mb-0">Butuh Solusi Digital yang Sesuai dengan Proses Bisnis Anda?</h2>
+                        <h5 class="fw-bold text-primary text-uppercase">{{ $siteSettings->home_consultation_eyebrow ?: 'Consultation' }}</h5>
+                        <h2 class="h1 mb-0">{{ $siteSettings->home_consultation_title ?: 'Butuh Solusi Digital yang Sesuai dengan Proses Bisnis Anda?' }}</h2>
                     </div>
                     <div class="row gx-3">
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
-                            <h5 class="mb-4"><span class="text-primary me-3">↩</span>Analisis kebutuhan awal</h5>
+                            <h5 class="mb-4"><span class="text-primary me-3">↩</span>{{ $siteSettings->home_consultation_feature_one ?: 'Analisis kebutuhan awal' }}</h5>
                         </div>
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
-                            <h5 class="mb-4"><span class="text-primary me-3">☎</span>Diskusi scope teknis</h5>
+                            <h5 class="mb-4"><span class="text-primary me-3">☎</span>{{ $siteSettings->home_consultation_feature_two ?: 'Diskusi scope teknis' }}</h5>
                         </div>
                     </div>
-                    <p class="mb-4">Diskusikan kebutuhan website, aplikasi, SaaS, SEO, integrasi AI, atau sistem internal yang ingin Anda bangun bersama JASAIBNU. Kami membantu memetakan pendekatan yang realistis sebelum masuk ke tahap produksi.</p>
+                    <p class="mb-4">{{ $siteSettings->home_consultation_description ?: 'Diskusikan kebutuhan website, aplikasi, SaaS, SEO, integrasi AI, atau sistem internal yang ingin Anda bangun bersama JASAIBNU. Kami membantu memetakan pendekatan yang realistis sebelum masuk ke tahap produksi.' }}</p>
                     <div class="d-flex align-items-center mt-2 wow zoomIn" data-wow-delay="0.6s">
                         <div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
                             <span class="text-white">✉</span>
                         </div>
                         <div class="ps-4">
-                            <h5 class="mb-2">Mulai dengan konsultasi</h5>
-                            <h4 class="text-primary mb-0">hello@jasaibnu.com</h4>
+                            <h5 class="mb-2">{{ $siteSettings->home_consultation_contact_label ?: 'Mulai dengan konsultasi' }}</h5>
+                            <h4 class="text-primary mb-0">{{ $siteSettings->email }}</h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="bg-primary rounded h-100 d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s">
                         <div>
-                            <h3 class="text-white mb-3">Konsultasi Gratis</h3>
-                            <p class="text-white mb-4">Ceritakan target bisnis dan kebutuhan sistem Anda. Kami akan membantu memetakan solusi digital yang sesuai.</p>
-                            <a class="btn btn-dark w-100 py-3" href="{{ route('contact') }}">Hubungi JASAIBNU</a>
+                            <h3 class="text-white mb-3">{{ $siteSettings->home_consultation_card_title ?: 'Konsultasi Gratis' }}</h3>
+                            <p class="text-white mb-4">{{ $siteSettings->home_consultation_card_description ?: 'Ceritakan target bisnis dan kebutuhan sistem Anda. Kami akan membantu memetakan solusi digital yang sesuai.' }}</p>
+                            <a class="btn btn-dark w-100 py-3" href="{{ route('contact') }}">{{ $siteSettings->home_consultation_button_text ?: 'Hubungi JASAIBNU' }}</a>
                         </div>
                     </div>
                 </div>

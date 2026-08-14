@@ -82,6 +82,46 @@
                 <label>Google Maps External URL</label>
                 <input type="url" name="google_maps_external_url" class="form-control mb-3" value="{{ old('google_maps_external_url', $settings->google_maps_external_url) }}">
 
+                <h6 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 mt-4">Home Consultation Section</h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Section Label</label>
+                        <input name="home_consultation_eyebrow" class="form-control mb-3" value="{{ old('home_consultation_eyebrow', $settings->home_consultation_eyebrow) }}" placeholder="Consultation">
+                    </div>
+                    <div class="col-md-8">
+                        <label>Title</label>
+                        <input name="home_consultation_title" class="form-control mb-3" value="{{ old('home_consultation_title', $settings->home_consultation_title) }}" placeholder="Butuh Solusi Digital yang Sesuai dengan Proses Bisnis Anda?">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Feature 1</label>
+                        <input name="home_consultation_feature_one" class="form-control mb-3" value="{{ old('home_consultation_feature_one', $settings->home_consultation_feature_one) }}" placeholder="Analisis kebutuhan awal">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Feature 2</label>
+                        <input name="home_consultation_feature_two" class="form-control mb-3" value="{{ old('home_consultation_feature_two', $settings->home_consultation_feature_two) }}" placeholder="Diskusi scope teknis">
+                    </div>
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <textarea name="home_consultation_description" class="form-control mb-3" rows="3">{{ old('home_consultation_description', $settings->home_consultation_description) }}</textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Contact Label</label>
+                        <input name="home_consultation_contact_label" class="form-control mb-3" value="{{ old('home_consultation_contact_label', $settings->home_consultation_contact_label) }}" placeholder="Mulai dengan konsultasi">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Card Title</label>
+                        <input name="home_consultation_card_title" class="form-control mb-3" value="{{ old('home_consultation_card_title', $settings->home_consultation_card_title) }}" placeholder="Konsultasi Gratis">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Button Text</label>
+                        <input name="home_consultation_button_text" class="form-control mb-3" value="{{ old('home_consultation_button_text', $settings->home_consultation_button_text) }}" placeholder="Hubungi JASAIBNU">
+                    </div>
+                    <div class="col-md-12">
+                        <label>Card Description</label>
+                        <textarea name="home_consultation_card_description" class="form-control mb-3" rows="2">{{ old('home_consultation_card_description', $settings->home_consultation_card_description) }}</textarea>
+                    </div>
+                </div>
+
                 <h6 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 mt-4">Social Media</h6>
                 <div class="row">
                     <div class="col-md-6">

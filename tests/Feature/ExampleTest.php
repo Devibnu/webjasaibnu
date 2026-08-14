@@ -766,6 +766,15 @@ class ExampleTest extends TestCase
                 'country' => 'Indonesia',
                 'google_maps_embed_url' => 'https://www.google.com/maps?q=Jakarta%2C%20Indonesia&output=embed',
                 'google_maps_external_url' => '',
+                'home_consultation_eyebrow' => 'Audit Gratis',
+                'home_consultation_title' => 'Butuh sistem yang lebih rapi?',
+                'home_consultation_feature_one' => 'Cek proses bisnis',
+                'home_consultation_feature_two' => 'Rancang roadmap teknis',
+                'home_consultation_description' => 'Kami bantu membaca kebutuhan sistem dan prioritas pengembangan.',
+                'home_consultation_contact_label' => 'Mulai audit kebutuhan',
+                'home_consultation_card_title' => 'Jadwalkan Konsultasi',
+                'home_consultation_card_description' => 'Ceritakan kendala bisnis dan target digital Anda.',
+                'home_consultation_button_text' => 'Bicara Dengan Tim',
                 'x_url' => '#',
                 'facebook_url' => 'https://facebook.com/jasaibnu',
                 'linkedin_url' => 'https://linkedin.com/company/jasaibnu',
@@ -785,6 +794,8 @@ class ExampleTest extends TestCase
             'whatsapp_number' => '+6281234567890',
             'whatsapp_url' => 'https://wa.me/6281234567890',
             'facebook_url' => 'https://facebook.com/jasaibnu',
+            'home_consultation_title' => 'Butuh sistem yang lebih rapi?',
+            'home_consultation_button_text' => 'Bicara Dengan Tim',
         ]);
 
         $this->assertSame('https://wa.me/6281234567890', SiteSetting::current()->whatsappContactUrl('Halo JASAIBNU'));
@@ -891,6 +902,15 @@ class ExampleTest extends TestCase
             'whatsapp_url' => null,
             'address' => 'Jakarta, Indonesia',
             'google_maps_embed_url' => 'https://www.google.com/maps?q=Jakarta%2C%20Indonesia&output=embed',
+            'home_consultation_eyebrow' => 'Audit Digital',
+            'home_consultation_title' => 'Bangun sistem yang lebih sesuai',
+            'home_consultation_feature_one' => 'Pemetaan proses',
+            'home_consultation_feature_two' => 'Prioritas teknis',
+            'home_consultation_description' => 'Teks konsultasi dari database.',
+            'home_consultation_contact_label' => 'Mulai dari email',
+            'home_consultation_card_title' => 'Konsultasi Implementasi',
+            'home_consultation_card_description' => 'Teks kartu konsultasi dari database.',
+            'home_consultation_button_text' => 'Mulai Diskusi',
             'footer_description' => 'Footer from database settings.',
             'copyright_text' => 'All Rights Reserved.',
         ]);
@@ -916,6 +936,18 @@ class ExampleTest extends TestCase
                 ->assertSee('aria-label="Konsultasi via WhatsApp"', false)
                 ->assertSee('https://wa.me/6281234567890?text=Halo%20JASAIBNU%2C%20saya%20ingin%20konsultasi%20mengenai%20kebutuhan%20digital%20bisnis%20saya.', false);
         }
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Audit Digital')
+            ->assertSee('Bangun sistem yang lebih sesuai')
+            ->assertSee('Pemetaan proses')
+            ->assertSee('Prioritas teknis')
+            ->assertSee('Teks konsultasi dari database.')
+            ->assertSee('Mulai dari email')
+            ->assertSee('Konsultasi Implementasi')
+            ->assertSee('Teks kartu konsultasi dari database.')
+            ->assertSee('Mulai Diskusi');
 
         $this->get(route('contact'))
             ->assertOk()
