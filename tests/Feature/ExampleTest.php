@@ -812,6 +812,28 @@ class ExampleTest extends TestCase
             ->assertSessionHasErrors(['email', 'whatsapp_number', 'whatsapp_url', 'google_maps_embed_url', 'facebook_url']);
     }
 
+    public function test_site_settings_extracts_google_maps_embed_url_from_iframe()
+    {
+        $adminUser = User::create([
+            'name' => 'Admin Google Maps Iframe',
+            'email' => 'admin-google-maps-iframe@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+        ]);
+
+        $embedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.2610645412497!2d106.1493419!3d-6.0954957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e418be2cdfca929%3A0xcedfa059b9a8bfbb!2sPT%20Jasa%20Ibnu%20Development!5e0!3m2!1sen!2sid!4v1786746438926!5m2!1sen!2sid';
+
+        $this->actingAs($adminUser)
+            ->from(route('admin.site-settings.edit'))
+            ->put(route('admin.site-settings.update'), array_merge(SiteSetting::defaults(), [
+                'google_maps_embed_url' => '<iframe src="' . $embedUrl . '" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>',
+            ]))
+            ->assertRedirect(route('admin.site-settings.edit'))
+            ->assertSessionHas('status');
+
+        $this->assertSame($embedUrl, SiteSetting::current()->google_maps_embed_url);
+    }
+
     public function test_site_settings_accepts_only_whatsapp_url_domains()
     {
         $adminUser = User::create([

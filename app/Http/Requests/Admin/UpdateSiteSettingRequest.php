@@ -31,7 +31,7 @@ class UpdateSiteSettingRequest extends FormRequest
             'address' => ['nullable', 'string', 'max:220'],
             'city' => ['nullable', 'string', 'max:120'],
             'country' => ['nullable', 'string', 'max:120'],
-            'google_maps_embed_url' => ['nullable', 'url', 'max:255'],
+            'google_maps_embed_url' => ['nullable', 'url', 'max:2000'],
             'google_maps_external_url' => ['nullable', 'url', 'max:255'],
             'x_url' => ['nullable', 'string', 'max:255', 'regex:/^(#|https?:\/\/.+)$/'],
             'facebook_url' => ['nullable', 'string', 'max:255', 'regex:/^(#|https?:\/\/.+)$/'],
@@ -65,6 +65,29 @@ class UpdateSiteSettingRequest extends FormRequest
         if (is_string($whatsappUrl) && trim($whatsappUrl) === '') {
             $this->merge(['whatsapp_url' => null]);
         }
+
+        $googleMapsEmbedUrl = $this->input('google_maps_embed_url');
+
+        if (is_string($googleMapsEmbedUrl)) {
+            $this->merge([
+                'google_maps_embed_url' => $this->normalizeGoogleMapsEmbedUrl($googleMapsEmbedUrl),
+            ]);
+        }
+    }
+
+    private function normalizeGoogleMapsEmbedUrl(string $value): ?string
+    {
+        $value = trim($value);
+
+        if ($value === '') {
+            return null;
+        }
+
+        if (preg_match('/<iframe\b[^>]*\bsrc=(["\'])(.*?)\1/i', $value, $matches)) {
+            return html_entity_decode($matches[2], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
+        return $value;
     }
 
     public function after(): array

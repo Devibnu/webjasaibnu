@@ -76,7 +76,8 @@
 
                 <h6 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 mt-4">Location / Maps</h6>
                 <label>Google Maps Embed URL</label>
-                <input type="url" name="google_maps_embed_url" class="form-control mb-3" value="{{ old('google_maps_embed_url', $settings->google_maps_embed_url) }}">
+                <input type="text" name="google_maps_embed_url" class="form-control mb-1" value="{{ old('google_maps_embed_url', $settings->google_maps_embed_url) }}" placeholder="Paste Google Maps embed URL atau kode iframe">
+                <small class="text-muted d-block mb-3">Boleh paste URL embed saja atau kode iframe dari Google Maps. Sistem akan menyimpan URL embed-nya.</small>
 
                 <label>Google Maps External URL</label>
                 <input type="url" name="google_maps_external_url" class="form-control mb-3" value="{{ old('google_maps_external_url', $settings->google_maps_external_url) }}">
