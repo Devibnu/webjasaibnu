@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\InsightCategoryController as AdminInsightCategory
 use App\Http\Controllers\Admin\InsightController as AdminInsightController;
 use App\Http\Controllers\Admin\PortfolioCategoryController as AdminPortfolioCategoryController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
+use App\Http\Controllers\Admin\PortfolioPageSettingController as AdminPortfolioPageSettingController;
 use App\Http\Controllers\Admin\SiteSettingController as AdminSiteSettingController;
 use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\HeroSlideController as AdminHeroSlideController;
@@ -66,6 +67,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('portfolio-categories', AdminPortfolioCategoryController::class)
             ->parameters(['portfolio-categories' => 'portfolioCategory'])
             ->except(['show']);
+        Route::get('/portfolio-page-settings', [AdminPortfolioPageSettingController::class, 'edit'])->name('portfolio-page-settings.edit');
+        Route::put('/portfolio-page-settings', [AdminPortfolioPageSettingController::class, 'update'])->name('portfolio-page-settings.update');
         Route::resource('services', AdminServiceController::class)->except(['show']);
         Route::resource('solutions', AdminSolutionController::class)->except(['show']);
         Route::get('/contact', [AdminContactMessageController::class, 'index'])->name('contact.index');

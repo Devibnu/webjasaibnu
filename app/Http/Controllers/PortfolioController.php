@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PortfolioPageSetting;
 use App\Models\PortfolioCategory;
 use App\Models\PortfolioItem;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ class PortfolioController extends Controller
                 ->ordered()
                 ->get(),
             'activeCategory' => $request->input('category'),
+            'pageSettings' => PortfolioPageSetting::current(),
         ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\InsightCategory;
 use App\Models\ContactMessage;
 use App\Models\PortfolioCategory;
 use App\Models\PortfolioItem;
+use App\Models\PortfolioPageSetting;
 use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -371,6 +372,93 @@ class ExampleTest extends TestCase
             ])
             ->assertRedirect(route('admin.portfolio.create'))
             ->assertSessionHasErrors('slug');
+    }
+
+    public function test_portfolio_page_settings_control_public_intro_and_cta_copy()
+    {
+        $this->withoutVite();
+
+        $category = PortfolioCategory::create([
+            'name' => 'Published Category',
+            'slug' => 'published-category',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        PortfolioItem::create([
+            'portfolio_category_id' => $category->id,
+            'title' => 'Settings Visible Portfolio',
+            'slug' => 'settings-visible-portfolio',
+            'code' => 'SVP',
+            'excerpt' => 'Portfolio item remains visible after page settings change.',
+            'description' => 'Portfolio item remains visible after page settings change.',
+            'technologies' => ['Laravel'],
+            'status' => PortfolioItem::STATUS_PUBLISHED,
+            'published_at' => now()->subDay(),
+            'sort_order' => 1,
+        ]);
+
+        $this->get(route('portfolio.index'))
+            ->assertOk()
+            ->assertSee('PORTFOLIO JASAIBNU')
+            ->assertSee('Solusi Digital yang Kami Bangun untuk Kebutuhan Bisnis')
+            ->assertSee('Diskusikan kebutuhan website, aplikasi, SaaS, integrasi sistem, atau AI bersama JASAIBNU.')
+            ->assertSee('Settings Visible Portfolio');
+
+        $adminUser = User::create([
+            'name' => 'Admin Portfolio Settings',
+            'email' => 'admin-portfolio-settings@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+        ]);
+
+        $this->actingAs($adminUser)
+            ->get(route('admin.portfolio-page-settings.edit'))
+            ->assertOk()
+            ->assertSee('Portfolio Page Settings')
+            ->assertSee('Portfolio Intro')
+            ->assertSee(route('admin.portfolio-page-settings.update'), false);
+
+        $this->actingAs($adminUser)
+            ->put(route('admin.portfolio-page-settings.update'), [
+                'eyebrow' => 'CUSTOM PORTFOLIO',
+                'title' => 'Custom Portfolio Heading',
+                'description' => 'Custom portfolio intro description.',
+                'cta_eyebrow' => 'CUSTOM CTA',
+                'cta_title' => 'Custom CTA Heading',
+                'cta_description' => 'Custom CTA description.',
+                'cta_primary_label' => 'Primary Custom',
+                'cta_primary_url' => '/contact',
+                'cta_secondary_label' => 'Secondary Custom',
+                'cta_secondary_url' => 'https://example.com/services',
+            ])
+            ->assertRedirect(route('admin.portfolio-page-settings.edit'));
+
+        $this->assertSame(1, PortfolioPageSetting::count());
+        $this->assertDatabaseHas('portfolio_page_settings', [
+            'eyebrow' => 'CUSTOM PORTFOLIO',
+            'title' => 'Custom Portfolio Heading',
+            'cta_primary_url' => '/contact',
+        ]);
+
+        $this->get(route('portfolio.index'))
+            ->assertOk()
+            ->assertSee('CUSTOM PORTFOLIO')
+            ->assertSee('Custom Portfolio Heading')
+            ->assertSee('Custom portfolio intro description.')
+            ->assertSee('CUSTOM CTA')
+            ->assertSee('Custom CTA Heading')
+            ->assertSee('Custom CTA description.')
+            ->assertSee('href="' . url('/contact') . '"', false)
+            ->assertSee('href="https://example.com/services"', false)
+            ->assertSee('Primary Custom')
+            ->assertSee('Secondary Custom')
+            ->assertSee('Settings Visible Portfolio');
+
+        $this->actingAs($adminUser)
+            ->get(route('admin.portfolio.create'))
+            ->assertOk()
+            ->assertSee('Create Portfolio');
     }
 
     public function test_admin_portfolio_uploads_featured_image()

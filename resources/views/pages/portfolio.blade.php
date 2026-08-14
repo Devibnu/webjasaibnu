@@ -137,9 +137,9 @@
     <section class="portfolio-intro" aria-labelledby="portfolio-overview-heading">
         <div class="portfolio-shell">
             <div class="portfolio-section-title">
-                <p>PORTFOLIO JASAIBNU</p>
-                <h1 id="portfolio-overview-heading">Solusi Digital yang Kami Bangun untuk Kebutuhan Bisnis</h1>
-                <span>Beberapa contoh pengembangan website, aplikasi, sistem bisnis, dan platform digital yang menggambarkan pendekatan JASAIBNU dalam membangun solusi yang scalable dan mudah dikembangkan.</span>
+                <p>{{ $pageSettings->value('eyebrow') }}</p>
+                <h1 id="portfolio-overview-heading">{{ $pageSettings->value('title') }}</h1>
+                <span>{{ $pageSettings->value('description') }}</span>
             </div>
 
             <div class="portfolio-grid">
@@ -184,12 +184,12 @@
     <section class="portfolio-cta" aria-labelledby="portfolio-cta-heading">
         <div class="portfolio-shell">
             <div class="portfolio-cta-panel">
-                <p>PUNYA PROYEK?</p>
-                <h1 id="portfolio-cta-heading">Mari Bangun Solusi Digital untuk Bisnis Anda</h1>
-                <span>Diskusikan kebutuhan website, aplikasi, SaaS, integrasi sistem, atau AI bersama JASAIBNU.</span>
+                <p>{{ $pageSettings->value('cta_eyebrow') }}</p>
+                <h1 id="portfolio-cta-heading">{{ $pageSettings->value('cta_title') }}</h1>
+                <span>{{ $pageSettings->value('cta_description') }}</span>
                 <div>
-                    <a href="{{ route('contact') }}">Konsultasi Gratis</a>
-                    <a href="{{ route('services.index') }}">Lihat Layanan</a>
+                    <a href="{{ $pageSettings->ctaPrimaryUrl() }}">{{ $pageSettings->ctaPrimaryLabel() }}</a>
+                    <a href="{{ $pageSettings->ctaSecondaryUrl() }}">{{ $pageSettings->ctaSecondaryLabel() }}</a>
                 </div>
             </div>
         </div>
