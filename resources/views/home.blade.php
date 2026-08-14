@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('body_class', 'startup2-home')
-@section('title', 'JASAIBNU — IT Solutions, Software Development, SaaS & AI')
-@section('meta_description', 'PT JASA IBNU DEVELOPMENT membantu bisnis membangun website, aplikasi, SaaS, SEO, dan integrasi AI dengan fondasi teknis yang scalable, aman, dan siap dikembangkan.')
+@section('title', 'Jasa Pembuatan Website, Aplikasi & SEO | JASAIBNU')
+@section('meta_description', 'JASAIBNU menyediakan jasa pembuatan website, aplikasi bisnis, SaaS, SEO, integrasi sistem, dan AI untuk bisnis yang ingin tumbuh secara digital.')
 
 @push('head')
     @php

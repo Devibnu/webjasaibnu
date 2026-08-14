@@ -41,6 +41,9 @@
     @json($siteSettings->organizationSchema($homeUrl), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
     </script>
     <script type="application/ld+json">
+    @json($siteSettings->professionalServiceSchema($homeUrl), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+    </script>
+    <script type="application/ld+json">
     @json($siteSettings->websiteSchema($homeUrl), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
     </script>
 </head>

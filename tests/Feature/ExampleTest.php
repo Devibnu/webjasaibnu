@@ -39,6 +39,8 @@ class ExampleTest extends TestCase
         $response->assertSee('Solusi Digital untuk Bisnis yang Siap Bertumbuh');
         $response->assertSee('JASAIBNU');
         $response->assertSee('Software Development');
+        $response->assertSee('<title>Jasa Pembuatan Website, Aplikasi &amp; SEO | JASAIBNU</title>', false);
+        $response->assertSee('JASAIBNU menyediakan jasa pembuatan website, aplikasi bisnis, SaaS, SEO, integrasi sistem, dan AI', false);
         $response->assertSee('meta name="description"', false);
         $response->assertSee('rel="canonical"', false);
         $response->assertSee(route('services.index'), false);
@@ -1336,11 +1338,16 @@ class ExampleTest extends TestCase
 
         $homeUrl = rtrim(route('home'), '/');
         $organizationSchema = $schemas->firstWhere('@type', 'Organization');
+        $professionalServiceSchema = $schemas->firstWhere('@type', 'ProfessionalService');
         $websiteSchema = $schemas->firstWhere('@type', 'WebSite');
 
         $this->assertNotNull($organizationSchema);
+        $this->assertNotNull($professionalServiceSchema);
         $this->assertNotNull($websiteSchema);
         $this->assertSame($homeUrl . '#organization', $organizationSchema['@id'] ?? null);
+        $this->assertSame($homeUrl . '#professional-service', $professionalServiceSchema['@id'] ?? null);
+        $this->assertContains('Jasa pembuatan website', $professionalServiceSchema['serviceType'] ?? []);
+        $this->assertContains('SEO services', $professionalServiceSchema['serviceType'] ?? []);
         $this->assertSame($homeUrl . '#website', $websiteSchema['@id'] ?? null);
         $this->assertSame(['@id' => $homeUrl . '#organization'], $websiteSchema['publisher'] ?? null);
     }

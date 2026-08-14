@@ -167,6 +167,74 @@ class SiteSetting extends Model
         return $schema;
     }
 
+    public function professionalServiceSchema(string $homeUrl): array
+    {
+        $homeUrl = rtrim($homeUrl, '/');
+
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'ProfessionalService',
+            '@id' => $homeUrl . '#professional-service',
+            'name' => $this->company_legal_name ?: $this->company_name,
+            'alternateName' => $this->company_name ?: 'JASAIBNU',
+            'url' => $homeUrl,
+            'description' => 'JASAIBNU menyediakan jasa pembuatan website, aplikasi bisnis, SaaS, SEO, integrasi sistem, dan solusi AI untuk bisnis di Indonesia.',
+            'priceRange' => '$$',
+            'areaServed' => [
+                ['@type' => 'Country', 'name' => $this->country ?: 'Indonesia'],
+                ['@type' => 'City', 'name' => $this->city ?: 'Serang'],
+            ],
+            'serviceType' => [
+                'Jasa pembuatan website',
+                'Jasa pembuatan aplikasi bisnis',
+                'SaaS development',
+                'SEO services',
+                'AI integration',
+                'System integration',
+            ],
+            'hasOfferCatalog' => [
+                '@type' => 'OfferCatalog',
+                'name' => 'Layanan Digital JASAIBNU',
+                'itemListElement' => [
+                    $this->serviceOffer('Jasa Pembuatan Website', 'Website company profile, landing page, dan website bisnis yang responsive, SEO-ready, dan mudah dikelola.'),
+                    $this->serviceOffer('Jasa Pembuatan Aplikasi Bisnis', 'Aplikasi web untuk CRM, operasional, sales pipeline, ticketing, dashboard, dan workflow bisnis.'),
+                    $this->serviceOffer('SEO Services', 'Optimasi SEO teknis dan on-page untuk meningkatkan visibilitas website bisnis di mesin pencari.'),
+                    $this->serviceOffer('AI & System Integration', 'Integrasi API, automasi workflow, dan penerapan AI untuk meningkatkan produktivitas bisnis.'),
+                ],
+            ],
+        ];
+
+        if ($this->email) {
+            $schema['email'] = $this->email;
+        }
+
+        if ($this->phone && ! Str::contains(Str::lower($this->phone), ['whatsapp', 'konsultasi'])) {
+            $schema['telephone'] = $this->phone;
+        }
+
+        if ($logoUrl = $this->publicLogoUrl()) {
+            $schema['image'] = $logoUrl;
+        }
+
+        if ($address = $this->schemaAddress()) {
+            $schema['address'] = $address;
+        }
+
+        return $schema;
+    }
+
+    private function serviceOffer(string $name, string $description): array
+    {
+        return [
+            '@type' => 'Offer',
+            'itemOffered' => [
+                '@type' => 'Service',
+                'name' => $name,
+                'description' => $description,
+            ],
+        ];
+    }
+
     public function websiteSchema(string $homeUrl): array
     {
         $homeUrl = rtrim($homeUrl, '/');
