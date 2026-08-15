@@ -1402,6 +1402,10 @@ class ExampleTest extends TestCase
         $responseRobots->assertSee("User-agent: *\nDisallow: /", false);
         $responseRobots->assertDontSee('Sitemap:', false);
 
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertDontSee('href="#"', false);
+
         $responseSitemap = $this->get('/sitemap.xml');
         $responseSitemap->assertOk();
         $responseSitemap->assertHeader('Content-Type', 'application/xml; charset=UTF-8');

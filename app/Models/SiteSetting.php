@@ -89,11 +89,16 @@ class SiteSetting extends Model
     public function socialLinks(): array
     {
         return [
-            ['label' => 'X', 'key' => 'x_url', 'value' => $this->x_url, 'text' => 'x'],
-            ['label' => 'Facebook', 'key' => 'facebook_url', 'value' => $this->facebook_url, 'text' => 'f'],
-            ['label' => 'LinkedIn', 'key' => 'linkedin_url', 'value' => $this->linkedin_url, 'text' => 'in'],
-            ['label' => 'Instagram', 'key' => 'instagram_url', 'value' => $this->instagram_url, 'text' => 'ig'],
+            ['label' => 'X', 'key' => 'x_url', 'value' => $this->publicSocialUrl($this->x_url), 'text' => 'x'],
+            ['label' => 'Facebook', 'key' => 'facebook_url', 'value' => $this->publicSocialUrl($this->facebook_url), 'text' => 'f'],
+            ['label' => 'LinkedIn', 'key' => 'linkedin_url', 'value' => $this->publicSocialUrl($this->linkedin_url), 'text' => 'in'],
+            ['label' => 'Instagram', 'key' => 'instagram_url', 'value' => $this->publicSocialUrl($this->instagram_url), 'text' => 'ig'],
         ];
+    }
+
+    private function publicSocialUrl(?string $url): ?string
+    {
+        return is_string($url) && filter_var($url, FILTER_VALIDATE_URL) ? $url : null;
     }
 
     public function publicLogoUrl(): ?string

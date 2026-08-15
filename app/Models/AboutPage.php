@@ -149,11 +149,8 @@ class AboutPage extends Model
 
     public function homepageCtaUrl(): string
     {
-        $url = $this->homepageAboutValue('homepage_cta_url') ?: '#';
-
-        if ($url === '#') {
-            return $url;
-        }
+        $url = $this->homepageAboutValue('homepage_cta_url') ?: '/contact';
+        $url = $url === '#' ? '/contact' : $url;
 
         return str_starts_with($url, 'http://') || str_starts_with($url, 'https://')
             ? $url

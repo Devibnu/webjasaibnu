@@ -123,4 +123,4 @@
     </a>
 @endif
 
-<a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top" aria-label="Back to top" data-back-to-top>↑</a>
+<button type="button" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top" aria-label="Back to top" data-back-to-top>↑</button>
