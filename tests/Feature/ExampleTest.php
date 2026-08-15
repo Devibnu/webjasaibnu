@@ -199,6 +199,26 @@ class ExampleTest extends TestCase
         $this->assertSame(1, count($h1Matches[0]));
     }
 
+    public function test_serang_website_selection_insight_is_published()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('insights.show', 'cara-memilih-jasa-pembuatan-website-di-serang'));
+
+        $response
+            ->assertOk()
+            ->assertSee('<title>Cara Memilih Jasa Pembuatan Website di Serang</title>', false)
+            ->assertSee('Cara Memilih Jasa Pembuatan Website di Serang')
+            ->assertSee('jasa pembuatan website di Serang')
+            ->assertSee('Pastikan Website Cepat Dibuka di Mobile')
+            ->assertSee('JASAIBNU membantu bisnis di Serang, Banten, dan area sekitarnya')
+            ->assertSee('rel="canonical" href="' . route('insights.show', 'cara-memilih-jasa-pembuatan-website-di-serang') . '"', false)
+            ->assertSee('"@type": "BlogPosting"', false);
+
+        preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
+        $this->assertSame(1, count($h1Matches[0]));
+    }
+
     public function test_contact_form_accepts_valid_submission()
     {
         Log::spy();
