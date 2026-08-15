@@ -55,6 +55,20 @@ Route::view('/jasa-pembuatan-website-banten', 'pages.website-development', [
         'badge' => 'Website menjadi pusat informasi bisnis yang siap melayani calon pelanggan dari Serang, Cilegon, Tangerang, Pandeglang, Lebak, dan area Banten lainnya.',
     ],
 ])->name('website-development-banten');
+Route::view('/jasa-pembuatan-website-serang-murah', 'pages.website-development', [
+    'landing' => [
+        'title' => 'Jasa Pembuatan Website Serang Murah & Profesional | JASAIBNU',
+        'meta_description' => 'Jasa pembuatan website Serang murah dan profesional untuk UMKM, company profile, landing page, dan website bisnis yang cepat, mobile-friendly, SEO-ready, dan mudah dikelola.',
+        'canonical' => url('/jasa-pembuatan-website-serang-murah'),
+        'label' => 'Jasa Website Serang Murah',
+        'h1' => 'Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional',
+        'hero_copy' => 'JASAIBNU membantu UMKM dan bisnis lokal Serang membuat website dengan biaya yang lebih efisien, tampilan rapi, struktur SEO dasar, kontak WhatsApp, dan fondasi yang bisa dikembangkan.',
+        'impact_label' => 'Website hemat untuk bisnis lokal',
+        'impact_title' => 'Website terjangkau tetap bisa membantu bisnis Serang terlihat serius, mudah dipercaya, dan siap menerima calon pelanggan.',
+        'impact_copy' => 'Paket website yang efisien cocok untuk bisnis yang ingin mulai online tanpa membangun sistem terlalu besar sejak awal. Fokusnya jelas: profil usaha, layanan, kontak, portfolio, dan jalur konsultasi yang mudah.',
+        'badge' => 'Mulai dari website sederhana yang rapi, cepat, mobile-friendly, dan siap menjadi pintu masuk pelanggan baru.',
+    ],
+])->name('website-development-serang-murah');
 Route::get('/services', function () {
     return view('pages.services', [
         'services' => \App\Models\Service::active()->ordered()->get(),

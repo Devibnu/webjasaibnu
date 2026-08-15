@@ -79,6 +79,7 @@ class ExampleTest extends TestCase
             route('services.index') => 'Solusi Digital untuk Mendukung Pertumbuhan Bisnis Anda',
             route('website-development-serang') => 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional',
             route('website-development-banten') => 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional',
+            route('website-development-serang-murah') => 'Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional',
             route('solutions.index') => 'Solusi Teknologi yang Dibangun Sesuai Kebutuhan Bisnis',
             route('portfolio.index') => 'Solusi Digital yang Kami Bangun untuk Kebutuhan Bisnis',
             route('insights.index') => 'Fondasi SEO Teknis yang Perlu Dipersiapkan Sejak Website Dibangun',
@@ -126,6 +127,24 @@ class ExampleTest extends TestCase
             ->assertSee('Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional')
             ->assertSee('Website membantu bisnis di Banten tampil lebih kredibel', false)
             ->assertSee('rel="canonical" href="' . route('website-development-banten') . '"', false);
+
+        preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
+        $this->assertSame(1, count($h1Matches[0]));
+    }
+
+    public function test_serang_affordable_website_development_landing_page_targets_local_keyword()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('website-development-serang-murah'));
+
+        $response
+            ->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Serang Murah &amp; Profesional | JASAIBNU</title>', false)
+            ->assertSee('Jasa pembuatan website Serang murah dan profesional', false)
+            ->assertSee('Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional')
+            ->assertSee('Website terjangkau tetap bisa membantu bisnis Serang terlihat serius', false)
+            ->assertSee('rel="canonical" href="' . route('website-development-serang-murah') . '"', false);
 
         preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
         $this->assertSame(1, count($h1Matches[0]));
@@ -1477,6 +1496,7 @@ class ExampleTest extends TestCase
             '/jasa-pembuatan-website',
             '/jasa-pembuatan-website-serang',
             '/jasa-pembuatan-website-banten',
+            '/jasa-pembuatan-website-serang-murah',
             '/services',
             '/solutions',
             '/portfolio',
