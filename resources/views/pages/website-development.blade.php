@@ -157,12 +157,12 @@
         }
 
         .seo-service-impact-copy h2 {
-            max-width: 640px;
+            max-width: 600px;
             margin: 0 0 16px;
             color: #091e3e;
-            font-size: clamp(30px, 3.1vw, 44px);
+            font-size: clamp(26px, 2.35vw, 34px);
             font-weight: 800;
-            line-height: 1.14;
+            line-height: 1.22;
         }
 
         .seo-service-impact-copy > p {
