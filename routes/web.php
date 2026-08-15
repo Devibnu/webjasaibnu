@@ -41,6 +41,20 @@ Route::view('/jasa-pembuatan-website-serang', 'pages.website-development', [
         'badge' => 'Website bekerja 24 jam untuk memperkenalkan bisnis Anda ke calon pelanggan di Serang, Banten, dan sekitarnya.',
     ],
 ])->name('website-development-serang');
+Route::view('/jasa-pembuatan-website-banten', 'pages.website-development', [
+    'landing' => [
+        'title' => 'Jasa Pembuatan Website Banten | Website Bisnis & UMKM',
+        'meta_description' => 'Jasa pembuatan website Banten untuk bisnis, UMKM, company profile, landing page, dan website layanan yang cepat, mobile-friendly, SEO-ready, aman, dan mudah dikembangkan.',
+        'canonical' => url('/jasa-pembuatan-website-banten'),
+        'label' => 'Jasa Pembuatan Website Banten',
+        'h1' => 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional',
+        'hero_copy' => 'JASAIBNU membantu bisnis di Banten membangun website yang rapi, cepat dibuka, mudah dipahami pelanggan, terhubung ke WhatsApp, dan siap dipakai sebagai pusat promosi digital.',
+        'impact_label' => 'Website untuk area Banten',
+        'impact_title' => 'Website membantu bisnis di Banten tampil lebih kredibel dan lebih mudah dijangkau calon pelanggan online.',
+        'impact_copy' => 'Dengan website yang jelas, pelanggan bisa mengenal bisnis Anda dari Google, media sosial, iklan, atau WhatsApp, lalu melihat layanan, portfolio, alamat, dan kontak dalam satu tempat yang profesional.',
+        'badge' => 'Website menjadi pusat informasi bisnis yang siap melayani calon pelanggan dari Serang, Cilegon, Tangerang, Pandeglang, Lebak, dan area Banten lainnya.',
+    ],
+])->name('website-development-banten');
 Route::get('/services', function () {
     return view('pages.services', [
         'services' => \App\Models\Service::active()->ordered()->get(),

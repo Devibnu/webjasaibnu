@@ -78,6 +78,7 @@ class ExampleTest extends TestCase
         $pages = [
             route('services.index') => 'Solusi Digital untuk Mendukung Pertumbuhan Bisnis Anda',
             route('website-development-serang') => 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional',
+            route('website-development-banten') => 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional',
             route('solutions.index') => 'Solusi Teknologi yang Dibangun Sesuai Kebutuhan Bisnis',
             route('portfolio.index') => 'Solusi Digital yang Kami Bangun untuk Kebutuhan Bisnis',
             route('insights.index') => 'Fondasi SEO Teknis yang Perlu Dipersiapkan Sejak Website Dibangun',
@@ -107,6 +108,24 @@ class ExampleTest extends TestCase
             ->assertSee('Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional')
             ->assertSee('Website membantu bisnis Serang dan Banten lebih mudah ditemukan', false)
             ->assertSee('rel="canonical" href="' . route('website-development-serang') . '"', false);
+
+        preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
+        $this->assertSame(1, count($h1Matches[0]));
+    }
+
+    public function test_banten_website_development_landing_page_targets_local_keyword()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('website-development-banten'));
+
+        $response
+            ->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Banten | Website Bisnis &amp; UMKM</title>', false)
+            ->assertSee('Jasa pembuatan website Banten untuk bisnis, UMKM', false)
+            ->assertSee('Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional')
+            ->assertSee('Website membantu bisnis di Banten tampil lebih kredibel', false)
+            ->assertSee('rel="canonical" href="' . route('website-development-banten') . '"', false);
 
         preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
         $this->assertSame(1, count($h1Matches[0]));
@@ -1457,6 +1476,7 @@ class ExampleTest extends TestCase
         foreach ([
             '/jasa-pembuatan-website',
             '/jasa-pembuatan-website-serang',
+            '/jasa-pembuatan-website-banten',
             '/services',
             '/solutions',
             '/portfolio',
