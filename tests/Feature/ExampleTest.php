@@ -63,9 +63,11 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertSee('<link rel="preload" as="image" href="' . asset('assets/startup2/img/carousel-1.jpg') . '" fetchpriority="high">', false);
-        $this->assertMatchesRegularExpression('/src="' . preg_quote(asset('assets/startup2/img/carousel-1.jpg'), '/') . '"[^>]+width="1920"[^>]+height="1080"[^>]+fetchpriority="high"[^>]+decoding="sync"/', $response->getContent());
-        $this->assertMatchesRegularExpression('/src="' . preg_quote(asset('assets/startup2/img/carousel-2.jpg'), '/') . '"[^>]+width="1920"[^>]+height="1080"[^>]+loading="lazy"[^>]+decoding="async"/', $response->getContent());
+        $response->assertSee('href="' . asset('assets/startup2/img/optimized/carousel-1-mobile.webp') . '"', false);
+        $response->assertSee('imagesrcset="' . asset('assets/startup2/img/optimized/carousel-1-mobile.webp') . ' 768w, ' . asset('assets/startup2/img/optimized/carousel-1-desktop.webp') . ' 1280w"', false);
+        $response->assertSee('<source type="image/webp" media="(max-width: 767px)" srcset="' . asset('assets/startup2/img/optimized/carousel-1-mobile.webp') . '">', false);
+        $this->assertMatchesRegularExpression('/src="' . preg_quote(asset('assets/startup2/img/carousel-1.jpg'), '/') . '"[^>]+width="1280"[^>]+height="720"[^>]+fetchpriority="high"[^>]+decoding="sync"/', $response->getContent());
+        $this->assertMatchesRegularExpression('/src="' . preg_quote(asset('assets/startup2/img/carousel-2.jpg'), '/') . '"[^>]+width="1280"[^>]+height="720"[^>]+loading="lazy"[^>]+decoding="async"/', $response->getContent());
         $response->assertSee('src="' . asset('assets/startup2/img/feature.jpg') . '" alt="Perencanaan solusi software untuk bisnis" width="800" height="800" loading="lazy" decoding="async"', false);
     }
 

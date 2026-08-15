@@ -10,14 +10,16 @@
 
 @push('head')
     @php
-        $firstHeroImage = ($heroSlides ?? collect())->first()?->imageUrl() ?: asset('assets/startup2/img/carousel-1.jpg');
+        $firstHeroSlide = ($heroSlides ?? collect())->first();
+        $firstHeroImage = $firstHeroSlide?->preloadImageUrl() ?: asset('assets/startup2/img/optimized/carousel-1-mobile.webp');
+        $firstHeroDesktopImage = $firstHeroSlide?->optimizedDesktopImageUrl() ?: asset('assets/startup2/img/optimized/carousel-1-desktop.webp');
     @endphp
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    @if (($heroSlides ?? collect())->isNotEmpty())
-        <link rel="preload" as="image" href="{{ $firstHeroImage }}" fetchpriority="high">
+    @if ($firstHeroSlide?->optimizedMobileImageUrl() || ($heroSlides ?? collect())->isEmpty())
+        <link rel="preload" as="image" href="{{ $firstHeroImage }}" imagesrcset="{{ $firstHeroImage }} 768w, {{ $firstHeroDesktopImage }} 1280w" imagesizes="100vw" fetchpriority="high" type="image/webp">
     @else
-        <link rel="preload" as="image" href="{{ asset('assets/startup2/img/optimized/carousel-1-mobile.webp') }}" imagesrcset="{{ asset('assets/startup2/img/optimized/carousel-1-mobile.webp') }} 768w, {{ asset('assets/startup2/img/optimized/carousel-1-desktop.webp') }} 1280w" imagesizes="100vw" fetchpriority="high" type="image/webp">
+        <link rel="preload" as="image" href="{{ $firstHeroImage }}" fetchpriority="high">
     @endif
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>

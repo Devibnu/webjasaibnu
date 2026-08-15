@@ -53,6 +53,29 @@ class HeroSlide extends Model
         return Storage::url($this->image_path);
     }
 
+    public function optimizedMobileImageUrl(): ?string
+    {
+        return match ($this->image_path) {
+            null, 'assets/startup2/img/carousel-1.jpg' => asset('assets/startup2/img/optimized/carousel-1-mobile.webp'),
+            'assets/startup2/img/carousel-2.jpg' => asset('assets/startup2/img/optimized/carousel-2-mobile.webp'),
+            default => null,
+        };
+    }
+
+    public function optimizedDesktopImageUrl(): ?string
+    {
+        return match ($this->image_path) {
+            null, 'assets/startup2/img/carousel-1.jpg' => asset('assets/startup2/img/optimized/carousel-1-desktop.webp'),
+            'assets/startup2/img/carousel-2.jpg' => asset('assets/startup2/img/optimized/carousel-2-desktop.webp'),
+            default => null,
+        };
+    }
+
+    public function preloadImageUrl(): string
+    {
+        return $this->optimizedMobileImageUrl() ?: $this->imageUrl();
+    }
+
     public function overlayRgba(string $color = '9, 30, 62'): string
     {
         $opacity = $this->overlay_opacity ?? self::DEFAULT_OVERLAY_OPACITY;

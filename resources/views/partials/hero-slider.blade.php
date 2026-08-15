@@ -8,7 +8,15 @@
     <div class="carousel-inner">
         @forelse ($heroSlides as $slide)
             <div class="carousel-item @if ($loop->first) active @endif">
-                <img class="w-100" src="{{ $slide->imageUrl() }}" alt="{{ $slide->image_alt ?: $slide->title }}" width="1920" height="1080" @if ($loop->first) fetchpriority="high" decoding="sync" @else loading="lazy" decoding="async" @endif>
+                @if ($slide->optimizedMobileImageUrl())
+                    <picture>
+                        <source type="image/webp" media="(max-width: 767px)" srcset="{{ $slide->optimizedMobileImageUrl() }}">
+                        <source type="image/webp" srcset="{{ $slide->optimizedDesktopImageUrl() }}">
+                        <img class="w-100" src="{{ $slide->imageUrl() }}" alt="{{ $slide->image_alt ?: $slide->title }}" width="1280" height="720" @if ($loop->first) fetchpriority="high" decoding="sync" @else loading="lazy" decoding="async" @endif>
+                    </picture>
+                @else
+                    <img class="w-100" src="{{ $slide->imageUrl() }}" alt="{{ $slide->image_alt ?: $slide->title }}" width="1920" height="1080" @if ($loop->first) fetchpriority="high" decoding="sync" @else loading="lazy" decoding="async" @endif>
+                @endif
                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center" style="background: {{ $slide->overlayRgba() }};">
                     <div class="p-3" style="max-width: 900px;">
                         @if ($slide->eyebrow)
