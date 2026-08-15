@@ -77,6 +77,7 @@ class ExampleTest extends TestCase
 
         $pages = [
             route('services.index') => 'Solusi Digital untuk Mendukung Pertumbuhan Bisnis Anda',
+            route('website-development-serang') => 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional',
             route('solutions.index') => 'Solusi Teknologi yang Dibangun Sesuai Kebutuhan Bisnis',
             route('portfolio.index') => 'Solusi Digital yang Kami Bangun untuk Kebutuhan Bisnis',
             route('insights.index') => 'Fondasi SEO Teknis yang Perlu Dipersiapkan Sejak Website Dibangun',
@@ -91,6 +92,24 @@ class ExampleTest extends TestCase
                 ->assertSee('meta name="description"', false)
                 ->assertSee('rel="canonical"', false);
         }
+    }
+
+    public function test_serang_website_development_landing_page_targets_local_keyword()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('website-development-serang'));
+
+        $response
+            ->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Serang &amp; Banten | JASAIBNU</title>', false)
+            ->assertSee('JASAIBNU menyediakan jasa pembuatan website di Serang dan Banten', false)
+            ->assertSee('Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional')
+            ->assertSee('Website membantu bisnis Serang dan Banten lebih mudah ditemukan', false)
+            ->assertSee('rel="canonical" href="' . route('website-development-serang') . '"', false);
+
+        preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
+        $this->assertSame(1, count($h1Matches[0]));
     }
 
     public function test_insight_detail_page_is_available()
@@ -1437,6 +1456,7 @@ class ExampleTest extends TestCase
 
         foreach ([
             '/jasa-pembuatan-website',
+            '/jasa-pembuatan-website-serang',
             '/services',
             '/solutions',
             '/portfolio',

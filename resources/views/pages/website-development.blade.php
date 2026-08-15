@@ -1,7 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Jasa Pembuatan Website Profesional | JASAIBNU')
-@section('meta_description', 'JASAIBNU menyediakan jasa pembuatan website profesional untuk company profile, landing page, website bisnis, SEO, dan sistem web yang cepat, aman, dan mudah dikembangkan.')
+@php
+    $landing = array_merge([
+        'title' => 'Jasa Pembuatan Website Profesional | JASAIBNU',
+        'meta_description' => 'JASAIBNU menyediakan jasa pembuatan website profesional untuk company profile, landing page, website bisnis, SEO, dan sistem web yang cepat, aman, dan mudah dikembangkan.',
+        'canonical' => route('website-development'),
+        'label' => 'Jasa Pembuatan Website',
+        'h1' => 'Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh',
+        'hero_copy' => 'JASAIBNU membantu bisnis membuat website company profile, landing page, website layanan, dan sistem web yang cepat, aman, mobile-friendly, serta siap dioptimasi untuk Google.',
+        'impact_label' => 'Fungsi punya website',
+        'impact_title' => 'Website membantu bisnis terlihat profesional, dipercaya, dan lebih mudah menghasilkan peluang penjualan.',
+        'impact_copy' => 'Website bukan sekadar halaman online. Website menjadi pusat informasi resmi bisnis, tempat pelanggan mengenal layanan, melihat portfolio, membaca keunggulan, lalu menghubungi Anda saat mereka siap membeli atau berdiskusi.',
+        'badge' => 'Website bekerja 24 jam sebagai etalase, profil bisnis, dan pintu masuk calon pelanggan.',
+    ], $landing ?? []);
+@endphp
+
+@section('title', $landing['title'])
+@section('meta_description', $landing['meta_description'])
+@section('canonical', $landing['canonical'])
 @section('body_class', 'services-page startup2-home')
 
 @push('head')
@@ -553,9 +569,9 @@
         <div class="seo-service-shell">
             <div class="seo-service-hero-grid">
                 <div class="seo-service-copy-block">
-                    <p class="seo-service-label">Jasa Pembuatan Website</p>
-                    <h1 id="website-service-title">Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh</h1>
-                    <p class="seo-service-hero-copy">JASAIBNU membantu bisnis membuat website company profile, landing page, website layanan, dan sistem web yang cepat, aman, mobile-friendly, serta siap dioptimasi untuk Google.</p>
+                    <p class="seo-service-label">{{ $landing['label'] }}</p>
+                    <h1 id="website-service-title">{{ $landing['h1'] }}</h1>
+                    <p class="seo-service-hero-copy">{{ $landing['hero_copy'] }}</p>
                     <div class="seo-service-actions">
                         <a class="seo-service-button" href="{{ route('contact') }}">Konsultasi Website</a>
                         <a class="seo-service-button secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio</a>
@@ -574,12 +590,12 @@
                         <source srcset="{{ asset('assets/startup2/img/optimized/feature-desktop.webp') }}" type="image/webp">
                         <img src="{{ asset('assets/startup2/img/feature.jpg') }}" alt="Website membantu bisnis membangun penjualan dan branding digital" width="720" height="720" loading="lazy" decoding="async">
                     </picture>
-                    <div class="seo-service-impact-badge">Website bekerja 24 jam sebagai etalase, profil bisnis, dan pintu masuk calon pelanggan.</div>
+                    <div class="seo-service-impact-badge">{{ $landing['badge'] }}</div>
                 </div>
                 <div class="seo-service-impact-copy">
-                    <p class="seo-service-label">Fungsi punya website</p>
-                    <h2 id="website-impact-title">Website membantu bisnis terlihat profesional, dipercaya, dan lebih mudah menghasilkan peluang penjualan.</h2>
-                    <p>Website bukan sekadar halaman online. Website menjadi pusat informasi resmi bisnis, tempat pelanggan mengenal layanan, melihat portfolio, membaca keunggulan, lalu menghubungi Anda saat mereka siap membeli atau berdiskusi.</p>
+                    <p class="seo-service-label">{{ $landing['impact_label'] }}</p>
+                    <h2 id="website-impact-title">{{ $landing['impact_title'] }}</h2>
+                    <p>{{ $landing['impact_copy'] }}</p>
                     <div class="seo-service-impact-points">
                         <div class="seo-service-impact-point">
                             <span class="seo-service-impact-icon" aria-hidden="true">01</span>

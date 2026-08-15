@@ -27,6 +27,20 @@ Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 Route::view('/', 'home')->name('home');
 Route::view('/jasa-pembuatan-website', 'pages.website-development')->name('website-development');
+Route::view('/jasa-pembuatan-website-serang', 'pages.website-development', [
+    'landing' => [
+        'title' => 'Jasa Pembuatan Website Serang & Banten | JASAIBNU',
+        'meta_description' => 'JASAIBNU menyediakan jasa pembuatan website di Serang dan Banten untuk company profile, landing page, website UMKM, dan website bisnis yang cepat, aman, SEO-ready, dan mobile-friendly.',
+        'canonical' => url('/jasa-pembuatan-website-serang'),
+        'label' => 'Jasa Pembuatan Website Serang',
+        'h1' => 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional',
+        'hero_copy' => 'JASAIBNU membantu bisnis di Serang dan Banten membangun website company profile, landing page, website layanan, dan sistem web yang cepat, aman, mobile-friendly, serta siap dioptimasi untuk Google.',
+        'impact_label' => 'Website untuk bisnis lokal',
+        'impact_title' => 'Website membantu bisnis Serang dan Banten lebih mudah ditemukan, dipercaya, dan dihubungi calon pelanggan.',
+        'impact_copy' => 'Website menjadi pusat informasi resmi bisnis lokal: pelanggan bisa melihat layanan, area kerja, portfolio, alamat, kontak WhatsApp, dan penawaran sebelum memutuskan untuk bertanya atau membeli.',
+        'badge' => 'Website bekerja 24 jam untuk memperkenalkan bisnis Anda ke calon pelanggan di Serang, Banten, dan sekitarnya.',
+    ],
+])->name('website-development-serang');
 Route::get('/services', function () {
     return view('pages.services', [
         'services' => \App\Models\Service::active()->ordered()->get(),

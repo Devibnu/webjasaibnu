@@ -12,7 +12,7 @@
     $darkLogoPath = $siteSettings->logo_dark_path ?: $siteSettings->logo_path;
 @endphp
 
-@if (request()->routeIs('home') || request()->routeIs('services.index') || request()->routeIs('website-development') || request()->routeIs('solutions.index') || request()->routeIs('portfolio.index') || request()->routeIs('insights.*') || request()->routeIs('about') || request()->routeIs('contact'))
+@if (request()->routeIs('home') || request()->routeIs('services.index') || request()->routeIs('website-development*') || request()->routeIs('solutions.index') || request()->routeIs('portfolio.index') || request()->routeIs('insights.*') || request()->routeIs('about') || request()->routeIs('contact'))
     <div class="container-fluid bg-dark px-5 d-none d-lg-block">
         <div class="row gx-0">
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
@@ -67,7 +67,7 @@
                 </div>
                 <div class="navbar-nav ms-auto py-0">
                     @foreach ($navigation as $item)
-                        <a href="{{ route($item['route']) }}" class="nav-item nav-link @if (request()->routeIs($item['route']) || ($item['route'] === 'services.index' && (request()->routeIs('services.*') || request()->routeIs('website-development'))) || ($item['route'] === 'solutions.index' && request()->routeIs('solutions.*')) || ($item['route'] === 'portfolio.index' && request()->routeIs('portfolio.*')) || ($item['route'] === 'insights.index' && request()->routeIs('insights.*'))) active @endif">{{ $item['label'] }}</a>
+                        <a href="{{ route($item['route']) }}" class="nav-item nav-link @if (request()->routeIs($item['route']) || ($item['route'] === 'services.index' && (request()->routeIs('services.*') || request()->routeIs('website-development*'))) || ($item['route'] === 'solutions.index' && request()->routeIs('solutions.*')) || ($item['route'] === 'portfolio.index' && request()->routeIs('portfolio.*')) || ($item['route'] === 'insights.index' && request()->routeIs('insights.*'))) active @endif">{{ $item['label'] }}</a>
                     @endforeach
                 </div>
                 <a href="{{ route('contact') }}" class="btn btn-primary py-2 px-4 ms-3 nav-contact">Konsultasi Gratis</a>
