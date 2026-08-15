@@ -34,7 +34,25 @@
         <link rel="icon" href="{{ asset('storage/' . $siteSettings->favicon_path) }}">
     @endif
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php
+        $shouldSplitHomeAssets = request()->routeIs('home') && ! app()->runningUnitTests();
+        $viteManifestPath = public_path('build/manifest.json');
+        $viteManifest = $shouldSplitHomeAssets && file_exists($viteManifestPath)
+            ? json_decode(file_get_contents($viteManifestPath), true)
+            : [];
+        $viteCssFile = $viteManifest['resources/css/app.css']['file'] ?? null;
+        $viteJsFile = $viteManifest['resources/js/app.js']['file'] ?? null;
+    @endphp
+
+    @if($shouldSplitHomeAssets && $viteCssFile && $viteJsFile)
+        <link rel="preload" as="style" href="{{ asset('build/' . $viteCssFile) }}" media="(min-width: 768px)">
+        <link rel="stylesheet" href="{{ asset('build/' . $viteCssFile) }}" media="(min-width: 768px)">
+        <link rel="stylesheet" href="{{ asset('build/' . $viteCssFile) }}" media="print" onload="this.media='(max-width: 767px)'">
+        <noscript><link rel="stylesheet" href="{{ asset('build/' . $viteCssFile) }}"></noscript>
+        <script type="module" src="{{ asset('build/' . $viteJsFile) }}"></script>
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
     @stack('head')
 
     <script type="application/ld+json">
