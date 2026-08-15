@@ -179,10 +179,25 @@
         }
 
         .seo-service-impact-point {
-            padding: 18px;
+            min-height: 178px;
+            padding: 22px;
             border: 1px solid #dcebf4;
             border-radius: 6px;
-            background: #f8fcff;
+            background: #fff;
+            box-shadow: 0 14px 34px rgba(9, 30, 62, .08);
+        }
+
+        .seo-service-impact-icon {
+            display: inline-grid;
+            width: 50px;
+            height: 50px;
+            place-items: center;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            background: #091e3e;
+            color: #fff;
+            font-size: .95rem;
+            font-weight: 800;
         }
 
         .seo-service-impact-point strong {
@@ -467,18 +482,22 @@
                     <p>Website bukan sekadar halaman online. Website menjadi pusat informasi resmi bisnis, tempat pelanggan mengenal layanan, melihat portfolio, membaca keunggulan, lalu menghubungi Anda saat mereka siap membeli atau berdiskusi.</p>
                     <div class="seo-service-impact-points">
                         <div class="seo-service-impact-point">
+                            <span class="seo-service-impact-icon" aria-hidden="true">01</span>
                             <strong>Meningkatkan penjualan</strong>
                             <span>Calon pelanggan bisa menemukan layanan, memahami penawaran, dan langsung menghubungi bisnis.</span>
                         </div>
                         <div class="seo-service-impact-point">
+                            <span class="seo-service-impact-icon" aria-hidden="true">BR</span>
                             <strong>Membangun branding</strong>
                             <span>Tampilan, pesan, portfolio, dan identitas bisnis tersusun konsisten dalam satu tempat.</span>
                         </div>
                         <div class="seo-service-impact-point">
+                            <span class="seo-service-impact-icon" aria-hidden="true">TR</span>
                             <strong>Menambah kepercayaan</strong>
                             <span>Bisnis terlihat lebih serius dengan profil, alamat, kontak, testimoni, dan bukti pekerjaan.</span>
                         </div>
                         <div class="seo-service-impact-point">
+                            <span class="seo-service-impact-icon" aria-hidden="true">ADS</span>
                             <strong>Siap dipromosikan</strong>
                             <span>Website bisa jadi tujuan iklan, Google Search, media sosial, WhatsApp, dan campaign digital.</span>
                         </div>
