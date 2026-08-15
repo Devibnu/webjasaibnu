@@ -143,6 +143,11 @@
             opacity: .96;
         }
 
+        .seo-service-impact-media picture {
+            display: block;
+            height: 100%;
+        }
+
         .seo-service-impact-badge {
             position: absolute;
             right: 22px;
@@ -564,7 +569,11 @@
         <div class="seo-service-shell">
             <div class="seo-service-impact-grid">
                 <div class="seo-service-impact-media">
-                    <img src="{{ asset('assets/startup2/img/feature.jpg') }}" alt="Website membantu bisnis membangun penjualan dan branding digital" width="800" height="800" loading="lazy" decoding="async">
+                    <picture>
+                        <source media="(max-width: 575.98px)" srcset="{{ asset('assets/startup2/img/optimized/feature-mobile.webp') }}" type="image/webp">
+                        <source srcset="{{ asset('assets/startup2/img/optimized/feature-desktop.webp') }}" type="image/webp">
+                        <img src="{{ asset('assets/startup2/img/feature.jpg') }}" alt="Website membantu bisnis membangun penjualan dan branding digital" width="720" height="720" loading="lazy" decoding="async">
+                    </picture>
                     <div class="seo-service-impact-badge">Website bekerja 24 jam sebagai etalase, profil bisnis, dan pintu masuk calon pelanggan.</div>
                 </div>
                 <div class="seo-service-impact-copy">
