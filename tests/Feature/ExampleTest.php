@@ -1158,6 +1158,78 @@ class ExampleTest extends TestCase
         ]);
     }
 
+    public function test_admin_service_technologies_can_upload_logos_for_services_page()
+    {
+        Storage::fake('public');
+
+        $normalUser = User::create([
+            'name' => 'Normal Technology User',
+            'email' => 'normal-technology@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => false,
+        ]);
+
+        $adminUser = User::create([
+            'name' => 'Admin Technology User',
+            'email' => 'admin-technology@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+        ]);
+
+        $this->get(route('admin.service-technologies.index'))
+            ->assertRedirect('/weblogin');
+
+        $this->actingAs($normalUser)
+            ->get(route('admin.service-technologies.index'))
+            ->assertRedirect('/weblogin');
+
+        $this->actingAs($adminUser)
+            ->get(route('admin.service-technologies.index'))
+            ->assertOk()
+            ->assertSee('Service Technologies');
+
+        $this->actingAs($adminUser)
+            ->post(route('admin.service-technologies.store'), [
+                'name' => 'Laravel Logo Test',
+                'mark' => 'LV',
+                'logo_path' => UploadedFile::fake()->image('laravel-logo.png', 160, 160),
+                'is_active' => '1',
+                'sort_order' => 1,
+            ])
+            ->assertRedirect(route('admin.service-technologies.index'));
+
+        $technology = \App\Models\ServiceTechnology::where('name', 'Laravel Logo Test')->firstOrFail();
+
+        $this->assertNotNull($technology->logo_path);
+        Storage::disk('public')->assertExists($technology->logo_path);
+
+        $this->get(route('services.index'))
+            ->assertOk()
+            ->assertSee('Laravel Logo Test')
+            ->assertSee(asset('storage/' . $technology->logo_path), false);
+
+        $this->actingAs($adminUser)
+            ->put(route('admin.service-technologies.update', $technology), [
+                'name' => 'Laravel Hidden Logo Test',
+                'mark' => 'LH',
+                'is_active' => '0',
+                'sort_order' => 2,
+            ])
+            ->assertRedirect(route('admin.service-technologies.index'));
+
+        $this->get(route('services.index'))
+            ->assertOk()
+            ->assertDontSee('Laravel Hidden Logo Test');
+
+        $this->actingAs($adminUser)
+            ->delete(route('admin.service-technologies.destroy', $technology))
+            ->assertRedirect(route('admin.service-technologies.index'));
+
+        $this->assertDatabaseMissing('service_technologies', [
+            'id' => $technology->id,
+        ]);
+    }
+
     public function test_admin_solutions_cms_requires_admin_crud_and_sorting()
     {
         $normalUser = User::create([

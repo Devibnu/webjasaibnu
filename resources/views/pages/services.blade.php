@@ -191,19 +191,14 @@
                 <h2 id="services-technology-heading">Teknologi yang kami gunakan untuk membangun solusi digital yang scalable dan maintainable.</h2>
             </div>
             <div class="services-vendor-strip">
-                @foreach ([
-                    ['name' => 'Laravel', 'mark' => 'Lv'],
-                    ['name' => 'PHP', 'mark' => 'PHP'],
-                    ['name' => 'JavaScript', 'mark' => 'JS'],
-                    ['name' => 'MySQL', 'mark' => 'SQL'],
-                    ['name' => 'PostgreSQL', 'mark' => 'PG'],
-                    ['name' => 'WordPress', 'mark' => 'WP'],
-                    ['name' => 'GitHub', 'mark' => 'GH'],
-                    ['name' => 'OpenAI', 'mark' => 'AI'],
-                ] as $item)
-                    <span class="services-technology-item" aria-label="{{ $item['name'] }}">
-                        <strong aria-hidden="true">{{ $item['mark'] }}</strong>
-                        <small>{{ $item['name'] }}</small>
+                @foreach ($technologies as $item)
+                    <span class="services-technology-item" aria-label="{{ $item->name }}">
+                        @if ($item->logo_path)
+                            <img src="{{ asset('storage/' . $item->logo_path) }}" alt="" aria-hidden="true" loading="lazy">
+                        @else
+                            <strong aria-hidden="true">{{ $item->mark ?: \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($item->name, 0, 2)) }}</strong>
+                        @endif
+                        <small>{{ $item->name }}</small>
                     </span>
                 @endforeach
             </div>

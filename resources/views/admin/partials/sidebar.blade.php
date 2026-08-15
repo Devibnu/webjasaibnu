@@ -91,6 +91,14 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/service-technologies*') ? 'active' : '' }}" href="{{ route('admin.service-technologies.index') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-spaceship {{ request()->is('admin/service-technologies*') ? 'text-white' : 'text-dark' }} text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Service Technologies</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/solutions') || request()->is('admin/solutions/*') ? 'active' : '' }}" href="{{ route('admin.solutions.index') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-bulb-61 {{ request()->is('admin/solutions') || request()->is('admin/solutions/*') ? 'text-white' : 'text-dark' }} text-sm opacity-10"></i>

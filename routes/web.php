@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AboutPageController as AdminAboutPageController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\ServiceTechnologyController as AdminServiceTechnologyController;
 use App\Http\Controllers\Admin\SolutionController as AdminSolutionController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
@@ -28,6 +29,7 @@ Route::view('/', 'home')->name('home');
 Route::get('/services', function () {
     return view('pages.services', [
         'services' => \App\Models\Service::active()->ordered()->get(),
+        'technologies' => \App\Models\ServiceTechnology::active()->ordered()->get(),
     ]);
 })->name('services.index');
 Route::get('/solutions', function () {
@@ -70,6 +72,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/portfolio-page-settings', [AdminPortfolioPageSettingController::class, 'edit'])->name('portfolio-page-settings.edit');
         Route::put('/portfolio-page-settings', [AdminPortfolioPageSettingController::class, 'update'])->name('portfolio-page-settings.update');
         Route::resource('services', AdminServiceController::class)->except(['show']);
+        Route::resource('service-technologies', AdminServiceTechnologyController::class)->except(['show']);
         Route::resource('solutions', AdminSolutionController::class)->except(['show']);
         Route::get('/contact', [AdminContactMessageController::class, 'index'])->name('contact.index');
         Route::get('/contact/{contactMessage}', [AdminContactMessageController::class, 'show'])->name('contact.show');
