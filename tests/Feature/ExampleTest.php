@@ -1436,6 +1436,7 @@ class ExampleTest extends TestCase
         $this->assertTrue($homePath === null || $homePath === false || $homePath === '' || $homePath === '/');
 
         foreach ([
+            '/jasa-pembuatan-website',
             '/services',
             '/solutions',
             '/portfolio',
