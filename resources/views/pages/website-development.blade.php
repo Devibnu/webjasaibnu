@@ -70,13 +70,13 @@
         }
 
         .seo-service-hero h1 {
-            max-width: 820px;
+            max-width: 760px;
             margin: 0 auto 20px;
             color: #fff;
             font-family: "Nunito", sans-serif;
-            font-size: clamp(46px, 4.8vw, 72px);
+            font-size: clamp(38px, 3.7vw, 56px);
             font-weight: 800;
-            line-height: 1.06;
+            line-height: 1.12;
         }
 
         .seo-service-hero-copy {
@@ -114,12 +114,92 @@
             box-shadow: none;
         }
 
-        .seo-service-advantage {
-            margin-top: -58px;
-            padding-bottom: clamp(44px, 6vw, 78px);
+        .seo-service-impact {
+            padding: clamp(58px, 7vw, 92px) 0;
             background: #fff;
+        }
+
+        .seo-service-impact-grid {
+            display: grid;
+            grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+            gap: clamp(28px, 5vw, 62px);
+            align-items: center;
+        }
+
+        .seo-service-impact-media {
             position: relative;
-            z-index: 2;
+            min-height: 420px;
+            overflow: hidden;
+            border-radius: 6px;
+            background: #091e3e;
+            box-shadow: 0 22px 54px rgba(9, 30, 62, .16);
+        }
+
+        .seo-service-impact-media img {
+            width: 100%;
+            height: 100%;
+            min-height: 420px;
+            object-fit: cover;
+            opacity: .82;
+        }
+
+        .seo-service-impact-badge {
+            position: absolute;
+            right: 22px;
+            bottom: 22px;
+            max-width: 250px;
+            padding: 18px;
+            border-radius: 6px;
+            background: #06a3da;
+            color: #fff;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .seo-service-impact-copy h2 {
+            max-width: 640px;
+            margin: 0 0 16px;
+            color: #091e3e;
+            font-size: clamp(30px, 3.1vw, 44px);
+            font-weight: 800;
+            line-height: 1.14;
+        }
+
+        .seo-service-impact-copy > p {
+            max-width: 620px;
+            margin: 0 0 24px;
+            color: #6b6a75;
+            line-height: 1.75;
+        }
+
+        .seo-service-impact-points {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .seo-service-impact-point {
+            padding: 18px;
+            border: 1px solid #dcebf4;
+            border-radius: 6px;
+            background: #f8fcff;
+        }
+
+        .seo-service-impact-point strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #091e3e;
+            font-weight: 800;
+        }
+
+        .seo-service-impact-point span {
+            color: #6b6a75;
+            line-height: 1.55;
+        }
+
+        .seo-service-advantage {
+            padding: clamp(58px, 7vw, 92px) 0 clamp(44px, 6vw, 78px);
+            background: #eef9ff;
         }
 
         .seo-service-advantage-grid {
@@ -269,6 +349,7 @@
 
         @media (max-width: 991.98px) {
             .seo-service-hero-grid,
+            .seo-service-impact-grid,
             .seo-service-advantage-grid,
             .seo-service-card-grid,
             .seo-service-faq-grid {
@@ -281,9 +362,9 @@
                 background-image: linear-gradient(180deg, rgba(9, 30, 62, .88), rgba(9, 30, 62, .72)), url("/assets/startup2/img/optimized/carousel-1-mobile.webp");
             }
 
-            .seo-service-advantage {
-                margin-top: 0;
-                padding-top: 28px;
+            .seo-service-impact-media,
+            .seo-service-impact-media img {
+                min-height: 320px;
             }
         }
 
@@ -310,7 +391,7 @@
                 max-width: 360px;
                 margin-inline: auto;
                 margin-bottom: 16px;
-                font-size: clamp(34px, 10vw, 42px);
+                font-size: clamp(31px, 8.6vw, 38px);
                 line-height: 1.1;
             }
 
@@ -330,6 +411,21 @@
                 width: 100%;
                 min-height: 46px;
                 padding: .7rem 1rem;
+            }
+
+            .seo-service-impact {
+                padding-top: 44px;
+            }
+
+            .seo-service-impact-points {
+                grid-template-columns: 1fr;
+            }
+
+            .seo-service-impact-badge {
+                right: 14px;
+                bottom: 14px;
+                left: 14px;
+                max-width: none;
             }
 
             .seo-service-advantage-card,
@@ -352,6 +448,40 @@
                     <div class="seo-service-actions">
                         <a class="seo-service-button" href="{{ route('contact') }}">Konsultasi Website</a>
                         <a class="seo-service-button secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="seo-service-impact" aria-labelledby="website-impact-title">
+        <div class="seo-service-shell">
+            <div class="seo-service-impact-grid">
+                <div class="seo-service-impact-media">
+                    <img src="{{ asset('assets/startup2/img/feature.jpg') }}" alt="Website membantu bisnis membangun penjualan dan branding digital" width="800" height="800" loading="lazy" decoding="async">
+                    <div class="seo-service-impact-badge">Website bekerja 24 jam sebagai etalase, profil bisnis, dan pintu masuk calon pelanggan.</div>
+                </div>
+                <div class="seo-service-impact-copy">
+                    <p class="seo-service-label">Fungsi punya website</p>
+                    <h2 id="website-impact-title">Website membantu bisnis terlihat profesional, dipercaya, dan lebih mudah menghasilkan peluang penjualan.</h2>
+                    <p>Website bukan sekadar halaman online. Website menjadi pusat informasi resmi bisnis, tempat pelanggan mengenal layanan, melihat portfolio, membaca keunggulan, lalu menghubungi Anda saat mereka siap membeli atau berdiskusi.</p>
+                    <div class="seo-service-impact-points">
+                        <div class="seo-service-impact-point">
+                            <strong>Meningkatkan penjualan</strong>
+                            <span>Calon pelanggan bisa menemukan layanan, memahami penawaran, dan langsung menghubungi bisnis.</span>
+                        </div>
+                        <div class="seo-service-impact-point">
+                            <strong>Membangun branding</strong>
+                            <span>Tampilan, pesan, portfolio, dan identitas bisnis tersusun konsisten dalam satu tempat.</span>
+                        </div>
+                        <div class="seo-service-impact-point">
+                            <strong>Menambah kepercayaan</strong>
+                            <span>Bisnis terlihat lebih serius dengan profil, alamat, kontak, testimoni, dan bukti pekerjaan.</span>
+                        </div>
+                        <div class="seo-service-impact-point">
+                            <strong>Siap dipromosikan</strong>
+                            <span>Website bisa jadi tujuan iklan, Google Search, media sosial, WhatsApp, dan campaign digital.</span>
+                        </div>
                     </div>
                 </div>
             </div>
