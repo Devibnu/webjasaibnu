@@ -13,10 +13,6 @@
 @endphp
 
 @if (request()->routeIs('home') || request()->routeIs('services.index') || request()->routeIs('solutions.index') || request()->routeIs('portfolio.index') || request()->routeIs('insights.*') || request()->routeIs('about') || request()->routeIs('contact'))
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner"></div>
-    </div>
-
     <div class="container-fluid bg-dark px-5 d-none d-lg-block">
         <div class="row gx-0">
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">

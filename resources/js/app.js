@@ -1,13 +1,5 @@
 import './bootstrap';
 
-const spinner = document.querySelector('#spinner');
-
-if (spinner) {
-    window.setTimeout(() => {
-        spinner.classList.remove('show');
-    }, 1);
-}
-
 const startupNavbar = document.querySelector('.startup2-home .navbar');
 
 if (startupNavbar) {

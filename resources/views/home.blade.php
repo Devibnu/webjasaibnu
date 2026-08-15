@@ -158,6 +158,14 @@
                 font-size: 1.65rem;
             }
 
+            .startup2-home #header-carousel .animated,
+            .startup2-home #header-carousel .wow {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+                visibility: visible !important;
+            }
+
             .startup2-home #header-carousel,
             .startup2-home #header-carousel .carousel-inner,
             .startup2-home #header-carousel .carousel-item {
