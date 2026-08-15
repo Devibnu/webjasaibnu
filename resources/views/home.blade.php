@@ -21,106 +21,13 @@
     @else
         <link rel="preload" as="image" href="{{ $firstHeroImage }}" fetchpriority="high">
     @endif
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"></noscript>
     <style>
         .startup2-home {
             font-family: "Rubik", Arial, sans-serif;
             overflow-x: hidden;
-        }
-
-        .startup2-home .container-fluid {
-            width: 100%;
-            margin-right: auto;
-            margin-left: auto;
-            padding-right: .75rem;
-            padding-left: .75rem;
-        }
-
-        .startup2-home .position-relative {
-            position: relative !important;
-        }
-
-        .startup2-home .position-absolute {
-            position: absolute !important;
-        }
-
-        .startup2-home .p-0 {
-            padding: 0 !important;
-        }
-
-        .startup2-home .p-3 {
-            padding: 1rem !important;
-        }
-
-        .startup2-home .d-flex {
-            display: flex !important;
-        }
-
-        .startup2-home .flex-column {
-            flex-direction: column !important;
-        }
-
-        .startup2-home .align-items-center {
-            align-items: center !important;
-        }
-
-        .startup2-home .justify-content-center {
-            justify-content: center !important;
-        }
-
-        .startup2-home .w-100 {
-            width: 100% !important;
-        }
-
-        .startup2-home .h-100 {
-            height: 100% !important;
-        }
-
-        .startup2-home .mb-3 {
-            margin-bottom: 1rem !important;
-        }
-
-        .startup2-home .mb-4 {
-            margin-bottom: 1.5rem !important;
-        }
-
-        .startup2-home .text-white {
-            color: #fff !important;
-        }
-
-        .startup2-home .text-uppercase {
-            text-transform: uppercase !important;
-        }
-
-        .startup2-home .navbar {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .startup2-home #header-carousel,
-        .startup2-home #header-carousel .carousel-inner,
-        .startup2-home #header-carousel .carousel-item {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .startup2-home #header-carousel .carousel-item {
-            display: none;
-        }
-
-        .startup2-home #header-carousel .carousel-item.active {
-            display: block;
-        }
-
-        .startup2-home .carousel-caption {
-            position: absolute;
-            right: 15%;
-            bottom: 1.25rem;
-            left: 15%;
-            z-index: 10;
-            text-align: center;
         }
 
         .startup2-home .navbar-dark .navbar-brand h1 {
