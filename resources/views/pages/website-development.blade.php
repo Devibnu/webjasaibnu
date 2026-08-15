@@ -121,33 +121,33 @@
 
         .seo-service-impact-grid {
             display: grid;
-            grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-            gap: clamp(28px, 5vw, 62px);
+            grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+            gap: clamp(32px, 5vw, 68px);
             align-items: center;
         }
 
         .seo-service-impact-media {
             position: relative;
-            min-height: 420px;
+            min-height: 520px;
             overflow: hidden;
             border-radius: 6px;
-            background: #091e3e;
+            background: #eef9ff;
             box-shadow: 0 22px 54px rgba(9, 30, 62, .16);
         }
 
         .seo-service-impact-media img {
             width: 100%;
             height: 100%;
-            min-height: 420px;
+            min-height: 520px;
             object-fit: cover;
-            opacity: .82;
+            opacity: .96;
         }
 
         .seo-service-impact-badge {
             position: absolute;
             right: 22px;
             bottom: 22px;
-            max-width: 250px;
+            max-width: 280px;
             padding: 18px;
             border-radius: 6px;
             background: #06a3da;
@@ -180,11 +180,11 @@
 
         .seo-service-impact-point {
             min-height: 178px;
-            padding: 22px;
+            padding: 24px;
             border: 1px solid #dcebf4;
             border-radius: 6px;
-            background: #fff;
-            box-shadow: 0 14px 34px rgba(9, 30, 62, .08);
+            background: #f8fcff;
+            box-shadow: none;
         }
 
         .seo-service-impact-icon {
@@ -194,10 +194,11 @@
             place-items: center;
             margin-bottom: 16px;
             border-radius: 6px;
-            background: #091e3e;
+            background: #06a3da;
             color: #fff;
             font-size: .95rem;
             font-weight: 800;
+            box-shadow: 0 12px 24px rgba(6, 163, 218, .22);
         }
 
         .seo-service-impact-point strong {
@@ -379,7 +380,7 @@
 
             .seo-service-impact-media,
             .seo-service-impact-media img {
-                min-height: 320px;
+                min-height: 360px;
             }
         }
 
