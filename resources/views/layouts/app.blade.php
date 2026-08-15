@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="id">
 <head>
     @php
         $siteName = $siteSettings->company_legal_name ?? config('app.name', 'PT JASA IBNU DEVELOPMENT');
