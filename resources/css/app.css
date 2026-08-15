@@ -1,3 +1,6 @@
+@import "../../public/assets/startup2/css/bootstrap.min.css";
+@import "../../public/assets/startup2/css/style.css";
+
 :root {
     --color-primary: #2563eb;
     --color-primary-dark: #071832;

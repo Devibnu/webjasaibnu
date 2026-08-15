@@ -14,10 +14,12 @@
     @endphp
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="image" href="{{ $firstHeroImage }}" fetchpriority="high">
+    @if (($heroSlides ?? collect())->isNotEmpty())
+        <link rel="preload" as="image" href="{{ $firstHeroImage }}" fetchpriority="high">
+    @else
+        <link rel="preload" as="image" href="{{ asset('assets/startup2/img/optimized/carousel-1-mobile.webp') }}" imagesrcset="{{ asset('assets/startup2/img/optimized/carousel-1-mobile.webp') }} 768w, {{ asset('assets/startup2/img/optimized/carousel-1-desktop.webp') }} 1280w" imagesizes="100vw" fetchpriority="high" type="image/webp">
+    @endif
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{{ asset('assets/startup2/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/startup2/css/style.css') }}" rel="stylesheet">
     <style>
         .startup2-home {
             font-family: "Rubik", sans-serif;

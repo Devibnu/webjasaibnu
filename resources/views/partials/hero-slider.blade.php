@@ -33,7 +33,11 @@
             </div>
         @empty
             <div class="carousel-item active">
-                <img class="w-100" src="{{ asset('assets/startup2/img/carousel-1.jpg') }}" alt="Diskusi strategi digital untuk bisnis" width="1920" height="1080" fetchpriority="high" decoding="sync">
+                <picture>
+                    <source type="image/webp" media="(max-width: 767px)" srcset="{{ asset('assets/startup2/img/optimized/carousel-1-mobile.webp') }}">
+                    <source type="image/webp" srcset="{{ asset('assets/startup2/img/optimized/carousel-1-desktop.webp') }}">
+                    <img class="w-100" src="{{ asset('assets/startup2/img/carousel-1.jpg') }}" alt="Diskusi strategi digital untuk bisnis" width="1280" height="720" fetchpriority="high" decoding="sync">
+                </picture>
                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">IT Solutions • Software Development • SaaS • AI Integration</h5>
@@ -45,7 +49,11 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img class="w-100" src="{{ asset('assets/startup2/img/carousel-2.jpg') }}" alt="Kolaborasi pengembangan sistem digital" width="1920" height="1080" loading="lazy" decoding="async">
+                <picture>
+                    <source type="image/webp" media="(max-width: 767px)" srcset="{{ asset('assets/startup2/img/optimized/carousel-2-mobile.webp') }}">
+                    <source type="image/webp" srcset="{{ asset('assets/startup2/img/optimized/carousel-2-desktop.webp') }}">
+                    <img class="w-100" src="{{ asset('assets/startup2/img/carousel-2.jpg') }}" alt="Kolaborasi pengembangan sistem digital" width="1280" height="720" loading="lazy" decoding="async">
+                </picture>
                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">PT JASA IBNU DEVELOPMENT</h5>
