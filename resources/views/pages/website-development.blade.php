@@ -43,13 +43,15 @@
             position: relative;
             z-index: 1;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+            grid-template-columns: 1fr;
             gap: clamp(30px, 5vw, 70px);
             align-items: center;
         }
 
         .seo-service-copy-block {
-            max-width: 720px;
+            max-width: 820px;
+            text-align: center;
+            margin-inline: auto;
         }
 
         .seo-service-label {
@@ -68,18 +70,18 @@
         }
 
         .seo-service-hero h1 {
-            max-width: 700px;
-            margin: 0 0 20px;
+            max-width: 820px;
+            margin: 0 auto 20px;
             color: #fff;
             font-family: "Nunito", sans-serif;
-            font-size: clamp(44px, 4.45vw, 62px);
+            font-size: clamp(46px, 4.8vw, 72px);
             font-weight: 800;
             line-height: 1.06;
         }
 
         .seo-service-hero-copy {
-            max-width: 620px;
-            margin: 0 0 28px;
+            max-width: 680px;
+            margin: 0 auto 28px;
             color: rgba(255, 255, 255, .9);
             font-size: clamp(1rem, 1.12vw, 1.1rem);
             line-height: 1.75;
@@ -89,6 +91,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
+            justify-content: center;
         }
 
         .seo-service-button {
@@ -111,81 +114,53 @@
             box-shadow: none;
         }
 
-        .seo-service-panel {
+        .seo-service-advantage {
+            margin-top: -58px;
+            padding-bottom: clamp(44px, 6vw, 78px);
+            background: #fff;
             position: relative;
-            padding: clamp(24px, 3vw, 34px);
-            border: 1px solid rgba(255, 255, 255, .7);
-            border-radius: 6px;
-            background: rgba(255, 255, 255, .96);
-            color: #091e3e;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
-            transform: translateY(20px);
+            z-index: 2;
         }
 
-        .seo-service-panel::before {
-            content: "";
-            position: absolute;
-            inset: 0 auto 0 0;
-            width: 5px;
-            border-radius: 6px 0 0 6px;
-            background: #06a3da;
-        }
-
-        .seo-service-panel-kicker {
-            margin: 0 0 8px;
-            color: #06a3da;
-            font-size: .78rem;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .seo-service-panel h2 {
-            margin: 0 0 16px;
-            font-size: clamp(1.45rem, 2vw, 1.75rem);
-            font-weight: 800;
-            line-height: 1.18;
-        }
-
-        .seo-service-list {
-            display: grid;
-            gap: 12px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .seo-service-list li {
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-            color: #10284a;
-            font-weight: 600;
-            line-height: 1.55;
-        }
-
-        .seo-service-list span {
-            color: #06a3da;
-            font-weight: 800;
-        }
-
-        .seo-service-panel-footer {
+        .seo-service-advantage-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 8px;
-            margin-top: 22px;
+            gap: 16px;
         }
 
-        .seo-service-panel-footer span {
-            display: inline-flex;
-            min-height: 42px;
-            align-items: center;
-            justify-content: center;
+        .seo-service-advantage-card {
+            min-height: 190px;
+            padding: 26px;
+            border: 1px solid #dcebf4;
             border-radius: 6px;
-            background: #eef9ff;
-            color: #091e3e;
-            font-size: .8rem;
+            background: #fff;
+            box-shadow: 0 18px 46px rgba(9, 30, 62, .1);
+        }
+
+        .seo-service-advantage-icon {
+            display: inline-grid;
+            width: 54px;
+            height: 54px;
+            place-items: center;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            background: #06a3da;
+            color: #fff;
+            font-size: 1.45rem;
             font-weight: 800;
-            text-align: center;
+        }
+
+        .seo-service-advantage-card h2 {
+            margin: 0 0 10px;
+            color: #091e3e;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .seo-service-advantage-card p {
+            margin: 0;
+            color: #6b6a75;
+            line-height: 1.65;
         }
 
         .seo-service-section {
@@ -294,6 +269,7 @@
 
         @media (max-width: 991.98px) {
             .seo-service-hero-grid,
+            .seo-service-advantage-grid,
             .seo-service-card-grid,
             .seo-service-faq-grid {
                 grid-template-columns: 1fr;
@@ -305,8 +281,9 @@
                 background-image: linear-gradient(180deg, rgba(9, 30, 62, .88), rgba(9, 30, 62, .72)), url("/assets/startup2/img/optimized/carousel-1-mobile.webp");
             }
 
-            .seo-service-panel {
-                transform: none;
+            .seo-service-advantage {
+                margin-top: 0;
+                padding-top: 28px;
             }
         }
 
@@ -331,6 +308,7 @@
 
             .seo-service-hero h1 {
                 max-width: 360px;
+                margin-inline: auto;
                 margin-bottom: 16px;
                 font-size: clamp(34px, 10vw, 42px);
                 line-height: 1.1;
@@ -354,28 +332,10 @@
                 padding: .7rem 1rem;
             }
 
-            .seo-service-panel,
+            .seo-service-advantage-card,
             .seo-service-card,
             .seo-service-faq {
                 padding: 22px;
-            }
-
-            .seo-service-panel h2 {
-                font-size: 1.28rem;
-            }
-
-            .seo-service-list {
-                gap: 10px;
-            }
-
-            .seo-service-list li {
-                font-size: .95rem;
-                line-height: 1.45;
-            }
-
-            .seo-service-panel-footer {
-                grid-template-columns: 1fr;
-                margin-top: 16px;
             }
         }
     </style>
@@ -394,22 +354,47 @@
                         <a class="seo-service-button secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio</a>
                     </div>
                 </div>
-                <aside class="seo-service-panel" aria-label="Ringkasan layanan pembuatan website">
-                    <p class="seo-service-panel-kicker">Fokus deliverable</p>
-                    <h2>Website yang kami bangun</h2>
-                    <ul class="seo-service-list">
-                        <li><span>✓</span> Website company profile profesional</li>
-                        <li><span>✓</span> Landing page promosi dan campaign</li>
-                        <li><span>✓</span> Website jasa, UMKM, dan bisnis lokal</li>
-                        <li><span>✓</span> Struktur SEO, sitemap, dan schema dasar</li>
-                        <li><span>✓</span> Integrasi WhatsApp, form kontak, dan analytics</li>
-                    </ul>
-                    <div class="seo-service-panel-footer" aria-label="Keunggulan teknis website">
-                        <span>SEO-ready</span>
-                        <span>Mobile-first</span>
-                        <span>Fast loading</span>
-                    </div>
-                </aside>
+            </div>
+        </div>
+    </section>
+
+    <section class="seo-service-advantage" aria-labelledby="website-advantage-title">
+        <div class="seo-service-shell">
+            <div class="seo-service-heading">
+                <p class="seo-service-label">Fondasi website yang baik</p>
+                <h2 id="website-advantage-title">Keunggulan penting yang kami siapkan sejak awal.</h2>
+            </div>
+            <div class="seo-service-advantage-grid">
+                <article class="seo-service-advantage-card">
+                    <span class="seo-service-advantage-icon" aria-hidden="true">01</span>
+                    <h2>Kecepatan halaman</h2>
+                    <p>Gambar, struktur asset, dan layout dibuat ringan agar website cepat dibuka di mobile maupun desktop.</p>
+                </article>
+                <article class="seo-service-advantage-card">
+                    <span class="seo-service-advantage-icon" aria-hidden="true">SEO</span>
+                    <h2>Siap ditemukan Google</h2>
+                    <p>Title, meta description, heading, canonical, sitemap, dan schema dasar disusun rapi untuk indexing.</p>
+                </article>
+                <article class="seo-service-advantage-card">
+                    <span class="seo-service-advantage-icon" aria-hidden="true">M</span>
+                    <h2>Mobile-friendly</h2>
+                    <p>Tampilan diprioritaskan nyaman dibaca, diklik, dan dipahami dari layar HP yang paling sering dipakai pelanggan.</p>
+                </article>
+                <article class="seo-service-advantage-card">
+                    <span class="seo-service-advantage-icon" aria-hidden="true">SSL</span>
+                    <h2>Keamanan dasar</h2>
+                    <p>Form, route, validasi input, dan konfigurasi HTTPS disiapkan agar website lebih aman digunakan.</p>
+                </article>
+                <article class="seo-service-advantage-card">
+                    <span class="seo-service-advantage-icon" aria-hidden="true">CMS</span>
+                    <h2>Mudah dikelola</h2>
+                    <p>Website bisa dilengkapi admin panel untuk mengubah konten, portfolio, artikel, layanan, dan pengaturan bisnis.</p>
+                </article>
+                <article class="seo-service-advantage-card">
+                    <span class="seo-service-advantage-icon" aria-hidden="true">06</span>
+                    <h2>Siap dikembangkan</h2>
+                    <p>Fondasi website dapat dilanjutkan menjadi katalog, booking, dashboard internal, SaaS, atau integrasi AI.</p>
+                </article>
             </div>
         </div>
     </section>
