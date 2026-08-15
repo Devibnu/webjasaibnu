@@ -69,6 +69,20 @@ Route::view('/jasa-pembuatan-website-serang-murah', 'pages.website-development',
         'badge' => 'Mulai dari website sederhana yang rapi, cepat, mobile-friendly, dan siap menjadi pintu masuk pelanggan baru.',
     ],
 ])->name('website-development-serang-murah');
+Route::view('/jasa-website-umkm-serang', 'pages.website-development', [
+    'landing' => [
+        'title' => 'Jasa Website UMKM Serang | Website Usaha Lokal',
+        'meta_description' => 'Jasa website UMKM Serang untuk usaha lokal, toko, jasa, kuliner, bengkel, klinik, dan bisnis kecil yang ingin tampil profesional, mudah ditemukan, dan mudah dihubungi pelanggan.',
+        'canonical' => url('/jasa-website-umkm-serang'),
+        'label' => 'Jasa Website UMKM Serang',
+        'h1' => 'Jasa Website UMKM Serang untuk Usaha Lokal yang Ingin Lebih Mudah Ditemukan',
+        'hero_copy' => 'JASAIBNU membantu UMKM di Serang memiliki website usaha yang rapi, cepat, mobile-friendly, terhubung ke WhatsApp, dan mudah dipakai untuk menampilkan layanan, produk, alamat, serta bukti pekerjaan.',
+        'impact_label' => 'Website untuk UMKM lokal',
+        'impact_title' => 'Website membantu UMKM Serang terlihat lebih dipercaya saat pelanggan mencari produk atau layanan secara online.',
+        'impact_copy' => 'Untuk UMKM, website bisa menjadi profil resmi usaha, katalog sederhana, halaman promosi, tempat menampilkan testimoni, dan tujuan iklan atau link WhatsApp agar calon pelanggan lebih yakin sebelum menghubungi.',
+        'badge' => 'Cocok untuk toko, jasa lokal, kuliner, bengkel, klinik, komunitas, dan usaha kecil di Serang yang ingin mulai serius online.',
+    ],
+])->name('website-development-umkm-serang');
 Route::get('/services', function () {
     return view('pages.services', [
         'services' => \App\Models\Service::active()->ordered()->get(),
