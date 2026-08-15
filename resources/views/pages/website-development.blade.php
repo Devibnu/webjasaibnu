@@ -259,6 +259,45 @@
             line-height: 1.65;
         }
 
+        .seo-service-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .seo-service-type-card {
+            min-height: 210px;
+            padding: 26px;
+            border: 1px solid #e2edf4;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        .seo-service-type-card span {
+            display: inline-grid;
+            width: 48px;
+            height: 48px;
+            place-items: center;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            background: #eef9ff;
+            color: #06a3da;
+            font-weight: 800;
+        }
+
+        .seo-service-type-card h2 {
+            margin: 0 0 10px;
+            color: #091e3e;
+            font-size: 1.16rem;
+            font-weight: 800;
+        }
+
+        .seo-service-type-card p {
+            margin: 0;
+            color: #6b6a75;
+            line-height: 1.65;
+        }
+
         .seo-service-section {
             padding: clamp(64px, 8vw, 104px) 0;
             background: #fff;
@@ -363,10 +402,48 @@
             line-height: 1.7;
         }
 
+        .seo-service-mid-cta {
+            padding: clamp(42px, 6vw, 64px) 0;
+            background: #06a3da;
+            color: #fff;
+        }
+
+        .seo-service-mid-cta-row {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .seo-service-mid-cta h2 {
+            max-width: 680px;
+            margin: 0 0 10px;
+            color: #fff;
+            font-size: clamp(26px, 2.6vw, 38px);
+            font-weight: 800;
+            line-height: 1.16;
+        }
+
+        .seo-service-mid-cta p {
+            max-width: 620px;
+            margin: 0;
+            color: rgba(255, 255, 255, .9);
+            line-height: 1.68;
+        }
+
+        .seo-service-mid-cta .seo-service-button {
+            flex: 0 0 auto;
+            border-color: #fff;
+            background: #fff;
+            color: #091e3e;
+            box-shadow: none;
+        }
+
         @media (max-width: 991.98px) {
             .seo-service-hero-grid,
             .seo-service-impact-grid,
             .seo-service-advantage-grid,
+            .seo-service-type-grid,
             .seo-service-card-grid,
             .seo-service-faq-grid {
                 grid-template-columns: 1fr;
@@ -381,6 +458,10 @@
             .seo-service-impact-media,
             .seo-service-impact-media img {
                 min-height: 360px;
+            }
+
+            .seo-service-mid-cta-row {
+                display: grid;
             }
         }
 
@@ -433,6 +514,14 @@
                 padding-top: 44px;
             }
 
+            .seo-service-impact-copy h2,
+            .seo-service-heading h2,
+            .seo-service-cta h2,
+            .seo-service-mid-cta h2 {
+                font-size: clamp(25px, 7.2vw, 32px);
+                line-height: 1.18;
+            }
+
             .seo-service-impact-points {
                 grid-template-columns: 1fr;
             }
@@ -445,6 +534,7 @@
             }
 
             .seo-service-advantage-card,
+            .seo-service-type-card,
             .seo-service-card,
             .seo-service-faq {
                 padding: 22px;
@@ -576,7 +666,61 @@
         </div>
     </section>
 
-    <section class="seo-service-section alt" aria-labelledby="website-process-title">
+    <section class="seo-service-section alt" aria-labelledby="website-types-title">
+        <div class="seo-service-shell">
+            <div class="seo-service-heading">
+                <p class="seo-service-label">Jenis website</p>
+                <h2 id="website-types-title">Website yang bisa dibuat sesuai kebutuhan bisnis Anda.</h2>
+                <p>Dari halaman profil sederhana sampai website dengan pengelolaan konten, JASAIBNU membantu memilih bentuk website yang paling realistis untuk target bisnis dan budget.</p>
+            </div>
+            <div class="seo-service-type-grid">
+                <article class="seo-service-type-card">
+                    <span aria-hidden="true">CP</span>
+                    <h2>Company profile</h2>
+                    <p>Website profil perusahaan untuk menampilkan layanan, legalitas, portfolio, kontak, dan kredibilitas bisnis.</p>
+                </article>
+                <article class="seo-service-type-card">
+                    <span aria-hidden="true">LP</span>
+                    <h2>Landing page promosi</h2>
+                    <p>Halaman khusus untuk campaign, iklan, launching produk, pendaftaran, atau penawaran jasa tertentu.</p>
+                </article>
+                <article class="seo-service-type-card">
+                    <span aria-hidden="true">UMK</span>
+                    <h2>Website UMKM dan jasa</h2>
+                    <p>Website untuk bisnis lokal agar calon pelanggan lebih mudah melihat layanan, harga awal, lokasi, dan kontak.</p>
+                </article>
+                <article class="seo-service-type-card">
+                    <span aria-hidden="true">CAT</span>
+                    <h2>Katalog produk</h2>
+                    <p>Website katalog untuk menampilkan produk, kategori, detail, dan jalur pemesanan melalui WhatsApp atau form.</p>
+                </article>
+                <article class="seo-service-type-card">
+                    <span aria-hidden="true">CMS</span>
+                    <h2>Website dengan admin panel</h2>
+                    <p>Konten website dapat dikelola sendiri, seperti artikel, portfolio, layanan, halaman, dan pengaturan umum.</p>
+                </article>
+                <article class="seo-service-type-card">
+                    <span aria-hidden="true">APP</span>
+                    <h2>Website menuju aplikasi web</h2>
+                    <p>Fondasi website bisa dikembangkan menjadi sistem booking, dashboard, member area, atau aplikasi bisnis.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="seo-service-mid-cta" aria-labelledby="website-mid-cta-title">
+        <div class="seo-service-shell">
+            <div class="seo-service-mid-cta-row">
+                <div>
+                    <h2 id="website-mid-cta-title">Ingin website bisnis yang siap dipakai untuk branding dan penjualan?</h2>
+                    <p>Kirim kebutuhan singkat Anda. Kami bantu petakan halaman, fitur, dan prioritas yang paling penting dulu.</p>
+                </div>
+                <a class="seo-service-button" href="{{ route('contact') }}">Diskusi Sekarang</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="seo-service-section" aria-labelledby="website-process-title">
         <div class="seo-service-shell">
             <div class="seo-service-heading">
                 <p class="seo-service-label">Proses kerja</p>
@@ -624,6 +768,22 @@
                 <article class="seo-service-faq">
                     <h3>Bisa lanjut ke aplikasi web?</h3>
                     <p>Bisa. Jika kebutuhan berkembang, website dapat dilanjutkan menjadi sistem bisnis, dashboard internal, SaaS, atau integrasi AI.</p>
+                </article>
+                <article class="seo-service-faq">
+                    <h3>Apakah harga website sudah termasuk domain dan hosting?</h3>
+                    <p>Bisa disesuaikan. Kami dapat membantu menyiapkan domain, hosting, SSL, email bisnis, dan konfigurasi dasar sesuai kebutuhan project.</p>
+                </article>
+                <article class="seo-service-faq">
+                    <h3>Apakah website bisa dipakai untuk iklan dan promosi?</h3>
+                    <p>Bisa. Website dapat disiapkan sebagai tujuan iklan Google, media sosial, WhatsApp campaign, atau landing page penawaran agar promosi lebih terukur.</p>
+                </article>
+                <article class="seo-service-faq">
+                    <h3>Apakah ada revisi desain?</h3>
+                    <p>Ada. Revisi mengikuti scope yang disepakati di awal, agar desain, konten, dan fitur tetap terarah sampai website siap online.</p>
+                </article>
+                <article class="seo-service-faq">
+                    <h3>Apakah bisa dibantu isi konten website?</h3>
+                    <p>Bisa. Kami dapat membantu menyusun struktur halaman dan copy awal seperti profil bisnis, layanan, keunggulan, CTA, dan FAQ.</p>
                 </article>
             </div>
         </div>
