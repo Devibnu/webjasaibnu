@@ -364,10 +364,6 @@
                 color: #06a3da;
             }
 
-            .startup2-home .navbar-collapse {
-                display: none;
-            }
-
             .startup2-home .navbar-dark .navbar-brand h1 {
                 font-size: 1.65rem;
             }
