@@ -325,10 +325,10 @@
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: space-between;
-                min-height: clamp(96px, 13svh, 105px);
+                min-height: 74px;
                 align-items: center;
-                padding-top: 1rem !important;
-                padding-bottom: 1rem !important;
+                padding-top: .75rem !important;
+                padding-bottom: .75rem !important;
                 background: #fff;
             }
 
@@ -344,7 +344,8 @@
             }
 
             .startup2-home .ji-header-logo {
-                max-height: 46px;
+                width: auto;
+                max-height: 42px;
             }
 
             .startup2-home .ji-header-logo-public {
@@ -381,9 +382,9 @@
             .startup2-home #header-carousel .carousel-item {
                 position: relative;
                 width: 100%;
-                height: calc(100svh - clamp(96px, 13svh, 105px));
-                min-height: 560px;
-                max-height: 760px;
+                height: 600px;
+                min-height: 600px;
+                max-height: none;
                 overflow: hidden;
             }
 
@@ -396,10 +397,17 @@
             }
 
             .startup2-home #header-carousel .carousel-item img {
+                position: absolute;
+                inset: 0;
                 height: 100%;
                 min-height: 0;
                 object-fit: cover;
                 object-position: center 42%;
+            }
+
+            .startup2-home #header-carousel picture {
+                display: block;
+                height: 100%;
             }
 
             .startup2-home .carousel-caption {
@@ -409,7 +417,7 @@
                 right: 0;
                 bottom: 0;
                 z-index: 1;
-                padding: clamp(34px, 6svh, 54px) 24px 86px;
+                padding: 64px 24px 88px;
                 text-align: center;
                 background: rgba(9, 30, 62, .7);
             }
@@ -438,7 +446,7 @@
                 margin-left: auto;
                 color: #fff;
                 font-weight: 800;
-                font-size: clamp(38px, 6.4vw, 46px);
+                font-size: clamp(34px, 5.4vw, 42px);
                 line-height: 1.1;
                 overflow-wrap: normal;
             }
@@ -447,7 +455,7 @@
                 width: min(100%, 620px);
                 max-width: 620px;
                 margin: 14px auto 20px !important;
-                font-size: clamp(18px, 2.8vw, 20px);
+                font-size: clamp(16px, 2.4vw, 18px);
                 line-height: 1.5;
                 overflow-wrap: anywhere;
             }
@@ -491,36 +499,72 @@
             }
 
             .startup2-home .facts {
-                min-height: 558px;
+                min-height: 0;
+                padding-top: 0 !important;
+                padding-bottom: 2.5rem !important;
             }
 
             .startup2-home .facts .container {
-                padding-top: 3rem !important;
-                padding-bottom: 3rem !important;
+                padding-top: 2rem !important;
+                padding-bottom: 0 !important;
             }
 
             .startup2-home .facts .col-lg-4 > div {
-                min-height: 150px;
+                min-height: 118px;
+                height: auto !important;
+                justify-content: flex-start !important;
+                gap: 16px;
+                padding: 1.1rem !important;
+            }
+
+            .startup2-home .facts .col-lg-4 > div > div:first-child {
+                width: 52px !important;
+                height: 52px !important;
+                flex: 0 0 52px;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                margin-bottom: 0 !important;
+            }
+
+            .startup2-home .startup2-fact-icon {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+
+            .startup2-home .container-fluid.py-5:not(.facts) {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+
+            .startup2-home .container.py-5 {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+
+            .startup2-home .row.g-5 {
+                --bs-gutter-y: 2.25rem;
             }
         }
 
         @media (max-width: 575.98px) {
             .startup2-home .navbar {
-                min-height: clamp(96px, 12svh, 102px);
+                min-height: 68px;
                 padding-right: 16px !important;
                 padding-left: 16px !important;
             }
 
             .startup2-home .ji-header-logo-stack {
-                max-width: min(218px, 61vw);
+                max-width: min(190px, 58vw);
             }
 
             .startup2-home #header-carousel,
             .startup2-home #header-carousel .carousel-inner,
             .startup2-home #header-carousel .carousel-item {
-                height: calc(100svh - clamp(96px, 12svh, 102px));
-                min-height: 540px;
-                max-height: 700px;
+                height: 620px;
+                min-height: 620px;
+                max-height: none;
             }
 
             .startup2-home .carousel-item img {
@@ -533,7 +577,7 @@
             .startup2-home .carousel-caption {
                 left: 0;
                 right: 0;
-                padding: 28px 18px 76px;
+                padding: 58px 18px 82px;
             }
 
             .startup2-home .carousel-caption .p-3 {
@@ -547,14 +591,14 @@
                 width: min(100%, 336px);
                 max-width: 336px;
                 margin-inline: auto;
-                font-size: clamp(17px, 4.6vw, 19px);
+                font-size: clamp(15px, 4vw, 17px);
                 line-height: 1.48;
                 overflow-wrap: anywhere;
             }
 
             .startup2-home .carousel-caption .startup2-hero-title {
                 max-width: 354px;
-                font-size: clamp(36px, 10.8vw, 44px);
+                font-size: clamp(30px, 8.8vw, 38px);
                 line-height: 1.09;
                 overflow-wrap: normal;
             }
@@ -564,7 +608,7 @@
                 margin-right: auto;
                 margin-bottom: 10px !important;
                 margin-left: auto;
-                font-size: clamp(15px, 4vw, 16px);
+                font-size: clamp(13px, 3.6vw, 15px);
                 line-height: 1.38;
                 overflow-wrap: anywhere;
             }
@@ -593,7 +637,8 @@
             }
 
             .startup2-home .facts {
-                min-height: 546px;
+                min-height: 0;
+                padding-bottom: 1.25rem !important;
             }
 
             .startup2-home .facts .d-flex {
@@ -605,8 +650,90 @@
             }
 
             .startup2-home .facts p {
-                max-width: 210px;
+                max-width: none;
                 overflow-wrap: anywhere;
+            }
+
+            .startup2-home .facts h5 {
+                font-size: 1.02rem;
+                line-height: 1.25;
+            }
+
+            .startup2-home .container.py-5 {
+                padding-top: 1.5rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+
+            .startup2-home .container-fluid.py-5:not(.facts) {
+                padding-top: 1.5rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+
+            .startup2-home .section-title {
+                margin-bottom: 1.5rem !important;
+            }
+
+            .startup2-home .row.g-5 {
+                --bs-gutter-y: 1.75rem;
+            }
+
+            .startup2-home .row.g-5 > [class*="col-"] {
+                margin-top: var(--bs-gutter-y);
+            }
+
+            .startup2-home .row.g-5 > [class*="col-"]:first-child {
+                margin-top: 0;
+            }
+
+            .startup2-home .row.g-5 .row.g-5 {
+                --bs-gutter-y: 2rem;
+            }
+
+            .startup2-home .section-title h2 {
+                font-size: clamp(1.72rem, 7vw, 2.15rem);
+                line-height: 1.18;
+            }
+
+            .startup2-home .col-lg-5[style*="min-height: 500px"] {
+                min-height: 320px !important;
+                margin-top: 1.5rem;
+            }
+
+            .startup2-home .col-lg-4[style*="min-height: 350px"] {
+                min-height: 280px !important;
+                margin-block: .25rem .75rem;
+            }
+
+            .startup2-home .service-item {
+                min-height: 250px;
+                padding: 1.5rem !important;
+            }
+
+            .startup2-home .service-icon {
+                margin-bottom: 1rem;
+            }
+
+            .startup2-home .bg-primary.h-100.p-5 {
+                padding: 1.75rem !important;
+            }
+
+            .startup2-home .floating-whatsapp {
+                right: 14px;
+                bottom: 18px;
+                height: 48px;
+                max-width: 48px;
+                padding: 0 13px;
+            }
+
+            .startup2-home .floating-whatsapp span {
+                display: none;
+            }
+
+            .startup2-home .jasaibnu-startup-copyright + .floating-whatsapp + .back-to-top {
+                right: 14px;
+                bottom: 78px;
+                width: 42px;
+                height: 42px;
             }
 
             .startup2-home .jasaibnu-startup-footer .container,
@@ -648,6 +775,10 @@
                 margin-left: auto;
                 font-size: .92rem;
                 overflow-wrap: anywhere;
+            }
+
+            .startup2-home .jasaibnu-startup-footer.mt-5 {
+                margin-top: 1.5rem !important;
             }
         }
     </style>
