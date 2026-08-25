@@ -136,7 +136,7 @@
         <div class="services-shell">
             <div class="services-section-title">
                 <p>LAYANAN KAMI</p>
-                <h1 id="services-overview-heading">Solusi Digital untuk Mendukung Pertumbuhan Bisnis Anda</h1>
+                <h2 id="services-overview-heading">Solusi Digital untuk Mendukung Pertumbuhan Bisnis Anda</h2>
             </div>
 
             <div class="services-grid">
@@ -158,7 +158,7 @@
         <div class="services-shell">
             <div class="services-section-title services-section-title-tight">
                 <p>PENDEKATAN KERJA</p>
-                <h1 id="services-proof-heading">Dari Kebutuhan Bisnis sampai Sistem Siap Dirawat</h1>
+                <h2 id="services-proof-heading">Dari Kebutuhan Bisnis sampai Sistem Siap Dirawat</h2>
             </div>
 
             <div class="services-proof-row" aria-label="Tahapan kerja JASAIBNU">
@@ -179,6 +179,13 @@
                     </article>
                 @endforeach
             </div>
+            <p class="mt-4 mb-0">
+                Untuk kebutuhan lokal, JASAIBNU juga menyediakan
+                <a href="{{ route('website-development-serang') }}">Jasa Pembuatan Website di Serang</a>,
+                <a href="{{ route('website-development-banten') }}">layanan website Banten</a>, dan
+                <a href="{{ route('website-development-umkm-serang') }}">website UMKM Serang</a>
+                dengan arah kebutuhan yang berbeda.
+            </p>
         </div>
     </section>
 

@@ -8,6 +8,7 @@
         $canonical = trim($__env->yieldContent('canonical', url()->current()));
         $robots = trim($__env->yieldContent('robots', 'index,follow'));
         $ogType = trim($__env->yieldContent('og_type', 'website'));
+        $ogImage = trim($__env->yieldContent('og_image'));
         $twitterCard = trim($__env->yieldContent('twitter_card', 'summary'));
         $homeUrl = rtrim(route('home'), '/');
     @endphp
@@ -23,10 +24,16 @@
     <meta property="og:url" content="{{ $canonical }}">
     <meta property="og:type" content="{{ $ogType }}">
     <meta property="og:site_name" content="{{ $siteName }}">
+    @if($ogImage !== '')
+        <meta property="og:image" content="{{ $ogImage }}">
+    @endif
 
     <meta name="twitter:card" content="{{ $twitterCard }}">
     <meta name="twitter:title" content="{{ $title }}">
     <meta name="twitter:description" content="{{ $description }}">
+    @if($ogImage !== '')
+        <meta name="twitter:image" content="{{ $ogImage }}">
+    @endif
 
     <title>{{ $title }}</title>
 

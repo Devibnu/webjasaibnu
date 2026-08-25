@@ -42,6 +42,11 @@ class ExampleTest extends TestCase
         $response->assertSee('Software Development');
         $response->assertSee('<title>Jasa Pembuatan Website, Aplikasi &amp; SEO | JASAIBNU</title>', false);
         $response->assertSee('JASAIBNU menyediakan jasa pembuatan website, aplikasi bisnis, SaaS, SEO, integrasi sistem, dan AI', false);
+        $response->assertSee('Jasa SEO dan optimasi website disiapkan natural untuk bisnis di Serang, Banten', false);
+        $response->assertSee('aria-label="Lihat Jasa Pembuatan Website di Serang"', false);
+        $response->assertSee(route('website-development-serang'), false);
+        $response->assertSee('Jasa pembuatan website Banten', false);
+        $response->assertSee('website UMKM Serang', false);
         $response->assertSee('meta name="description"', false);
         $response->assertSee('rel="canonical"', false);
         $response->assertSee(route('services.index'), false);
@@ -142,9 +147,9 @@ class ExampleTest extends TestCase
         $response
             ->assertOk()
             ->assertSee('<title>Jasa Pembuatan Website Serang Murah &amp; Profesional | JASAIBNU</title>', false)
-            ->assertSee('Jasa pembuatan website Serang murah dan profesional', false)
+            ->assertSee('Jasa pembuatan website Serang murah untuk bisnis yang ingin mulai dari website sederhana', false)
             ->assertSee('Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional')
-            ->assertSee('Website terjangkau tetap bisa membantu bisnis Serang terlihat serius', false)
+            ->assertSee('Website terjangkau membantu bisnis Serang mulai tampil profesional', false)
             ->assertSee('rel="canonical" href="' . route('website-development-serang-murah') . '"', false);
 
         preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
@@ -160,8 +165,9 @@ class ExampleTest extends TestCase
         $response
             ->assertOk()
             ->assertSee('<title>Jasa Website UMKM Serang | Website Usaha Lokal</title>', false)
-            ->assertSee('Jasa website UMKM Serang untuk usaha lokal', false)
+            ->assertSee('Jasa website UMKM Serang untuk toko, jasa lokal, kuliner', false)
             ->assertSee('Jasa Website UMKM Serang untuk Usaha Lokal yang Ingin Lebih Mudah Ditemukan')
+            ->assertSee('profil usaha, katalog sederhana, layanan, alamat', false)
             ->assertSee('Website membantu UMKM Serang terlihat lebih dipercaya', false)
             ->assertSee('rel="canonical" href="' . route('website-development-umkm-serang') . '"', false);
 
@@ -213,10 +219,25 @@ class ExampleTest extends TestCase
             ->assertSee('Pastikan Website Cepat Dibuka di Mobile')
             ->assertSee('JASAIBNU membantu bisnis di Serang, Banten, dan area sekitarnya')
             ->assertSee('rel="canonical" href="' . route('insights.show', 'cara-memilih-jasa-pembuatan-website-di-serang') . '"', false)
+            ->assertSee('<meta property="og:image" content="' . asset('assets/startup2/img/blog-1.jpg') . '">', false)
+            ->assertSee('<meta name="twitter:image" content="' . asset('assets/startup2/img/blog-1.jpg') . '">', false)
             ->assertSee('"@type": "BlogPosting"', false);
 
         preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
         $this->assertSame(1, count($h1Matches[0]));
+    }
+
+    public function test_services_and_portfolio_pages_render_one_h1()
+    {
+        $this->withoutVite();
+
+        foreach ([route('services.index'), route('portfolio.index')] as $url) {
+            $response = $this->get($url);
+            $response->assertOk();
+
+            preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
+            $this->assertSame(1, count($h1Matches[0]), $url . ' should render exactly one H1.');
+        }
     }
 
     public function test_contact_form_accepts_valid_submission()

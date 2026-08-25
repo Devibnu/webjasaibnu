@@ -136,7 +136,7 @@
         <div class="portfolio-shell">
             <div class="portfolio-section-title">
                 <p>{{ $pageSettings->value('eyebrow') }}</p>
-                <h1 id="portfolio-overview-heading">{{ $pageSettings->value('title') }}</h1>
+                <h2 id="portfolio-overview-heading">{{ $pageSettings->value('title') }}</h2>
                 <span>{{ $pageSettings->value('description') }}</span>
             </div>
 
@@ -183,7 +183,7 @@
         <div class="portfolio-shell">
             <div class="portfolio-cta-panel">
                 <p>{{ $pageSettings->value('cta_eyebrow') }}</p>
-                <h1 id="portfolio-cta-heading">{{ $pageSettings->value('cta_title') }}</h1>
+                <h2 id="portfolio-cta-heading">{{ $pageSettings->value('cta_title') }}</h2>
                 <span>{{ $pageSettings->value('cta_description') }}</span>
                 <div>
                     <a href="{{ $pageSettings->ctaPrimaryUrl() }}">{{ $pageSettings->ctaPrimaryLabel() }}</a>
