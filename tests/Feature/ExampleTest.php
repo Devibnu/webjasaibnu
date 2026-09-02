@@ -238,6 +238,14 @@ class ExampleTest extends TestCase
             ->assertSee('Published proof reused on the national website service page.')
             ->assertSee('class="national-proof-fallback" aria-hidden="true">NPW</span>', false)
             ->assertSee('aria-label="Tahapan kolaborasi jarak jauh"', false)
+            ->assertSee('class="national-trust-strip"', false)
+            ->assertSee('class="national-primary-grid"', false)
+            ->assertSee('class="national-why-grid"', false)
+            ->assertSee('class="national-process-grid"', false)
+            ->assertSee('data-national-faq-button', false)
+            ->assertSee('aria-expanded="true" aria-controls="national-faq-answer-0"', false)
+            ->assertSee('Berapa lama pembuatan website?')
+            ->assertSee('Apakah bisa dibantu isi konten website?')
             ->assertDontSee('National Draft Website Proof');
     }
 
@@ -309,7 +317,9 @@ class ExampleTest extends TestCase
                 ->assertSee('<h1 id="website-service-title">' . $expected['h1'] . '</h1>', false)
                 ->assertDontSee('national-positioning-title', false)
                 ->assertDontSee('national-offer-title', false)
-                ->assertDontSee('national-proof-title', false);
+                ->assertDontSee('national-proof-title', false)
+                ->assertDontSee('class="national-trust-strip"', false)
+                ->assertDontSee('data-national-faq-button', false);
 
             preg_match_all('/<h2\b[^>]*>(.*?)<\/h2>/si', $html, $h2Matches);
             $this->assertCount(20, $h2Matches[1]);
