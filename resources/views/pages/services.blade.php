@@ -180,6 +180,11 @@
                 @endforeach
             </div>
             <p class="mt-4 mb-0">
+                Untuk kebutuhan website bisnis secara umum, pelajari
+                <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a>
+                yang mencakup perencanaan, development, testing, dan persiapan go-live.
+            </p>
+            <p class="mt-4 mb-0">
                 Untuk kebutuhan lokal, JASAIBNU juga menyediakan
                 <a href="{{ route('website-development-serang') }}">Jasa Pembuatan Website di Serang</a>,
                 <a href="{{ route('website-development-banten') }}">layanan website Banten</a>, dan

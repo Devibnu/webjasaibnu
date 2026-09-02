@@ -256,6 +256,11 @@
                                     <p>{{ $block['text'] }}</p>
                                 @endif
                             @endforeach
+                            @if ($article->slug === 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun')
+                                <p>Jika fondasi ini perlu diterapkan sejak awal project, pelajari juga <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a> JASAIBNU.</p>
+                            @elseif ($article->slug === 'keamanan-website-bisnis-yang-tidak-boleh-diabaikan')
+                                <p>Keamanan dasar sebaiknya direncanakan sejak proses <a href="{{ route('website-development') }}">pengembangan website untuk bisnis</a>, bukan hanya setelah website online.</p>
+                            @endif
                         </div>
                     </article>
                 </div>

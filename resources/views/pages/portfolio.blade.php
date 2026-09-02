@@ -176,6 +176,11 @@
                     </article>
                 @endforelse
             </div>
+            <p class="mt-4 mb-0 text-center">
+                Ingin membangun solusi serupa untuk kebutuhan bisnis Anda? Pelajari
+                <a href="{{ route('website-development') }}">opsi pengembangan website untuk bisnis</a>
+                dan diskusikan scope yang paling relevan.
+            </p>
         </div>
     </section>
 

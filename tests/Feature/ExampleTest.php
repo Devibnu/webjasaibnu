@@ -201,6 +201,122 @@ class ExampleTest extends TestCase
         }
     }
 
+    public function test_national_website_page_adds_national_content_and_reuses_published_portfolio()
+    {
+        $this->withoutVite();
+
+        PortfolioItem::create([
+            'title' => 'National Published Website Proof',
+            'slug' => 'national-published-website-proof',
+            'code' => 'NPW',
+            'excerpt' => 'Published proof reused on the national website service page.',
+            'description' => 'Published proof reused on the national website service page.',
+            'technologies' => ['Laravel', 'Responsive'],
+            'status' => PortfolioItem::STATUS_PUBLISHED,
+            'published_at' => now()->subDay(),
+            'sort_order' => 0,
+        ]);
+
+        PortfolioItem::create([
+            'title' => 'National Draft Website Proof',
+            'slug' => 'national-draft-website-proof',
+            'excerpt' => 'Draft proof must not appear.',
+            'status' => PortfolioItem::STATUS_DRAFT,
+            'sort_order' => 0,
+        ]);
+
+        $response = $this->get(route('website-development'));
+
+        $response
+            ->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Profesional | JASAIBNU</title>', false)
+            ->assertSee('rel="canonical" href="' . route('website-development') . '"', false)
+            ->assertSee('<h1 id="website-service-title">Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh</h1>', false)
+            ->assertSee('Pembuatan website untuk bisnis di berbagai wilayah Indonesia.')
+            ->assertSee('Scope website disusun mengikuti kebutuhan dan kesiapan bisnis.')
+            ->assertSee('National Published Website Proof')
+            ->assertSee('Published proof reused on the national website service page.')
+            ->assertDontSee('National Draft Website Proof');
+    }
+
+    public function test_national_page_receives_contextual_internal_links_from_approved_sources()
+    {
+        $this->withoutVite();
+
+        $nationalUrl = route('website-development');
+        $sources = [
+            route('services.index') => 'layanan pembuatan website profesional',
+            route('portfolio.index') => 'opsi pengembangan website untuk bisnis',
+            route('insights.show', 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun') => 'layanan pembuatan website profesional',
+            route('insights.show', 'keamanan-website-bisnis-yang-tidak-boleh-diabaikan') => 'pengembangan website untuk bisnis',
+        ];
+
+        foreach ($sources as $sourceUrl => $anchorText) {
+            $response = $this->get($sourceUrl);
+
+            $response
+                ->assertOk()
+                ->assertSee('href="' . $nationalUrl . '">' . $anchorText . '</a>', false);
+
+            $this->assertSame(1, $this->anchorCountForUrl($response->getContent(), $nationalUrl));
+        }
+    }
+
+    public function test_national_changes_do_not_modify_local_landing_page_output_contracts()
+    {
+        $this->withoutVite();
+
+        $nationalUrl = route('website-development');
+        $serangUrl = route('website-development-serang');
+        $localPages = [
+            'website-development-serang' => [
+                'title' => 'Jasa Pembuatan Website Serang &amp; Banten | JASAIBNU',
+                'h1' => 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional',
+                'first_h2' => 'Website membantu bisnis Serang dan Banten lebih mudah ditemukan, dipercaya, dan dihubungi calon pelanggan.',
+                'serang_links' => 0,
+            ],
+            'website-development-serang-murah' => [
+                'title' => 'Jasa Pembuatan Website Serang Murah &amp; Profesional | JASAIBNU',
+                'h1' => 'Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional',
+                'first_h2' => 'Website terjangkau membantu bisnis Serang mulai tampil profesional tanpa langsung membangun sistem yang kompleks.',
+                'serang_links' => 1,
+            ],
+            'website-development-umkm-serang' => [
+                'title' => 'Jasa Website UMKM Serang | Website Usaha Lokal',
+                'h1' => 'Jasa Website UMKM Serang untuk Usaha Lokal yang Ingin Lebih Mudah Ditemukan',
+                'first_h2' => 'Website membantu UMKM Serang terlihat lebih dipercaya saat pelanggan mencari produk atau layanan secara online.',
+                'serang_links' => 1,
+            ],
+            'website-development-banten' => [
+                'title' => 'Jasa Pembuatan Website Banten | Website Bisnis &amp; UMKM',
+                'h1' => 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional',
+                'first_h2' => 'Website membantu bisnis di Banten tampil lebih kredibel dan lebih mudah dijangkau calon pelanggan online.',
+                'serang_links' => 1,
+            ],
+        ];
+
+        foreach ($localPages as $routeName => $expected) {
+            $url = route($routeName);
+            $response = $this->get($url);
+            $html = $response->getContent();
+
+            $response
+                ->assertOk()
+                ->assertSee('<title>' . $expected['title'] . '</title>', false)
+                ->assertSee('rel="canonical" href="' . $url . '"', false)
+                ->assertSee('<h1 id="website-service-title">' . $expected['h1'] . '</h1>', false)
+                ->assertDontSee('national-positioning-title', false)
+                ->assertDontSee('national-offer-title', false)
+                ->assertDontSee('national-proof-title', false);
+
+            preg_match_all('/<h2\b[^>]*>(.*?)<\/h2>/si', $html, $h2Matches);
+            $this->assertCount(20, $h2Matches[1]);
+            $this->assertSame($expected['first_h2'], trim(strip_tags($h2Matches[1][0])));
+            $this->assertSame(0, $this->anchorCountForUrl($html, $nationalUrl));
+            $this->assertSame($expected['serang_links'], $this->anchorCountForUrl($html, $serangUrl));
+        }
+    }
+
     private function anchorCountForUrl(string $html, string $url): int
     {
         preg_match_all('/<a\b[^>]*\bhref="' . preg_quote($url, '/') . '"[^>]*>/i', $html, $matches);

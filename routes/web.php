@@ -26,7 +26,15 @@ Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 Route::view('/', 'home')->name('home');
-Route::view('/jasa-pembuatan-website', 'pages.website-development')->name('website-development');
+Route::get('/jasa-pembuatan-website', function () {
+    return view('pages.website-development', [
+        'nationalPortfolioItems' => \App\Models\PortfolioItem::with('category')
+            ->published()
+            ->ordered()
+            ->limit(3)
+            ->get(),
+    ]);
+})->name('website-development');
 Route::view('/jasa-pembuatan-website-serang', 'pages.website-development', [
     'landing' => [
         'title' => 'Jasa Pembuatan Website Serang & Banten | JASAIBNU',

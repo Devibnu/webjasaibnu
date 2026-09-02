@@ -32,6 +32,8 @@
         ],
     ];
     $primarySerangLink = $primarySerangLinks[request()->route()?->getName()] ?? null;
+    $isNationalLanding = request()->routeIs('website-development');
+    $nationalPortfolioItems = $nationalPortfolioItems ?? collect();
 @endphp
 
 @section('title', $landing['title'])
@@ -581,6 +583,113 @@
             }
         }
     </style>
+    @if ($isNationalLanding)
+        <style>
+            .national-service-section {
+                padding: clamp(58px, 7vw, 92px) 0;
+                background: #fff;
+            }
+
+            .national-service-section.alt {
+                background: #f7fbfe;
+            }
+
+            .national-service-grid,
+            .national-proof-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 24px;
+            }
+
+            .national-service-card,
+            .national-proof-card {
+                padding: 28px;
+                border: 1px solid #e3edf5;
+                border-radius: 6px;
+                background: #fff;
+            }
+
+            .national-service-card h3,
+            .national-proof-card h3 {
+                margin: 0 0 12px;
+                color: #091e3e;
+                font-family: "Nunito", sans-serif;
+                font-size: 1.2rem;
+                font-weight: 800;
+            }
+
+            .national-service-card p,
+            .national-proof-card p {
+                margin: 0;
+                color: #5f6b7a;
+                line-height: 1.7;
+            }
+
+            .national-proof-card img {
+                width: 100%;
+                height: 180px;
+                margin-bottom: 20px;
+                border-radius: 4px;
+                object-fit: cover;
+            }
+
+            .national-proof-category {
+                display: block;
+                margin-bottom: 8px;
+                color: #06a3da;
+                font-size: .8rem;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+
+            .national-proof-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 18px;
+            }
+
+            .national-proof-tags span {
+                padding: 5px 8px;
+                border: 1px solid #d9edf8;
+                border-radius: 4px;
+                color: #091e3e;
+                font-size: .78rem;
+                font-weight: 700;
+            }
+
+            .national-proof-link {
+                display: inline-block;
+                margin-top: 18px;
+                color: #06a3da;
+                font-weight: 700;
+            }
+
+            .national-proof-more {
+                margin: 30px 0 0;
+                text-align: center;
+            }
+
+            .national-proof-more a {
+                color: #06a3da;
+                font-weight: 800;
+            }
+
+            @media (max-width: 991.98px) {
+                .national-service-grid,
+                .national-proof-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+
+            @media (max-width: 575.98px) {
+                .national-service-grid,
+                .national-proof-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    @endif
 @endpush
 
 @section('content')
@@ -599,6 +708,85 @@
             </div>
         </div>
     </section>
+
+    @if ($isNationalLanding)
+        <section class="national-service-section" aria-labelledby="national-positioning-title">
+            <div class="seo-service-shell">
+                <div class="seo-service-heading">
+                    <p class="seo-service-label">Kolaborasi lintas wilayah</p>
+                    <h2 id="national-positioning-title">Pembuatan website untuk bisnis di berbagai wilayah Indonesia.</h2>
+                    <p>JASAIBNU dapat mendampingi bisnis dari berbagai wilayah melalui proses kolaborasi jarak jauh. Diskusi kebutuhan, penyiapan materi, peninjauan desain, pengembangan, dan koordinasi sebelum website online dapat dilakukan secara terstruktur tanpa harus berada di kota yang sama.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="national-service-section alt" aria-labelledby="national-offer-title">
+            <div class="seo-service-shell">
+                <div class="seo-service-heading">
+                    <p class="seo-service-label">Cakupan layanan</p>
+                    <h2 id="national-offer-title">Scope website disusun mengikuti kebutuhan dan kesiapan bisnis.</h2>
+                    <p>Setiap project dimulai dengan pemetaan tujuan, halaman, materi, fitur, dan kebutuhan pengelolaan agar solusi yang dibangun tetap relevan dan dapat dikembangkan.</p>
+                </div>
+                <div class="national-service-grid">
+                    <article class="national-service-card">
+                        <h3>Jenis website</h3>
+                        <p>Company profile, landing page, website layanan, katalog, website dengan admin panel, dan fondasi aplikasi web dapat disusun sesuai tujuan bisnis.</p>
+                    </article>
+                    <article class="national-service-card">
+                        <h3>Deliverables utama</h3>
+                        <p>Struktur halaman, tampilan responsive, jalur kontak, keamanan dasar, dan fondasi SEO teknis disiapkan sesuai scope yang disepakati.</p>
+                    </article>
+                    <article class="national-service-card">
+                        <h3>Alur pengembangan</h3>
+                        <p>Proses mencakup analisis kebutuhan, penyusunan struktur, desain dan development, testing, serta persiapan go-live.</p>
+                    </article>
+                    <article class="national-service-card">
+                        <h3>Faktor timeline</h3>
+                        <p>Durasi dipengaruhi jumlah halaman, kesiapan materi, kompleksitas fitur, kebutuhan integrasi, dan kecepatan proses peninjauan.</p>
+                    </article>
+                    <article class="national-service-card">
+                        <h3>Pengelolaan dan handover</h3>
+                        <p>Akses pengelolaan dapat disiapkan saat project menggunakan admin panel. Kebutuhan pengembangan dan dukungan setelah go-live dibahas mengikuti scope project.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        @if ($nationalPortfolioItems->isNotEmpty())
+            <section class="national-service-section" aria-labelledby="national-proof-title">
+                <div class="seo-service-shell">
+                    <div class="seo-service-heading">
+                        <p class="seo-service-label">Portfolio terpublikasi</p>
+                        <h2 id="national-proof-title">Contoh solusi digital yang telah dipublikasikan JASAIBNU.</h2>
+                        <p>Contoh berikut diambil langsung dari portfolio terpublikasi dan menunjukkan cakupan website serta sistem digital yang tersedia.</p>
+                    </div>
+                    <div class="national-proof-grid">
+                        @foreach ($nationalPortfolioItems as $item)
+                            <article class="national-proof-card">
+                                @if ($item->imageUrl())
+                                    <img src="{{ $item->imageUrl() }}" alt="" width="500" height="350" loading="lazy" decoding="async">
+                                @endif
+                                <span class="national-proof-category">{{ $item->categoryName() }}</span>
+                                <h3>{{ $item->title }}</h3>
+                                <p>{{ $item->excerpt ?: $item->description }}</p>
+                                @if ($item->technologyList())
+                                    <div class="national-proof-tags" aria-label="Teknologi {{ $item->title }}">
+                                        @foreach ($item->technologyList() as $technology)
+                                            <span>{{ $technology }}</span>
+                                        @endforeach
+                                    </div>
+                                @endif
+                                @if ($item->project_url)
+                                    <a class="national-proof-link" href="{{ $item->project_url }}" target="_blank" rel="noopener noreferrer">Lihat project</a>
+                                @endif
+                            </article>
+                        @endforeach
+                    </div>
+                    <p class="national-proof-more"><a href="{{ route('portfolio.index') }}">Lihat portfolio JASAIBNU selengkapnya</a></p>
+                </div>
+            </section>
+        @endif
+    @endif
 
     <section class="seo-service-impact" aria-labelledby="website-impact-title">
         <div class="seo-service-shell">
