@@ -586,12 +586,86 @@
     @if ($isNationalLanding)
         <style>
             .national-service-section {
-                padding: clamp(58px, 7vw, 92px) 0;
+                padding: clamp(64px, 7vw, 96px) 0;
                 background: #fff;
             }
 
             .national-service-section.alt {
                 background: #f7fbfe;
+            }
+
+            .national-positioning-grid {
+                display: grid;
+                grid-template-columns: minmax(0, 1.08fr) minmax(380px, .92fr);
+                gap: clamp(44px, 6vw, 84px);
+                align-items: center;
+            }
+
+            .national-positioning-copy {
+                max-width: 660px;
+            }
+
+            .national-positioning-copy h2 {
+                margin: 0 0 20px;
+                color: #091e3e;
+                font-family: "Nunito", sans-serif;
+                font-size: clamp(2rem, 3.2vw, 2.75rem);
+                font-weight: 800;
+                line-height: 1.18;
+            }
+
+            .national-positioning-copy > p:last-child {
+                margin: 0;
+                color: #5f6b7a;
+                font-size: 1.03rem;
+                line-height: 1.8;
+            }
+
+            .national-collaboration-panel {
+                position: relative;
+                display: grid;
+                gap: 12px;
+                padding: clamp(24px, 3vw, 34px);
+                border: 1px solid #dceaf3;
+                border-radius: 10px;
+                background: #f7fbfe;
+                box-shadow: 0 18px 44px rgba(9, 30, 62, .08);
+            }
+
+            .national-collaboration-step {
+                display: grid;
+                grid-template-columns: 46px minmax(0, 1fr);
+                gap: 16px;
+                align-items: center;
+                padding: 16px;
+                border: 1px solid #e3edf5;
+                border-radius: 7px;
+                background: #fff;
+            }
+
+            .national-collaboration-step > span {
+                display: grid;
+                width: 46px;
+                height: 46px;
+                place-items: center;
+                border-radius: 6px;
+                background: #06a3da;
+                color: #fff;
+                font-weight: 800;
+            }
+
+            .national-collaboration-step strong {
+                display: block;
+                margin-bottom: 3px;
+                color: #091e3e;
+                font-size: 1rem;
+            }
+
+            .national-collaboration-step small {
+                display: block;
+                color: #6b7280;
+                font-size: .9rem;
+                line-height: 1.45;
             }
 
             .national-service-grid,
@@ -601,12 +675,23 @@
                 gap: 24px;
             }
 
-            .national-service-card,
-            .national-proof-card {
+            .national-service-card {
                 padding: 28px;
                 border: 1px solid #e3edf5;
                 border-radius: 6px;
                 background: #fff;
+            }
+
+            .national-proof-card {
+                display: flex;
+                min-height: 100%;
+                flex-direction: column;
+                overflow: hidden;
+                padding: 0;
+                border: 1px solid #e3edf5;
+                border-radius: 10px;
+                background: #fff;
+                box-shadow: 0 16px 38px rgba(9, 30, 62, .07);
             }
 
             .national-service-card h3,
@@ -625,12 +710,42 @@
                 line-height: 1.7;
             }
 
-            .national-proof-card img {
+            .national-proof-media {
+                display: grid;
+                min-height: 220px;
+                place-items: center;
+                overflow: hidden;
+                background: linear-gradient(135deg, #eef9ff, #dff3fb);
+            }
+
+            .national-proof-media img {
+                display: block;
                 width: 100%;
-                height: 180px;
-                margin-bottom: 20px;
-                border-radius: 4px;
+                height: 220px;
                 object-fit: cover;
+            }
+
+            .national-proof-fallback {
+                display: grid;
+                width: 88px;
+                height: 88px;
+                place-items: center;
+                border: 1px solid rgba(6, 163, 218, .25);
+                border-radius: 10px;
+                background: #fff;
+                color: #06a3da;
+                font-family: "Nunito", sans-serif;
+                font-size: 1.2rem;
+                font-weight: 900;
+                box-shadow: 0 14px 30px rgba(9, 30, 62, .08);
+            }
+
+            .national-proof-body {
+                display: flex;
+                min-height: 0;
+                flex: 1;
+                flex-direction: column;
+                padding: 26px;
             }
 
             .national-proof-category {
@@ -640,6 +755,19 @@
                 font-size: .8rem;
                 font-weight: 800;
                 text-transform: uppercase;
+            }
+
+            .national-proof-card h3 {
+                font-size: 1.3rem;
+                line-height: 1.25;
+            }
+
+            .national-proof-excerpt {
+                display: -webkit-box;
+                min-height: 5.1em;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
             }
 
             .national-proof-tags {
@@ -660,9 +788,17 @@
 
             .national-proof-link {
                 display: inline-block;
+                align-self: flex-start;
                 margin-top: 18px;
                 color: #06a3da;
                 font-weight: 700;
+            }
+
+            .national-proof-link:focus-visible,
+            .national-proof-more a:focus-visible {
+                border-radius: 3px;
+                outline: 3px solid rgba(6, 163, 218, .35);
+                outline-offset: 4px;
             }
 
             .national-proof-more {
@@ -676,6 +812,14 @@
             }
 
             @media (max-width: 991.98px) {
+                .national-positioning-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .national-positioning-copy {
+                    max-width: 760px;
+                }
+
                 .national-service-grid,
                 .national-proof-grid {
                     grid-template-columns: 1fr 1fr;
@@ -683,9 +827,47 @@
             }
 
             @media (max-width: 575.98px) {
+                .national-service-section {
+                    padding: 56px 0;
+                }
+
+                .national-positioning-grid {
+                    gap: 30px;
+                }
+
+                .national-positioning-copy h2 {
+                    font-size: clamp(1.8rem, 9vw, 2.2rem);
+                }
+
+                .national-collaboration-panel {
+                    padding: 18px;
+                }
+
+                .national-collaboration-step {
+                    grid-template-columns: 40px minmax(0, 1fr);
+                    gap: 12px;
+                    padding: 14px;
+                }
+
+                .national-collaboration-step > span {
+                    width: 40px;
+                    height: 40px;
+                }
+
                 .national-service-grid,
                 .national-proof-grid {
                     grid-template-columns: 1fr;
+                }
+
+                .national-service-card,
+                .national-proof-body {
+                    padding: 22px;
+                }
+
+                .national-proof-media,
+                .national-proof-media img {
+                    min-height: 200px;
+                    height: 200px;
                 }
             }
         </style>
@@ -712,10 +894,26 @@
     @if ($isNationalLanding)
         <section class="national-service-section" aria-labelledby="national-positioning-title">
             <div class="seo-service-shell">
-                <div class="seo-service-heading">
-                    <p class="seo-service-label">Kolaborasi lintas wilayah</p>
-                    <h2 id="national-positioning-title">Pembuatan website untuk bisnis di berbagai wilayah Indonesia.</h2>
-                    <p>JASAIBNU dapat mendampingi bisnis dari berbagai wilayah melalui proses kolaborasi jarak jauh. Diskusi kebutuhan, penyiapan materi, peninjauan desain, pengembangan, dan koordinasi sebelum website online dapat dilakukan secara terstruktur tanpa harus berada di kota yang sama.</p>
+                <div class="national-positioning-grid">
+                    <div class="national-positioning-copy">
+                        <p class="seo-service-label">Kolaborasi lintas wilayah</p>
+                        <h2 id="national-positioning-title">Pembuatan website untuk bisnis di berbagai wilayah Indonesia.</h2>
+                        <p>JASAIBNU dapat mendampingi bisnis dari berbagai wilayah melalui proses kolaborasi jarak jauh. Diskusi kebutuhan, penyiapan materi, peninjauan desain, pengembangan, dan koordinasi sebelum website online dapat dilakukan secara terstruktur tanpa harus berada di kota yang sama.</p>
+                    </div>
+                    <div class="national-collaboration-panel" aria-label="Tahapan kolaborasi jarak jauh">
+                        <div class="national-collaboration-step">
+                            <span aria-hidden="true">01</span>
+                            <div><strong>Diskusi kebutuhan</strong><small>Tujuan, halaman, dan fitur dipetakan secara terstruktur.</small></div>
+                        </div>
+                        <div class="national-collaboration-step">
+                            <span aria-hidden="true">02</span>
+                            <div><strong>Penyiapan dan peninjauan</strong><small>Materi dan desain ditinjau selama proses pengembangan.</small></div>
+                        </div>
+                        <div class="national-collaboration-step">
+                            <span aria-hidden="true">03</span>
+                            <div><strong>Koordinasi sebelum online</strong><small>Testing dan persiapan go-live dikoordinasikan jarak jauh.</small></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -763,22 +961,28 @@
                     <div class="national-proof-grid">
                         @foreach ($nationalPortfolioItems as $item)
                             <article class="national-proof-card">
-                                @if ($item->imageUrl())
-                                    <img src="{{ $item->imageUrl() }}" alt="" width="500" height="350" loading="lazy" decoding="async">
-                                @endif
-                                <span class="national-proof-category">{{ $item->categoryName() }}</span>
-                                <h3>{{ $item->title }}</h3>
-                                <p>{{ $item->excerpt ?: $item->description }}</p>
-                                @if ($item->technologyList())
-                                    <div class="national-proof-tags" aria-label="Teknologi {{ $item->title }}">
-                                        @foreach ($item->technologyList() as $technology)
-                                            <span>{{ $technology }}</span>
-                                        @endforeach
-                                    </div>
-                                @endif
-                                @if ($item->project_url)
-                                    <a class="national-proof-link" href="{{ $item->project_url }}" target="_blank" rel="noopener noreferrer">Lihat project</a>
-                                @endif
+                                <div class="national-proof-media">
+                                    @if ($item->imageUrl())
+                                        <img src="{{ $item->imageUrl() }}" alt="{{ $item->title }}" width="500" height="350" loading="lazy" decoding="async">
+                                    @else
+                                        <span class="national-proof-fallback" aria-hidden="true">{{ $item->code ?: Illuminate\Support\Str::of($item->title)->substr(0, 3)->upper() }}</span>
+                                    @endif
+                                </div>
+                                <div class="national-proof-body">
+                                    <span class="national-proof-category">{{ $item->categoryName() }}</span>
+                                    <h3>{{ $item->title }}</h3>
+                                    <p class="national-proof-excerpt">{{ $item->excerpt ?: $item->description }}</p>
+                                    @if ($item->technologyList())
+                                        <div class="national-proof-tags" aria-label="Teknologi {{ $item->title }}">
+                                            @foreach ($item->technologyList() as $technology)
+                                                <span>{{ $technology }}</span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    @if ($item->project_url)
+                                        <a class="national-proof-link" href="{{ $item->project_url }}" target="_blank" rel="noopener noreferrer">Lihat project</a>
+                                    @endif
+                                </div>
                             </article>
                         @endforeach
                     </div>

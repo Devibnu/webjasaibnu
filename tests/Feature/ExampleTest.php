@@ -236,6 +236,8 @@ class ExampleTest extends TestCase
             ->assertSee('Scope website disusun mengikuti kebutuhan dan kesiapan bisnis.')
             ->assertSee('National Published Website Proof')
             ->assertSee('Published proof reused on the national website service page.')
+            ->assertSee('class="national-proof-fallback" aria-hidden="true">NPW</span>', false)
+            ->assertSee('aria-label="Tahapan kolaborasi jarak jauh"', false)
             ->assertDontSee('National Draft Website Proof');
     }
 
