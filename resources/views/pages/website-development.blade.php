@@ -13,6 +13,25 @@
         'impact_copy' => 'Website bukan sekadar halaman online. Website menjadi pusat informasi resmi bisnis, tempat pelanggan mengenal layanan, melihat portfolio, membaca keunggulan, lalu menghubungi Anda saat mereka siap membeli atau berdiskusi.',
         'badge' => 'Website bekerja 24 jam sebagai etalase, profil bisnis, dan pintu masuk calon pelanggan.',
     ], $landing ?? []);
+
+    $primarySerangLinks = [
+        'website-development-serang-murah' => [
+            'before' => 'Jika bisnis Anda membutuhkan cakupan yang lebih lengkap, lihat juga ',
+            'anchor' => 'jasa pembuatan website profesional di Serang',
+            'after' => ' untuk pilihan website yang dapat disesuaikan dengan kebutuhan jangka panjang.',
+        ],
+        'website-development-umkm-serang' => [
+            'before' => 'Untuk kebutuhan usaha yang lebih luas, pelajari juga ',
+            'anchor' => 'layanan pembuatan website di Serang',
+            'after' => ' yang dapat dikembangkan mengikuti pertumbuhan bisnis.',
+        ],
+        'website-development-banten' => [
+            'before' => 'Bagi bisnis yang beroperasi di Kota Serang dan sekitarnya, tersedia juga ',
+            'anchor' => 'jasa website untuk area Serang',
+            'after' => ' dengan pendekatan yang disesuaikan untuk kebutuhan bisnis lokal.',
+        ],
+    ];
+    $primarySerangLink = $primarySerangLinks[request()->route()?->getName()] ?? null;
 @endphp
 
 @section('title', $landing['title'])
@@ -596,6 +615,9 @@
                     <p class="seo-service-label">{{ $landing['impact_label'] }}</p>
                     <h2 id="website-impact-title">{{ $landing['impact_title'] }}</h2>
                     <p>{{ $landing['impact_copy'] }}</p>
+                    @if ($primarySerangLink)
+                        <p>{{ $primarySerangLink['before'] }}<a href="{{ route('website-development-serang') }}">{{ $primarySerangLink['anchor'] }}</a>{{ $primarySerangLink['after'] }}</p>
+                    @endif
                     <div class="seo-service-impact-points">
                         <div class="seo-service-impact-point">
                             <span class="seo-service-impact-icon" aria-hidden="true">01</span>

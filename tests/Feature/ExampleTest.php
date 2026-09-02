@@ -175,6 +175,39 @@ class ExampleTest extends TestCase
         $this->assertSame(1, count($h1Matches[0]));
     }
 
+    public function test_supporting_local_landing_pages_link_once_to_primary_serang_page()
+    {
+        $this->withoutVite();
+
+        $primaryUrl = route('website-development-serang');
+        $landingPages = [
+            'website-development-serang-murah' => 'jasa pembuatan website profesional di Serang',
+            'website-development-umkm-serang' => 'layanan pembuatan website di Serang',
+            'website-development-banten' => 'jasa website untuk area Serang',
+        ];
+
+        $primaryResponse = $this->get($primaryUrl);
+        $primaryResponse->assertOk();
+        $this->assertSame(0, $this->anchorCountForUrl($primaryResponse->getContent(), $primaryUrl));
+
+        foreach ($landingPages as $routeName => $anchorText) {
+            $response = $this->get(route($routeName));
+
+            $response
+                ->assertOk()
+                ->assertSee('href="' . $primaryUrl . '">' . $anchorText . '</a>', false);
+
+            $this->assertSame(1, $this->anchorCountForUrl($response->getContent(), $primaryUrl));
+        }
+    }
+
+    private function anchorCountForUrl(string $html, string $url): int
+    {
+        preg_match_all('/<a\b[^>]*\bhref="' . preg_quote($url, '/') . '"[^>]*>/i', $html, $matches);
+
+        return count($matches[0]);
+    }
+
     public function test_insight_detail_page_is_available()
     {
         $this->withoutVite();
