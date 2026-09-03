@@ -16,6 +16,7 @@ class SiteSetting extends Model
         'whatsapp_url',
         'address',
         'city',
+        'region',
         'country',
         'google_maps_embed_url',
         'google_maps_external_url',
@@ -50,6 +51,7 @@ class SiteSetting extends Model
             'whatsapp_url' => null,
             'address' => 'Jakarta, Indonesia',
             'city' => 'Jakarta',
+            'region' => null,
             'country' => 'Indonesia',
             'google_maps_embed_url' => 'https://www.google.com/maps?q=Jakarta%2C%20Indonesia&output=embed',
             'google_maps_external_url' => null,
@@ -145,6 +147,7 @@ class SiteSetting extends Model
         $address = collect([
             'streetAddress' => $this->address,
             'addressLocality' => $this->city,
+            'addressRegion' => $this->region,
             'addressCountry' => $this->country,
         ])->filter(fn ($value) => filled($value))->all();
 
@@ -203,10 +206,11 @@ class SiteSetting extends Model
             'url' => $homeUrl,
             'description' => 'JASAIBNU menyediakan jasa pembuatan website, aplikasi bisnis, SaaS, SEO, integrasi sistem, dan solusi AI untuk bisnis di Indonesia.',
             'priceRange' => '$$',
-            'areaServed' => [
-                ['@type' => 'Country', 'name' => $this->country ?: 'Indonesia'],
+            'areaServed' => array_values(array_filter([
                 ['@type' => 'City', 'name' => $this->city ?: 'Serang'],
-            ],
+                ['@type' => 'AdministrativeArea', 'name' => $this->region],
+                ['@type' => 'Country', 'name' => $this->country ?: 'Indonesia'],
+            ], fn (array $area) => filled($area['name']))),
             'serviceType' => [
                 'Jasa pembuatan website',
                 'Jasa pembuatan aplikasi bisnis',

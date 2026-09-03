@@ -2175,6 +2175,7 @@
                         @else
                         <p><strong>Pembuatan website untuk bisnis di berbagai wilayah Indonesia.</strong> JASAIBNU dapat mendampingi bisnis melalui proses kolaborasi jarak jauh. Diskusi kebutuhan, penyiapan materi, peninjauan desain, pengembangan, dan koordinasi sebelum website online dapat dilakukan secara terstruktur tanpa harus berada di kota yang sama.</p>
                         <p><strong>Scope website disusun mengikuti kebutuhan dan kesiapan bisnis.</strong> Setiap project dipetakan berdasarkan tujuan, halaman, materi, fitur, dan kebutuhan pengelolaan.</p>
+                        <p>Untuk kebutuhan bisnis di tingkat provinsi, pelajari juga <a href="{{ route('website-development-banten') }}">jasa pembuatan website Banten</a>.</p>
                         <p>Company profile, landing page, website layanan, katalog, website dengan admin panel, dan fondasi aplikasi web dapat disusun sesuai tujuan bisnis. Halaman khusus untuk campaign, iklan, launching produk, pendaftaran, atau penawaran jasa tertentu juga dapat disiapkan.</p>
                         <p>Struktur halaman, tampilan responsive, jalur kontak, keamanan dasar, dan fondasi SEO teknis disiapkan sesuai scope yang disepakati.</p>
                         <p>Proses mencakup analisis kebutuhan, penyusunan struktur, desain dan development, testing, serta persiapan go-live.</p>

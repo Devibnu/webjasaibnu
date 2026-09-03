@@ -139,6 +139,51 @@ class ExampleTest extends TestCase
         $this->assertSame(1, count($h1Matches[0]));
     }
 
+    public function test_banten_geographic_schema_and_minimal_internal_link_preserve_locked_contracts()
+    {
+        $this->withoutVite();
+
+        SiteSetting::current()->update([
+            'address' => 'Jl Kelapa Dua, Kagungan, Kec. Serang, Kota Serang, Banten 42114',
+            'city' => 'Serang',
+            'region' => 'Banten',
+            'country' => 'Indonesia',
+        ]);
+
+        $national = $this->get(route('website-development'));
+        $national->assertOk()
+            ->assertSee('href="' . route('website-development-banten') . '">jasa pembuatan website Banten</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($national->getContent(), route('website-development-banten')));
+
+        $serang = $this->get(route('website-development-serang'));
+        $serang->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Serang &amp; Banten | JASAIBNU</title>', false)
+            ->assertSee('<h1 id="website-service-title">Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional</h1>', false)
+            ->assertSee('rel="canonical" href="' . route('website-development-serang') . '"', false);
+
+        $banten = $this->get(route('website-development-banten'));
+        $banten->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Banten | Website Bisnis &amp; UMKM</title>', false)
+            ->assertSee('<h1 id="website-service-title">Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional</h1>', false)
+            ->assertSee('rel="canonical" href="' . route('website-development-banten') . '"', false);
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $banten->getContent(), $jsonLdMatches);
+        $schemas = collect($jsonLdMatches[1])->map(fn ($json) => json_decode($json, true));
+        $organization = $schemas->firstWhere('@type', 'Organization');
+        $professionalService = $schemas->firstWhere('@type', 'ProfessionalService');
+
+        $this->assertSame('Serang', $organization['address']['addressLocality'] ?? null);
+        $this->assertSame('Banten', $organization['address']['addressRegion'] ?? null);
+        $this->assertSame('Indonesia', $organization['address']['addressCountry'] ?? null);
+        $this->assertSame(rtrim(route('home'), '/') . '#professional-service', $professionalService['@id'] ?? null);
+        $this->assertContains(['@type' => 'City', 'name' => 'Serang'], $professionalService['areaServed'] ?? []);
+        $this->assertContains(['@type' => 'AdministrativeArea', 'name' => 'Banten'], $professionalService['areaServed'] ?? []);
+        $this->assertContains(['@type' => 'Country', 'name' => 'Indonesia'], $professionalService['areaServed'] ?? []);
+        $this->assertNotContains(['@type' => 'Country', 'name' => 'Banten'], $professionalService['areaServed'] ?? []);
+
+        $this->get(route('seo-serang'))->assertOk();
+    }
+
     public function test_banten_locked_ui_preserves_seo_contract_and_isolates_protected_pages()
     {
         $this->withoutVite();

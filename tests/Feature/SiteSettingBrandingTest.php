@@ -124,4 +124,25 @@ class SiteSettingBrandingTest extends TestCase
 
         $this->assertEquals(1, SiteSetting::count());
     }
+
+    public function test_admin_can_persist_city_region_and_country_settings()
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $response = $this->actingAs($admin)->put(route('admin.site-settings.update'), array_merge(
+            SiteSetting::defaults(),
+            [
+                'city' => 'Serang',
+                'region' => 'Banten',
+                'country' => 'Indonesia',
+            ]
+        ));
+
+        $response->assertRedirect(route('admin.site-settings.edit'));
+        $this->assertDatabaseHas('site_settings', [
+            'city' => 'Serang',
+            'region' => 'Banten',
+            'country' => 'Indonesia',
+        ]);
+    }
 }

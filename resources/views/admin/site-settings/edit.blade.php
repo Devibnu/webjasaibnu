@@ -64,12 +64,16 @@
                         <label>Address</label>
                         <input name="address" class="form-control mb-3" value="{{ old('address', $settings->address) }}">
                     </div>
-                    <div class="col-md-3">
-                        <label>City</label>
+                    <div class="col-md-2">
+                        <label>City / Kota</label>
                         <input name="city" class="form-control mb-3" value="{{ old('city', $settings->city) }}">
                     </div>
-                    <div class="col-md-3">
-                        <label>Country</label>
+                    <div class="col-md-2">
+                        <label>Province / Region</label>
+                        <input name="region" class="form-control mb-3" value="{{ old('region', $settings->region) }}">
+                    </div>
+                    <div class="col-md-2">
+                        <label>Country / Negara</label>
                         <input name="country" class="form-control mb-3" value="{{ old('country', $settings->country) }}">
                     </div>
                 </div>

@@ -30,6 +30,7 @@ class UpdateSiteSettingRequest extends FormRequest
             'whatsapp_url' => ['nullable', 'url', 'max:255'],
             'address' => ['nullable', 'string', 'max:220'],
             'city' => ['nullable', 'string', 'max:120'],
+            'region' => ['nullable', 'string', 'max:120'],
             'country' => ['nullable', 'string', 'max:120'],
             'google_maps_embed_url' => ['nullable', 'url', 'max:2000'],
             'google_maps_external_url' => ['nullable', 'url', 'max:255'],
