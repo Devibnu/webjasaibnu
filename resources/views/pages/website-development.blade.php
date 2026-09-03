@@ -1221,16 +1221,388 @@
                 .national-trust-item + .national-trust-item { border-top: 1px solid #e3edf5; border-left: 0; }
                 .national-conversion-section { padding: 56px 0; }
             }
+
+            /* UIUX-NASIONAL-002A: locked, compact national composition. */
+            .national-conversion-page .seo-service-hero {
+                min-height: 590px;
+                padding: 62px 0 82px;
+            }
+
+            .national-conversion-page .sticky-top { position: static !important; }
+
+            .national-conversion-page .seo-service-hero-grid {
+                grid-template-columns: minmax(0, .94fr) minmax(500px, 1.06fr);
+                gap: 54px;
+            }
+
+            .national-conversion-page .seo-service-hero h1 {
+                font-size: clamp(40px, 3.45vw, 54px);
+            }
+
+            .national-hero-visual {
+                position: relative;
+                min-height: 390px;
+                padding: 0;
+                border: 0;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            .national-hero-browser {
+                position: absolute;
+                top: 10px;
+                left: 0;
+                width: 88%;
+                overflow: visible;
+                border: 7px solid #dbe6ed;
+                border-bottom-width: 18px;
+                border-radius: 12px;
+                box-shadow: 0 30px 60px rgba(0, 0, 0, .32);
+            }
+
+            .national-hero-browser::after {
+                content: "";
+                position: absolute;
+                left: 42%;
+                bottom: -54px;
+                width: 16%;
+                height: 38px;
+                border-bottom: 8px solid #aebec9;
+                background: #cbd8e0;
+            }
+
+            .national-hero-projects { display: block; padding: 0; }
+            .national-hero-project { display: none; border: 0; border-radius: 0; }
+            .national-hero-project:first-child { display: block; }
+            .national-hero-project:first-child img { width: 100%; height: 300px; aspect-ratio: auto; object-fit: cover; object-position: top; }
+            .national-hero-project:first-child span { min-height: 300px; font-size: 3rem; }
+            .national-hero-project:nth-child(2) {
+                position: absolute;
+                right: -13%;
+                bottom: -42px;
+                z-index: 2;
+                display: block;
+                width: 38%;
+                overflow: hidden;
+                border: 7px solid #dbe6ed;
+                border-radius: 13px;
+                box-shadow: 0 24px 46px rgba(0, 0, 0, .32);
+            }
+            .national-hero-project:nth-child(2) img { height: 218px; aspect-ratio: auto; object-position: top; }
+            .national-hero-project:nth-child(2) span { min-height: 218px; }
+
+            .national-service-section,
+            .national-conversion-section { padding: 68px 0; }
+            .national-service-section.alt { background: #fff; }
+            .seo-service-heading,
+            .national-conversion-heading { max-width: 720px; margin: 0 auto 30px; text-align: center; }
+            .seo-service-heading h2,
+            .national-conversion-heading h2 { font-size: clamp(28px, 2.55vw, 38px); }
+            .national-primary-grid { gap: 18px; }
+            .national-primary-card { min-height: 260px; padding: 28px 22px; text-align: center; }
+            .national-primary-card > span,
+            .national-why-card > span {
+                width: 62px;
+                height: 62px;
+                margin: 0 auto 18px;
+                border: 2px solid #06a3da;
+                border-radius: 50%;
+                background: transparent;
+                font-size: .76rem;
+            }
+            .national-primary-card p + p { margin-top: 8px; }
+            .national-compact-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 22px; }
+            .national-proof-grid { gap: 22px; }
+            .national-proof-media,
+            .national-proof-media img { height: 245px; min-height: 245px; }
+            .national-proof-media img { object-position: top; }
+            .national-proof-body { padding: 24px; }
+            .national-proof-excerpt { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+            .national-conversion-section.alt { background: #f7fbfe; }
+            .national-why-card { min-height: 0; padding: 8px 18px 0; border: 0; background: transparent; box-shadow: none; text-align: center; }
+            .national-process-grid { position: relative; gap: 42px; }
+            .national-process-grid::before { content: ""; position: absolute; top: 34px; left: 16%; right: 16%; border-top: 2px dashed #9bd5ec; }
+            .national-process-card { position: relative; padding: 0 20px; border: 0; background: transparent; text-align: center; }
+            .national-process-card { box-shadow: none; }
+            .national-process-card > span { display: grid; width: 68px; height: 68px; margin: 0 auto 20px; place-items: center; overflow: hidden; border-radius: 50%; background: #06a3da; color: #fff; font-size: 0; }
+            .national-process-card > span::first-letter { font-size: 0; }
+            .national-process-card:nth-child(1) > span::after { content: "01"; font-size: 1rem; }
+            .national-process-card:nth-child(2) > span::after { content: "02"; font-size: 1rem; }
+            .national-process-card:nth-child(3) > span::after { content: "03"; font-size: 1rem; }
+            .national-faq-list { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; align-items: start; }
+            .national-final-cta { padding: 52px 0; text-align: left; }
+            .national-final-cta .seo-service-shell { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+            .national-final-cta-copy { max-width: 720px; }
+            .national-final-cta h2,
+            .national-final-cta p { margin-left: 0; margin-right: 0; }
+            .national-final-cta p { margin-bottom: 0; }
+            .national-final-cta .seo-service-button { flex: 0 0 auto; min-height: 58px; padding-inline: 28px; background: #fff; border-color: #fff; color: #091e3e; box-shadow: none; }
+
+            @media (max-width: 991.98px) {
+                .national-conversion-page .seo-service-hero-grid { grid-template-columns: 1fr; }
+                .national-hero-visual { width: min(100%, 590px); min-height: 385px; }
+                .national-faq-list { grid-template-columns: 1fr; max-width: 760px; }
+                .national-compact-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                .national-final-cta .seo-service-shell { align-items: flex-start; flex-direction: column; gap: 24px; }
+            }
+
+            @media (max-width: 575.98px) {
+                .national-conversion-page .seo-service-hero { padding: 44px 0 62px; }
+                .national-conversion-page .seo-service-hero h1 { font-size: clamp(34px, 10.4vw, 43px); }
+                .national-hero-visual { min-height: 270px; }
+                .national-hero-browser { width: 91%; border-width: 5px; border-bottom-width: 13px; }
+                .national-hero-browser::after { bottom: -38px; height: 26px; border-bottom-width: 6px; }
+                .national-hero-project:first-child img,
+                .national-hero-project:first-child span { height: 205px; min-height: 205px; }
+                .national-hero-project:nth-child(2) { right: -6%; bottom: -30px; width: 36%; border-width: 5px; }
+                .national-hero-project:nth-child(2) img,
+                .national-hero-project:nth-child(2) span { height: 145px; min-height: 145px; }
+                .national-service-section,
+                .national-conversion-section { padding: 52px 0; }
+                .national-primary-card { min-height: 0; }
+                .national-compact-facts { grid-template-columns: 1fr; }
+                .national-proof-media,
+                .national-proof-media img { height: 210px; min-height: 210px; }
+                .national-process-grid { gap: 34px; }
+                .national-process-grid::before { display: none; }
+                .national-trust-item { padding: 15px 12px; }
+            }
+
+            /* UIUX-NASIONAL-002B: pixel-direction locked reference. */
+            .national-conversion-page {
+                background: #fff;
+                color: #0b2147;
+            }
+
+            .national-conversion-page .startup-inner-shell .navbar { background: #fff !important; }
+            .national-conversion-page .startup-inner-shell .ji-header-logo-public { visibility: hidden; opacity: 0; }
+            .national-conversion-page .startup-inner-shell .ji-header-logo-dark { visibility: visible; opacity: 1; }
+            .national-conversion-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link { color: #17253a !important; }
+            .national-conversion-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link:hover,
+            .national-conversion-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link.active { color: #087cf0 !important; }
+
+            .national-conversion-page .seo-service-shell {
+                width: min(100% - 40px, 1180px);
+            }
+
+            .national-conversion-page .seo-service-hero {
+                min-height: 560px;
+                padding: 66px 0 76px;
+                overflow: visible;
+                background: #fff;
+                color: #0b2147;
+            }
+
+            .national-conversion-page .seo-service-hero::before {
+                inset: 22px 0 auto auto;
+                width: 58%;
+                height: 510px;
+                border-radius: 54% 0 0 54%;
+                background: radial-gradient(circle at 55% 46%, #dff3ff 0, #eef9ff 58%, rgba(255,255,255,0) 72%);
+            }
+
+            .national-conversion-page .seo-service-hero::after { display: none; }
+
+            .national-conversion-page .seo-service-hero-grid {
+                grid-template-columns: minmax(0, .88fr) minmax(540px, 1.12fr);
+                gap: 54px;
+            }
+
+            .national-conversion-page .seo-service-copy-block { max-width: 520px; }
+            .national-conversion-page .seo-service-label { margin-bottom: 12px; background: #edf8ff; color: #0879ee; }
+            .national-conversion-page .seo-service-hero h1 {
+                max-width: 520px;
+                margin-bottom: 18px;
+                color: #0b2147;
+                font-size: clamp(38px, 3.25vw, 50px);
+                line-height: 1.08;
+            }
+            .national-conversion-page .seo-service-hero-copy { max-width: 510px; margin-bottom: 24px; color: #526175; line-height: 1.65; }
+            .national-conversion-page .seo-service-button { border-color: #087cf0; border-radius: 5px; background: #087cf0; box-shadow: 0 10px 24px rgba(8,124,240,.18); }
+            .national-conversion-page .seo-service-button.secondary { border-color: #087cf0; background: #fff; color: #087cf0; box-shadow: none; }
+
+            .national-hero-visual { min-height: 385px; }
+            .national-hero-browser {
+                top: 18px;
+                left: 2%;
+                width: 88%;
+                border: 0;
+                border-bottom: 14px solid #b8c0c8;
+                border-radius: 10px;
+                background: #fff;
+                box-shadow: 0 24px 50px rgba(17,42,77,.2);
+                transform: perspective(900px) rotateY(-4deg);
+            }
+            .national-hero-browser::after { bottom: -44px; height: 30px; border-color: #9ba7b2; background: #c6cdd3; }
+            .national-hero-browser-bar { padding: 9px 12px; background: #f3f7fa; }
+            .national-hero-project:first-child img { height: 310px; object-fit: cover; object-position: center; }
+            .national-hero-project:nth-child(2) {
+                right: -10%;
+                bottom: -48px;
+                width: 34%;
+                border: 7px solid #26313c;
+                border-radius: 13px;
+                background: #fff;
+            }
+            .national-hero-project:nth-child(2) img { height: 210px; object-fit: cover; object-position: 62% center; }
+
+            .national-trust-strip { margin-top: -42px; }
+            .national-trust-grid { border: 0; border-radius: 5px; box-shadow: 0 8px 28px rgba(23,54,87,.11); }
+            .national-trust-item { padding: 17px 12px; color: #40516a; font-size: .82rem; font-weight: 600; }
+            .national-trust-item::before { content: "◇"; margin-right: 8px; color: #087cf0; font-size: 1rem; }
+
+            .national-service-section,
+            .national-conversion-section { padding: 48px 0; }
+            .national-service-section.alt { background: #fff; }
+            .seo-service-heading,
+            .national-conversion-heading { max-width: 690px; margin-bottom: 24px; }
+            .seo-service-heading h2,
+            .national-conversion-heading h2 { font-size: clamp(26px, 2.15vw, 34px); line-height: 1.2; }
+            .seo-service-heading > p:last-child,
+            .national-conversion-heading > p:last-child { margin-top: 7px; line-height: 1.5; }
+
+            .national-primary-grid { gap: 14px; }
+            .national-primary-card {
+                min-height: 245px;
+                padding: 30px 22px 24px;
+                border-color: #e8edf3;
+                border-radius: 5px;
+                box-shadow: 0 8px 24px rgba(31,57,83,.06);
+            }
+            .national-primary-card > span,
+            .national-why-card > span {
+                width: auto;
+                height: 52px;
+                margin: 0 auto 15px;
+                border: 0;
+                border-radius: 0;
+                color: #087cf0;
+                font-size: 2.65rem;
+                line-height: 1;
+            }
+            .national-primary-card h3 { margin-bottom: 8px; font-size: 1rem; }
+            .national-primary-card p { font-size: .9rem; line-height: 1.55; }
+            .national-service-disclosure,
+            .national-why-disclosure { display: block; max-width: 760px; margin: 18px auto 0; }
+            .national-service-disclosure details,
+            .national-why-disclosure details { padding: 12px 16px; }
+            .national-service-disclosure summary,
+            .national-why-disclosure summary { font-size: .88rem; }
+
+            .national-service-section[aria-labelledby="national-proof-title"] { background: #f2faff; }
+            .national-proof-grid { gap: 18px; }
+            .national-proof-card { border-radius: 4px; box-shadow: 0 10px 28px rgba(22,53,84,.09); }
+            .national-proof-media,
+            .national-proof-media img { height: 190px; min-height: 190px; }
+            .national-proof-fallback {
+                position: relative;
+                min-height: 190px;
+                overflow: hidden;
+                background: linear-gradient(145deg, #0b2147 0 34%, #087cf0 34% 52%, #d9effd 52%);
+                color: transparent;
+                font-size: 0;
+            }
+            .national-proof-fallback::before {
+                content: "";
+                width: 72%;
+                height: 62%;
+                border: 6px solid rgba(255,255,255,.9);
+                border-radius: 5px;
+                background: linear-gradient(#fff 0 12%, #e5f5ff 12% 42%, #fff 42% 100%);
+                box-shadow: 16px 15px 0 rgba(9,33,71,.18);
+                transform: rotate(-3deg);
+            }
+            .national-proof-body { padding: 18px 20px 16px; }
+            .national-proof-category { margin-bottom: 5px; font-size: .7rem; }
+            .national-proof-card h3 { margin-bottom: 6px; font-size: 1.05rem; }
+            .national-proof-excerpt { font-size: .86rem; line-height: 1.5; -webkit-line-clamp: 2; }
+            .national-proof-tags { margin-top: 11px; gap: 5px; }
+            .national-proof-tags span { padding: 4px 7px; font-size: .67rem; }
+            .national-proof-more { margin-top: 18px; }
+
+            .national-conversion-section.alt { background: #fff; }
+            .national-why-grid { gap: 34px; }
+            .national-why-card { padding: 0; text-align: left; }
+            .national-why-card > span { margin: 0 0 12px; font-size: 2.25rem; }
+            .national-why-card h3 { margin-bottom: 6px; font-size: .96rem; }
+            .national-why-card p { font-size: .82rem; line-height: 1.52; }
+
+            .national-process-grid { gap: 50px; }
+            .national-process-grid::before { top: 50%; left: 28%; right: 28%; border: 0; }
+            .national-process-card {
+                padding: 26px 22px 22px;
+                border: 1px solid #e8edf3;
+                border-radius: 5px;
+                box-shadow: 0 8px 24px rgba(31,57,83,.05);
+            }
+            .national-process-card:not(:last-child)::after { content: "→"; position: absolute; top: 48%; right: -36px; color: #7890a8; font-size: 1.8rem; }
+            .national-process-card > span { position: absolute; top: -15px; left: 50%; width: 30px; height: 30px; margin: 0; transform: translateX(-50%); font-size: 0; }
+            .national-process-card > span::after { font-size: .76rem !important; }
+            .national-process-card h3 { margin-top: 13px; font-size: .96rem; }
+            .national-process-card p { font-size: .82rem; line-height: 1.5; }
+
+            .national-conversion-section[aria-labelledby="website-faq-title"] { padding-top: 42px; background: #f8fcff; }
+            .national-faq-list { gap: 8px 12px; }
+            .national-faq-item { border-radius: 4px; }
+            .national-faq-question { min-height: 50px; padding: 12px 16px; font-size: .86rem; }
+            .national-faq-answer { padding: 0 16px 14px; font-size: .84rem; line-height: 1.55; }
+
+            .national-final-cta { padding: 0 0 20px; background: #fff; }
+            .national-final-cta .seo-service-shell { padding: 28px 46px; border-radius: 6px; background: linear-gradient(110deg, #0743bf, #087cf0); }
+            .national-final-cta h2 { margin-bottom: 3px; font-size: clamp(24px, 2.1vw, 32px); }
+            .national-final-cta p { font-size: .9rem; line-height: 1.5; }
+            .national-final-cta .seo-service-button { min-height: 50px; border-radius: 5px; }
+
+            .national-conversion-page .jasaibnu-startup-footer .pt-5 { padding-top: 1.45rem !important; }
+            .national-conversion-page .jasaibnu-startup-footer .mb-5 { margin-bottom: 1.35rem !important; }
+            .national-conversion-page .jasaibnu-startup-footer .footer-about > div { padding-block: 20px !important; }
+
+            @media (max-width: 991.98px) {
+                .national-conversion-page .seo-service-hero { padding-top: 48px; }
+                .national-conversion-page .seo-service-hero::before { top: 46%; width: 100%; height: 48%; }
+                .national-conversion-page .seo-service-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+                .national-conversion-page .seo-service-copy-block { text-align: center; }
+                .national-hero-visual { min-height: 370px; }
+                .national-process-grid { gap: 28px; }
+                .national-process-card:not(:last-child)::after { display: none; }
+                .national-final-cta .seo-service-shell { padding: 28px; }
+            }
+
+            @media (max-width: 575.98px) {
+                .national-conversion-page .seo-service-shell { width: min(100% - 28px, 1180px); }
+                .national-conversion-page .seo-service-hero { padding: 36px 0 54px; }
+                .national-conversion-page .seo-service-hero h1 { font-size: clamp(32px, 9.8vw, 40px); }
+                .national-conversion-page .seo-service-hero-copy { font-size: .92rem; }
+                .national-hero-visual { min-height: 260px; }
+                .national-hero-browser { top: 8px; }
+                .national-hero-project:first-child img { height: 205px; }
+                .national-hero-project:nth-child(2) { bottom: -30px; }
+                .national-hero-project:nth-child(2) img { height: 138px; }
+                .national-trust-strip { margin-top: -24px; }
+                .national-service-section,
+                .national-conversion-section { padding: 40px 0; }
+                .national-primary-card { min-height: 0; padding: 25px 20px; }
+                .national-proof-media,
+                .national-proof-media img,
+                .national-proof-fallback { height: 190px; min-height: 190px; }
+                .national-why-grid { gap: 28px; }
+                .national-why-card { text-align: center; }
+                .national-why-card > span { margin-inline: auto; }
+                .national-process-grid { gap: 30px; }
+                .national-final-cta .seo-service-shell { padding: 26px 22px; }
+            }
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const floatingWhatsapp = document.querySelector('.floating-whatsapp');
-                const nationalWhatsappCta = document.querySelector('[data-national-whatsapp-cta]');
+                const nationalWhatsappCtas = document.querySelectorAll('[data-national-whatsapp-cta]');
 
-                if (floatingWhatsapp && nationalWhatsappCta) {
-                    nationalWhatsappCta.href = floatingWhatsapp.href;
-                    nationalWhatsappCta.target = '_blank';
-                    nationalWhatsappCta.rel = 'noopener noreferrer';
+                if (floatingWhatsapp && nationalWhatsappCtas.length) {
+                    nationalWhatsappCtas.forEach((cta) => {
+                        cta.href = floatingWhatsapp.href;
+                        cta.target = '_blank';
+                        cta.rel = 'noopener noreferrer';
+                    });
                 }
 
                 document.querySelectorAll('[data-national-faq-button]').forEach((button) => {
@@ -1255,7 +1627,7 @@
                     <h1 id="website-service-title">{{ $landing['h1'] }}</h1>
                     <p class="seo-service-hero-copy">{{ $landing['hero_copy'] }}</p>
                     <div class="seo-service-actions">
-                        <a class="seo-service-button" href="{{ route('contact') }}">Konsultasi Website</a>
+                        <a class="seo-service-button" href="{{ route('contact') }}" @if ($isNationalLanding) data-national-whatsapp-cta @endif>{{ $isNationalLanding ? 'Konsultasi via WhatsApp' : 'Konsultasi Website' }}</a>
                         <a class="seo-service-button secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio</a>
                     </div>
                 </div>
@@ -1269,7 +1641,7 @@
                                         @if ($item->imageUrl())
                                             <img src="{{ $item->imageUrl() }}" alt="{{ $item->title }}" width="240" height="180" decoding="async">
                                         @else
-                                            <span aria-hidden="true">{{ $item->code ?: Illuminate\Support\Str::of($item->title)->substr(0, 3)->upper() }}</span>
+                                            <img src="{{ asset('assets/startup2/img/optimized/carousel-1-desktop.webp') }}" alt="Preview website JASAIBNU" width="720" height="480" decoding="async">
                                         @endif
                                     </div>
                                 @endforeach
@@ -1293,82 +1665,44 @@
     @endif
 
     @if ($isNationalLanding)
-        <section class="national-service-section" aria-labelledby="national-positioning-title">
-            <div class="seo-service-shell">
-                <div class="national-positioning-grid">
-                    <div class="national-positioning-copy">
-                        <p class="seo-service-label">Kolaborasi lintas wilayah</p>
-                        <h2 id="national-positioning-title">Pembuatan website untuk bisnis di berbagai wilayah Indonesia.</h2>
-                        <p>JASAIBNU dapat mendampingi bisnis dari berbagai wilayah melalui proses kolaborasi jarak jauh. Diskusi kebutuhan, penyiapan materi, peninjauan desain, pengembangan, dan koordinasi sebelum website online dapat dilakukan secara terstruktur tanpa harus berada di kota yang sama.</p>
-                    </div>
-                    <div class="national-collaboration-panel" aria-label="Tahapan kolaborasi jarak jauh">
-                        <div class="national-collaboration-step">
-                            <span aria-hidden="true">01</span>
-                            <div><strong>Diskusi kebutuhan</strong><small>Tujuan, halaman, dan fitur dipetakan secara terstruktur.</small></div>
-                        </div>
-                        <div class="national-collaboration-step">
-                            <span aria-hidden="true">02</span>
-                            <div><strong>Penyiapan dan peninjauan</strong><small>Materi dan desain ditinjau selama proses pengembangan.</small></div>
-                        </div>
-                        <div class="national-collaboration-step">
-                            <span aria-hidden="true">03</span>
-                            <div><strong>Koordinasi sebelum online</strong><small>Testing dan persiapan go-live dikoordinasikan jarak jauh.</small></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section class="national-service-section alt" aria-labelledby="national-offer-title">
             <div class="seo-service-shell">
                 <div class="seo-service-heading">
                     <p class="seo-service-label">Cakupan layanan</p>
-                    <h2 id="national-offer-title">Scope website disusun mengikuti kebutuhan dan kesiapan bisnis.</h2>
+                    <h2 id="national-offer-title">Layanan website utama untuk mendukung pertumbuhan bisnis.</h2>
                     <p>Setiap project dimulai dengan pemetaan tujuan, halaman, materi, fitur, dan kebutuhan pengelolaan agar solusi yang dibangun tetap relevan dan dapat dikembangkan.</p>
                 </div>
                 <div class="national-primary-grid">
                     <article class="national-primary-card">
-                        <span aria-hidden="true">CP</span>
-                        <h3>Company profile &amp; landing page</h3>
-                        <p>Website profil perusahaan untuk menampilkan layanan, legalitas, portfolio, kontak, dan kredibilitas bisnis.</p>
-                        <p>Halaman khusus untuk campaign, iklan, launching produk, pendaftaran, atau penawaran jasa tertentu.</p>
+                        <span aria-hidden="true">▣</span>
+                        <h3>Website Company Profile</h3>
+                        <p>Website profil perusahaan untuk menampilkan layanan, portfolio, kontak, dan kredibilitas bisnis.</p>
                     </article>
                     <article class="national-primary-card">
-                        <span aria-hidden="true">CAT</span>
-                        <h3>Website bisnis &amp; katalog</h3>
-                        <p>Website untuk bisnis lokal agar calon pelanggan lebih mudah melihat layanan, harga awal, lokasi, dan kontak.</p>
-                        <p>Website katalog untuk menampilkan produk, kategori, detail, dan jalur pemesanan melalui WhatsApp atau form.</p>
+                        <span aria-hidden="true">⌑</span>
+                        <h3>Website Toko Online</h3>
+                        <p>Katalog produk dan informasi bisnis dengan jalur pemesanan melalui WhatsApp atau form.</p>
                     </article>
                     <article class="national-primary-card">
-                        <span aria-hidden="true">CMS</span>
-                        <h3>Website dengan admin panel</h3>
-                        <p>Konten website dapat dikelola sendiri, seperti artikel, portfolio, layanan, halaman, dan pengaturan umum.</p>
+                        <span aria-hidden="true">▤</span>
+                        <h3>Website Berita &amp; Blog</h3>
+                        <p>Website dengan admin panel untuk mengelola artikel, portfolio, layanan, halaman, dan informasi terbaru.</p>
                     </article>
                     <article class="national-primary-card">
-                        <span aria-hidden="true">APP</span>
-                        <h3>Custom web &amp; aplikasi</h3>
+                        <span aria-hidden="true">⚙</span>
+                        <h3>Web Application</h3>
                         <p>Fondasi website bisa dikembangkan menjadi sistem booking, dashboard, member area, atau aplikasi bisnis.</p>
                     </article>
                 </div>
-                <div class="national-compact-facts">
-                    <details>
-                        <summary>Jenis website</summary>
-                        <p>Company profile, landing page, website layanan, katalog, website dengan admin panel, dan fondasi aplikasi web dapat disusun sesuai tujuan bisnis.</p>
-                    </details>
-                    <details>
-                        <summary>Deliverables utama</summary>
+                <div class="national-compact-facts national-service-disclosure">
+                    <details aria-label="Tahapan kolaborasi jarak jauh">
+                        <summary>Informasi lengkap layanan dan kolaborasi</summary>
+                        <p><strong>Pembuatan website untuk bisnis di berbagai wilayah Indonesia.</strong> JASAIBNU dapat mendampingi bisnis melalui proses kolaborasi jarak jauh. Diskusi kebutuhan, penyiapan materi, peninjauan desain, pengembangan, dan koordinasi sebelum website online dapat dilakukan secara terstruktur tanpa harus berada di kota yang sama.</p>
+                        <p><strong>Scope website disusun mengikuti kebutuhan dan kesiapan bisnis.</strong> Setiap project dipetakan berdasarkan tujuan, halaman, materi, fitur, dan kebutuhan pengelolaan.</p>
+                        <p>Company profile, landing page, website layanan, katalog, website dengan admin panel, dan fondasi aplikasi web dapat disusun sesuai tujuan bisnis. Halaman khusus untuk campaign, iklan, launching produk, pendaftaran, atau penawaran jasa tertentu juga dapat disiapkan.</p>
                         <p>Struktur halaman, tampilan responsive, jalur kontak, keamanan dasar, dan fondasi SEO teknis disiapkan sesuai scope yang disepakati.</p>
-                    </details>
-                    <details>
-                        <summary>Alur pengembangan</summary>
                         <p>Proses mencakup analisis kebutuhan, penyusunan struktur, desain dan development, testing, serta persiapan go-live.</p>
-                    </details>
-                    <details>
-                        <summary>Faktor timeline</summary>
                         <p>Durasi dipengaruhi jumlah halaman, kesiapan materi, kompleksitas fitur, kebutuhan integrasi, dan kecepatan proses peninjauan.</p>
-                    </details>
-                    <details>
-                        <summary>Pengelolaan dan handover</summary>
                         <p>Akses pengelolaan dapat disiapkan saat project menggunakan admin panel. Kebutuhan pengembangan dan dukungan setelah go-live dibahas mengikuti scope project.</p>
                     </details>
                 </div>
@@ -1422,43 +1756,40 @@
             <div class="seo-service-shell">
                 <div class="national-conversion-heading">
                     <p class="seo-service-label">Kenapa JASAIBNU</p>
-                    <h2 id="website-benefits-title">Website bukan hanya tampil online, tapi harus membantu bisnis dipercaya dan ditemukan.</h2>
+                    <h2 id="website-benefits-title">Fondasi website yang rapi, cepat, aman, dan siap berkembang.</h2>
                     <p>Kami membangun website dengan pendekatan teknis yang rapi: desain responsive, performa cepat, struktur konten jelas, keamanan dasar, dan fondasi SEO agar lebih siap masuk pencarian Google.</p>
-                    <h3>{{ $landing['impact_title'] }}</h3>
-                    <p>{{ $landing['impact_copy'] }}</p>
                 </div>
                 <div class="national-why-grid">
                     <article class="national-why-card">
-                        <span aria-hidden="true">01</span>
+                        <span aria-hidden="true">↗</span>
                         <h3>Responsive dan cepat</h3>
                         <p>Website disiapkan agar nyaman dibuka di mobile maupun desktop, dengan optimasi gambar dan struktur halaman yang ringan.</p>
                     </article>
                     <article class="national-why-card">
-                        <span aria-hidden="true">SEO</span>
+                        <span aria-hidden="true">⌕</span>
                         <h3>Siap SEO teknis</h3>
                         <p>Title, meta description, canonical, sitemap, robots, dan struktur heading dibuat agar Google lebih mudah memahami halaman.</p>
                     </article>
                     <article class="national-why-card">
-                        <span aria-hidden="true">SSL</span>
+                        <span aria-hidden="true">◇</span>
                         <h3>Keamanan dasar</h3>
                         <p>Form, route, validasi input, dan konfigurasi HTTPS disiapkan agar website lebih aman digunakan.</p>
                     </article>
                     <article class="national-why-card">
-                        <span aria-hidden="true">CMS</span>
+                        <span aria-hidden="true">♧</span>
                         <h3>Mudah dikelola dan dikembangkan</h3>
                         <p>Website bisa dilengkapi admin panel untuk mengubah konten, portfolio, artikel, layanan, dan pengaturan bisnis.</p>
                     </article>
                 </div>
-                <div class="national-compact-facts">
+                <div class="national-compact-facts national-why-disclosure">
                     <details>
-                        <summary>Manfaat website untuk bisnis</summary>
+                        <summary>Selengkapnya tentang manfaat dan fondasi website</summary>
+                        <p><strong>Website bukan hanya tampil online, tapi harus membantu bisnis dipercaya dan ditemukan.</strong></p>
+                        <p><strong>{{ $landing['impact_title'] }}</strong> {{ $landing['impact_copy'] }}</p>
                         <p><strong>Meningkatkan penjualan.</strong> Calon pelanggan bisa menemukan layanan, memahami penawaran, dan langsung menghubungi bisnis.</p>
                         <p><strong>Membangun branding.</strong> Tampilan, pesan, portfolio, dan identitas bisnis tersusun konsisten dalam satu tempat.</p>
                         <p><strong>Menambah kepercayaan.</strong> Bisnis terlihat lebih serius dengan profil, alamat, kontak, testimoni, dan bukti pekerjaan.</p>
                         <p><strong>Siap dipromosikan.</strong> Website bisa jadi tujuan iklan, Google Search, media sosial, WhatsApp, dan campaign digital.</p>
-                    </details>
-                    <details>
-                        <summary>Fondasi website yang baik</summary>
                         <p>Gambar, struktur asset, dan layout dibuat ringan agar website cepat dibuka di mobile maupun desktop.</p>
                         <p>Tampilan diprioritaskan nyaman dibaca, diklik, dan dipahami dari layar HP yang paling sering dipakai pelanggan.</p>
                         <p>Fondasi website dapat dilanjutkan menjadi katalog, booking, dashboard internal, SaaS, atau integrasi AI.</p>
@@ -1476,17 +1807,17 @@
                 <div class="national-process-grid">
                     <article class="national-process-card">
                         <span>01 — Konsultasi &amp; analisis</span>
-                        <h3>Analisis kebutuhan</h3>
+                        <h3>Konsultasi &amp; Analisis</h3>
                         <p>Kami petakan tujuan website, target pengguna, halaman penting, fitur, dan arah konten yang dibutuhkan.</p>
                     </article>
                     <article class="national-process-card">
                         <span>02 — Desain &amp; development</span>
-                        <h3>Desain dan development</h3>
+                        <h3>Desain &amp; Development</h3>
                         <p>Website dibangun dengan tampilan profesional, struktur teknis rapi, dan pengalaman pengguna yang mudah dipahami.</p>
                     </article>
                     <article class="national-process-card">
                         <span>03 — Testing &amp; launch</span>
-                        <h3>Testing dan go-live</h3>
+                        <h3>Testing &amp; Launch</h3>
                         <p>Sebelum online, halaman dicek dari sisi performa, mobile view, form kontak, SEO dasar, dan kesiapan indexing.</p>
                     </article>
                 </div>
@@ -1530,8 +1861,10 @@
 
         <section class="national-final-cta" aria-labelledby="website-cta-title">
             <div class="seo-service-shell">
-                <h2 id="website-cta-title">Butuh jasa pembuatan website untuk bisnis Anda?</h2>
-                <p>Ceritakan kebutuhan website, target bisnis, dan fitur yang ingin dibangun. JASAIBNU akan membantu memetakan solusi yang realistis sebelum masuk tahap produksi.</p>
+                <div class="national-final-cta-copy">
+                    <h2 id="website-cta-title">Butuh jasa pembuatan website untuk bisnis Anda?</h2>
+                    <p>Ceritakan kebutuhan website, target bisnis, dan fitur yang ingin dibangun. JASAIBNU akan membantu memetakan solusi yang realistis sebelum masuk tahap produksi.</p>
+                </div>
                 <a class="seo-service-button" href="{{ route('contact') }}" data-national-whatsapp-cta>Konsultasi via WhatsApp</a>
             </div>
         </section>
