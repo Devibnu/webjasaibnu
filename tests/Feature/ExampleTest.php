@@ -190,7 +190,7 @@ class ExampleTest extends TestCase
         foreach ([
             'website-development' => 'services-page startup2-home national-conversion-page',
             'website-development-serang' => 'services-page startup2-home',
-            'website-development-serang-murah' => 'services-page startup2-home',
+            'website-development-serang-murah' => 'services-page startup2-home serang-murah-simple-page',
             'website-development-umkm-serang' => 'services-page startup2-home',
         ] as $routeName => $expectedClass) {
             $protected = $this->get(route($routeName));
@@ -214,6 +214,49 @@ class ExampleTest extends TestCase
 
         preg_match_all('/<h1(\s|>)/i', $response->getContent(), $h1Matches);
         $this->assertSame(1, count($h1Matches[0]));
+    }
+
+    public function test_serang_affordable_locked_simple_ui_preserves_seo_and_protected_pages()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('website-development-serang-murah'));
+        $html = $response->getContent();
+
+        $response
+            ->assertOk()
+            ->assertSee('<body class="services-page startup2-home serang-murah-simple-page">', false)
+            ->assertSee('<title>Jasa Pembuatan Website Serang Murah &amp; Profesional | JASAIBNU</title>', false)
+            ->assertSee('<meta name="description" content="Jasa pembuatan website Serang murah untuk bisnis yang ingin mulai dari website sederhana, rapi, mobile-friendly, mudah dihubungi pelanggan, dan tetap profesional.">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('rel="canonical" href="' . route('website-development-serang-murah') . '"', false)
+            ->assertSee('<meta property="og:title" content="Jasa Pembuatan Website Serang Murah &amp; Profesional | JASAIBNU">', false)
+            ->assertSee('<meta property="og:description" content="Jasa pembuatan website Serang murah untuk bisnis yang ingin mulai dari website sederhana, rapi, mobile-friendly, mudah dihubungi pelanggan, dan tetap profesional.">', false)
+            ->assertSee('<h1 id="website-service-title">Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional</h1>', false)
+            ->assertSee('href="' . route('website-development-serang') . '">jasa pembuatan website profesional di Serang</a>', false)
+            ->assertSee('class="serang-murah-benefits"', false)
+            ->assertSee('class="serang-murah-section serang-murah-services"', false)
+            ->assertSee('class="serang-murah-section serang-murah-advantages"', false)
+            ->assertSee('class="serang-murah-section serang-murah-process-faq"', false)
+            ->assertSee('class="serang-murah-cta"', false);
+
+        preg_match_all('/<h1(\s|>)/i', $html, $h1Matches);
+        preg_match_all('/class="serang-murah-faq"/', $html, $faqMatches);
+        $this->assertSame(1, count($h1Matches[0]));
+        $this->assertSame(8, count($faqMatches[0]));
+
+        $lastPosition = -1;
+        foreach (['class="serang-murah-benefits"', 'class="serang-murah-section serang-murah-services"', 'class="serang-murah-section serang-murah-advantages"', 'class="serang-murah-section serang-murah-process-faq"', 'class="serang-murah-cta"'] as $marker) {
+            $position = strpos($html, $marker);
+            $this->assertNotFalse($position, "Missing locked Serang Murah section marker: {$marker}");
+            $this->assertGreaterThan($lastPosition, $position, "Incorrect Serang Murah section order at: {$marker}");
+            $lastPosition = $position;
+        }
+
+        foreach (['website-development', 'website-development-serang', 'website-development-umkm-serang', 'website-development-banten'] as $routeName) {
+            $protected = $this->get(route($routeName));
+            $protected->assertOk()->assertDontSee('<body class="services-page startup2-home serang-murah-simple-page">', false);
+        }
     }
 
     public function test_serang_umkm_website_development_landing_page_targets_local_keyword()
@@ -344,18 +387,21 @@ class ExampleTest extends TestCase
                 'h1' => 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional',
                 'first_h2' => 'Website membantu bisnis Serang dan Banten lebih mudah ditemukan, dipercaya, dan dihubungi calon pelanggan.',
                 'serang_links' => 0,
+                'h2_count' => 20,
             ],
             'website-development-serang-murah' => [
                 'title' => 'Jasa Pembuatan Website Serang Murah &amp; Profesional | JASAIBNU',
                 'h1' => 'Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional',
-                'first_h2' => 'Website terjangkau membantu bisnis Serang mulai tampil profesional tanpa langsung membangun sistem yang kompleks.',
+                'first_h2' => 'Website sederhana yang tepat untuk kebutuhan bisnis Anda.',
                 'serang_links' => 1,
+                'h2_count' => 5,
             ],
             'website-development-umkm-serang' => [
                 'title' => 'Jasa Website UMKM Serang | Website Usaha Lokal',
                 'h1' => 'Jasa Website UMKM Serang untuk Usaha Lokal yang Ingin Lebih Mudah Ditemukan',
                 'first_h2' => 'Website membantu UMKM Serang terlihat lebih dipercaya saat pelanggan mencari produk atau layanan secara online.',
                 'serang_links' => 1,
+                'h2_count' => 20,
             ],
         ];
 
@@ -369,14 +415,14 @@ class ExampleTest extends TestCase
                 ->assertSee('<title>' . $expected['title'] . '</title>', false)
                 ->assertSee('rel="canonical" href="' . $url . '"', false)
                 ->assertSee('<h1 id="website-service-title">' . $expected['h1'] . '</h1>', false)
-                ->assertDontSee('national-positioning-title', false)
-                ->assertDontSee('national-offer-title', false)
-                ->assertDontSee('national-proof-title', false)
+                ->assertDontSee('id="national-positioning-title"', false)
+                ->assertDontSee('id="national-offer-title"', false)
+                ->assertDontSee('id="national-proof-title"', false)
                 ->assertDontSee('class="national-trust-strip"', false)
-                ->assertDontSee('data-national-faq-button', false);
+                ->assertDontSee('<button class="national-faq-question"', false);
 
             preg_match_all('/<h2\b[^>]*>(.*?)<\/h2>/si', $html, $h2Matches);
-            $this->assertCount(20, $h2Matches[1]);
+            $this->assertCount($expected['h2_count'], $h2Matches[1]);
             $this->assertSame($expected['first_h2'], trim(strip_tags($h2Matches[1][0])));
             $this->assertSame(0, $this->anchorCountForUrl($html, $nationalUrl));
             $this->assertSame($expected['serang_links'], $this->anchorCountForUrl($html, $serangUrl));

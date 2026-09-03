@@ -34,6 +34,7 @@
     $primarySerangLink = $primarySerangLinks[request()->route()?->getName()] ?? null;
     $isNationalLanding = request()->routeIs('website-development');
     $isBantenLanding = request()->routeIs('website-development-banten');
+    $isSerangMurahLanding = request()->routeIs('website-development-serang-murah');
     $isConversionLanding = $isNationalLanding || $isBantenLanding;
     $nationalPortfolioItems = $nationalPortfolioItems ?? collect();
     $conversionPortfolioItems = $isBantenLanding
@@ -44,7 +45,7 @@
 @section('title', $landing['title'])
 @section('meta_description', $landing['meta_description'])
 @section('canonical', $landing['canonical'])
-@section('body_class', 'services-page startup2-home' . ($isNationalLanding ? ' national-conversion-page' : '') . ($isBantenLanding ? ' banten-conversion-page' : ''))
+@section('body_class', 'services-page startup2-home' . ($isNationalLanding ? ' national-conversion-page' : '') . ($isBantenLanding ? ' banten-conversion-page' : '') . ($isSerangMurahLanding ? ' serang-murah-simple-page' : ''))
 
 @push('head')
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -588,7 +589,7 @@
             }
         }
     </style>
-    @if ($isConversionLanding)
+    @if ($isConversionLanding || $isSerangMurahLanding)
         <style>
             .national-service-section {
                 padding: clamp(64px, 7vw, 96px) 0;
@@ -1791,6 +1792,149 @@
                 .banten-conversion-page .national-trust-strip { margin-top: -24px; }
                 .banten-conversion-page .national-final-cta .seo-service-shell { padding: 26px 22px; }
             }
+
+            /* UIUX-SERANG-MURAH-001: isolated simple landing-page body. */
+            .serang-murah-simple-page { background: #fff; color: #0b2147; }
+            .serang-murah-simple-page .seo-service-shell { width: min(100% - 40px, 1180px); }
+            .serang-murah-simple-page .seo-service-hero {
+                min-height: 540px;
+                padding: 62px 0 72px;
+                background: linear-gradient(110deg, #fff 0%, #fff 55%, #f2f9ff 100%);
+                color: #0b2147;
+            }
+            .serang-murah-simple-page .seo-service-hero::after { display: none; }
+            .serang-murah-simple-page .seo-service-hero-grid { grid-template-columns: minmax(0, 1.05fr) minmax(380px, .95fr); gap: 54px; }
+            .serang-murah-simple-page .seo-service-copy-block { max-width: 640px; margin: 0; text-align: left; }
+            .serang-murah-simple-page .seo-service-label { margin-bottom: 12px; border-color: #cceafb; background: #edf8ff; color: #0879ee; }
+            .serang-murah-simple-page .seo-service-hero h1 {
+                max-width: 650px;
+                margin: 0 0 18px;
+                color: #0b2147;
+                font-size: clamp(38px, 3.2vw, 50px);
+                line-height: 1.12;
+            }
+            .serang-murah-simple-page .seo-service-hero-copy { max-width: 590px; margin: 0 0 24px; color: #526175; line-height: 1.65; }
+            .serang-murah-simple-page .seo-service-actions { justify-content: flex-start; }
+            .serang-murah-simple-page .seo-service-button { border-color: #087cf0; border-radius: 6px; background: #087cf0; box-shadow: 0 10px 24px rgba(8,124,240,.18); }
+            .serang-murah-simple-page .seo-service-button.secondary { border-color: #087cf0; background: #fff; color: #087cf0; box-shadow: none; }
+
+            .serang-murah-hero-visual {
+                position: relative;
+                min-height: 360px;
+                overflow: hidden;
+                border: 1px solid #dceefa;
+                border-radius: 50% 12px 12px 50%;
+                background: linear-gradient(145deg, #f6fbff, #dff2ff);
+            }
+            .serang-murah-hero-visual::before {
+                content: "";
+                position: absolute;
+                width: 360px;
+                height: 360px;
+                right: -75px;
+                top: -72px;
+                border-radius: 50%;
+                background: linear-gradient(145deg, rgba(8,124,240,.14), rgba(6,163,218,.03));
+            }
+            .serang-murah-visual-orbit { position: absolute; border: 1px solid rgba(8,124,240,.25); border-radius: 50%; transform: rotate(-18deg); }
+            .serang-murah-visual-orbit.orbit-one { width: 390px; height: 190px; right: -28px; bottom: 40px; }
+            .serang-murah-visual-orbit.orbit-two { width: 270px; height: 130px; right: 52px; bottom: 70px; }
+            .serang-murah-visual-panel { position: absolute; display: block; border: 7px solid #102a51; border-radius: 10px; background: #fff; box-shadow: 0 24px 42px rgba(11,33,71,.18); transform: rotate(3deg); }
+            .serang-murah-visual-panel::before { content: ""; position: absolute; inset: 0 0 auto; height: 30px; background: #f3f8fc; border-bottom: 1px solid #dfebf3; }
+            .serang-murah-visual-panel i { position: absolute; display: block; border-radius: 4px; background: #d8edfb; }
+            .serang-murah-visual-panel.panel-main { width: 300px; height: 205px; left: 38px; top: 72px; }
+            .serang-murah-visual-panel.panel-main i:nth-child(1) { inset: 50px 20px auto; height: 55px; background: linear-gradient(110deg,#087cf0,#06a3da); }
+            .serang-murah-visual-panel.panel-main i:nth-child(2) { left: 20px; bottom: 24px; width: 115px; height: 44px; }
+            .serang-murah-visual-panel.panel-main i:nth-child(3) { right: 20px; bottom: 24px; width: 115px; height: 44px; }
+            .serang-murah-visual-panel.panel-side { width: 120px; height: 210px; right: 28px; bottom: 28px; transform: rotate(-3deg); }
+            .serang-murah-visual-panel.panel-side i:nth-child(1) { inset: 48px 12px auto; height: 54px; background: linear-gradient(145deg,#087cf0,#06a3da); }
+            .serang-murah-visual-panel.panel-side i:nth-child(2) { inset: 118px 12px auto; height: 52px; }
+            .serang-murah-visual-check { position: absolute; display: grid; width: 58px; height: 58px; left: 18px; bottom: 22px; place-items: center; border-radius: 50%; background: #087cf0; color: #fff; font-size: 27px; font-weight: 800; box-shadow: 0 12px 24px rgba(8,124,240,.25); }
+
+            .serang-murah-benefits { position: relative; z-index: 2; margin-top: -38px; }
+            .serang-murah-benefit-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border: 1px solid #e3eef5; border-radius: 8px; background: #fff; box-shadow: 0 14px 34px rgba(11,33,71,.1); }
+            .serang-murah-benefit-grid > div { display: flex; min-height: 78px; align-items: center; justify-content: center; gap: 11px; padding: 16px; border-right: 1px solid #e3eef5; color: #17253a; text-align: center; }
+            .serang-murah-benefit-grid > div:last-child { border-right: 0; }
+            .serang-murah-benefit-grid span { display: grid; width: 35px; height: 35px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #eef8ff; color: #087cf0; font-size: .78rem; font-weight: 800; }
+            .serang-murah-benefit-grid strong { font-size: .9rem; }
+
+            .serang-murah-section { padding: 66px 0; }
+            .serang-murah-section:nth-of-type(odd) { background: #f8fcff; }
+            .serang-murah-heading { max-width: 720px; margin: 0 auto 30px; text-align: center; }
+            .serang-murah-heading.align-left { margin-left: 0; text-align: left; }
+            .serang-murah-heading h2 { margin: 0; color: #0b2147; font-family: "Nunito",sans-serif; font-size: clamp(28px,2.5vw,36px); font-weight: 800; line-height: 1.2; }
+            .serang-murah-heading > p:last-child { margin: 10px auto 0; color: #637084; line-height: 1.6; }
+            .serang-murah-service-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+            .serang-murah-service-grid article { min-height: 205px; padding: 27px; border: 1px solid #e0ebf2; border-radius: 7px; background: #fff; box-shadow: 0 10px 24px rgba(11,33,71,.055); }
+            .serang-murah-service-grid article > span { display: inline-grid; width: 42px; height: 42px; place-items: center; margin-bottom: 17px; border-radius: 6px; background: #edf8ff; color: #087cf0; font-size: .72rem; font-weight: 800; }
+            .serang-murah-service-grid h3,.serang-murah-advantage-grid h3,.serang-murah-process-list h3 { margin: 0 0 7px; color: #0b2147; font-size: 1.03rem; font-weight: 800; }
+            .serang-murah-service-grid p,.serang-murah-advantage-grid p,.serang-murah-process-list p { margin: 0; color: #637084; font-size: .9rem; line-height: 1.58; }
+            .serang-murah-details { margin-top: 20px; padding: 16px 20px; border: 1px solid #dfeaf1; border-radius: 7px; background: #fff; }
+            .serang-murah-details summary { color: #0b2147; font-weight: 800; cursor: pointer; }
+            .serang-murah-details p { margin: 14px 0 0; color: #637084; line-height: 1.65; }
+            .serang-murah-details a { color: #087cf0; font-weight: 700; }
+            .serang-murah-advantages { background: #f8fcff; }
+            .serang-murah-advantage-grid { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 14px; }
+            .serang-murah-advantage-grid article { padding: 9px 14px 12px 0; }
+            .serang-murah-advantage-grid span { display: block; margin-bottom: 12px; color: #087cf0; font-weight: 800; }
+            .serang-murah-advantage-grid h3 { font-size: .94rem; }
+            .serang-murah-advantage-grid p { font-size: .82rem; }
+            .serang-murah-split { display: grid; grid-template-columns: minmax(0,.82fr) minmax(0,1.18fr); gap: 64px; align-items: start; }
+            .serang-murah-process-list { display: grid; gap: 14px; }
+            .serang-murah-process-list article { display: grid; grid-template-columns: 48px minmax(0,1fr); gap: 15px; padding: 18px; border: 1px solid #e0ebf2; border-radius: 7px; background: #fff; }
+            .serang-murah-process-list article > span { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: #087cf0; color: #fff; font-size: .78rem; font-weight: 800; }
+            .serang-murah-faq-list { display: grid; gap: 10px; }
+            .serang-murah-faq { border: 1px solid #e0ebf2; border-radius: 7px; background: #fff; }
+            .serang-murah-faq summary { position: relative; padding: 16px 44px 16px 18px; list-style: none; cursor: pointer; }
+            .serang-murah-faq summary::-webkit-details-marker { display: none; }
+            .serang-murah-faq summary::after { content: "+"; position: absolute; right: 18px; top: 50%; color: #087cf0; font-size: 1.25rem; transform: translateY(-50%); }
+            .serang-murah-faq[open] summary::after { content: "−"; }
+            .serang-murah-faq h3 { margin: 0; color: #0b2147; font-size: .91rem; font-weight: 800; }
+            .serang-murah-faq p { margin: 0; padding: 0 18px 16px; color: #637084; font-size: .86rem; line-height: 1.55; }
+            .serang-murah-cta { padding: 0 0 28px; }
+            .serang-murah-cta .seo-service-shell { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 30px 42px; border-radius: 7px; background: linear-gradient(110deg,#0743bf,#087cf0); color: #fff; }
+            .serang-murah-cta h2 { margin: 0 0 4px; color: #fff; font-family: "Nunito",sans-serif; font-size: clamp(23px,2vw,30px); font-weight: 800; }
+            .serang-murah-cta p { max-width: 720px; margin: 0; color: rgba(255,255,255,.9); font-size: .9rem; }
+            .serang-murah-cta .seo-service-button { flex: 0 0 auto; border-color: #fff; background: #fff; color: #087cf0; box-shadow: none; }
+
+            @media (max-width: 1024px) {
+                .serang-murah-simple-page .seo-service-hero-grid { grid-template-columns: minmax(0,1fr) minmax(330px,.8fr); gap: 32px; }
+                .serang-murah-service-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+                .serang-murah-advantage-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+                .serang-murah-split { gap: 34px; }
+            }
+            @media (max-width: 767.98px) {
+                .serang-murah-simple-page .seo-service-shell { width: min(100% - 30px,1180px); }
+                .serang-murah-simple-page .seo-service-hero { min-height: 0; padding: 48px 0 68px; }
+                .serang-murah-simple-page .seo-service-hero-grid { grid-template-columns: 1fr; gap: 34px; }
+                .serang-murah-simple-page .seo-service-copy-block { margin-inline: auto; text-align: center; }
+                .serang-murah-simple-page .seo-service-hero h1,.serang-murah-simple-page .seo-service-hero-copy { margin-left: auto; margin-right: auto; }
+                .serang-murah-simple-page .seo-service-actions { justify-content: center; }
+                .serang-murah-hero-visual { width: min(100%,520px); min-height: 300px; margin-inline: auto; }
+                .serang-murah-benefit-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+                .serang-murah-benefit-grid > div:nth-child(2) { border-right: 0; }
+                .serang-murah-benefit-grid > div:nth-child(-n+2) { border-bottom: 1px solid #e3eef5; }
+                .serang-murah-split { grid-template-columns: 1fr; }
+                .serang-murah-cta .seo-service-shell { flex-direction: column; align-items: flex-start; }
+            }
+            @media (max-width: 575.98px) {
+                .serang-murah-simple-page .seo-service-shell { width: min(100% - 28px,1180px); }
+                .serang-murah-simple-page .seo-service-hero { padding: 34px 0 58px; }
+                .serang-murah-simple-page .seo-service-hero h1 { font-size: clamp(31px,9.4vw,38px); }
+                .serang-murah-simple-page .seo-service-hero-copy { font-size: .92rem; }
+                .serang-murah-hero-visual { min-height: 245px; border-radius: 42% 8px 8px 42%; }
+                .serang-murah-visual-panel.panel-main { width: 230px; height: 165px; left: 25px; top: 43px; }
+                .serang-murah-visual-panel.panel-side { width: 92px; height: 165px; right: 18px; bottom: 18px; }
+                .serang-murah-visual-check { width: 48px; height: 48px; left: 12px; bottom: 12px; }
+                .serang-murah-benefit-grid > div { min-height: 88px; flex-direction: column; gap: 6px; padding: 12px 8px; }
+                .serang-murah-benefit-grid strong { font-size: .79rem; }
+                .serang-murah-section { padding: 48px 0; }
+                .serang-murah-service-grid,.serang-murah-advantage-grid { grid-template-columns: 1fr; }
+                .serang-murah-service-grid article { min-height: 0; padding: 22px; }
+                .serang-murah-advantage-grid article { padding: 14px 0; border-bottom: 1px solid #e0ebf2; }
+                .serang-murah-split { gap: 46px; }
+                .serang-murah-cta .seo-service-shell { padding: 26px 22px; text-align: center; align-items: stretch; }
+            }
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -1827,7 +1971,7 @@
                     <h1 id="website-service-title">{{ $landing['h1'] }}</h1>
                     <p class="seo-service-hero-copy">{{ $landing['hero_copy'] }}</p>
                     <div class="seo-service-actions">
-                        <a class="seo-service-button" href="{{ route('contact') }}" @if ($isConversionLanding) data-national-whatsapp-cta @endif>{{ $isConversionLanding ? 'Konsultasi via WhatsApp' : 'Konsultasi Website' }}</a>
+                        <a class="seo-service-button" href="{{ route('contact') }}" @if ($isConversionLanding || $isSerangMurahLanding) data-national-whatsapp-cta @endif>{{ ($isConversionLanding || $isSerangMurahLanding) ? 'Konsultasi via WhatsApp' : 'Konsultasi Website' }}</a>
                         <a class="seo-service-button secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio</a>
                     </div>
                 </div>
@@ -1856,12 +2000,119 @@
                         <span class="banten-hero-tower"></span>
                         <span class="banten-hero-cap"></span>
                     </div>
+                @elseif ($isSerangMurahLanding)
+                    <div class="serang-murah-hero-visual" aria-hidden="true">
+                        <span class="serang-murah-visual-orbit orbit-one"></span>
+                        <span class="serang-murah-visual-orbit orbit-two"></span>
+                        <span class="serang-murah-visual-panel panel-main"><i></i><i></i><i></i></span>
+                        <span class="serang-murah-visual-panel panel-side"><i></i><i></i></span>
+                        <span class="serang-murah-visual-check">✓</span>
+                    </div>
                 @endif
             </div>
         </div>
     </section>
 
-    @if ($isConversionLanding)
+    @if ($isSerangMurahLanding)
+        @php
+            $serangMurahFaqs = [
+                ['Berapa lama pembuatan website?', 'Durasi bergantung pada jumlah halaman dan fitur. Website company profile sederhana biasanya bisa dimulai dari kebutuhan konten dan desain yang sudah jelas.'],
+                ['Apakah website sudah SEO?', 'Kami menyiapkan fondasi SEO teknis seperti title, meta description, struktur heading, sitemap, canonical, dan performa halaman. Ranking Google tetap membutuhkan waktu, konten, dan authority.'],
+                ['Bisa dibuat dengan admin panel?', 'Bisa. Website dapat dibuat dengan CMS/admin panel agar konten seperti portfolio, artikel, layanan, atau pengaturan website bisa dikelola sendiri.'],
+                ['Bisa lanjut ke aplikasi web?', 'Bisa. Jika kebutuhan berkembang, website dapat dilanjutkan menjadi sistem bisnis, dashboard internal, SaaS, atau integrasi AI.'],
+                ['Apakah harga website sudah termasuk domain dan hosting?', 'Bisa disesuaikan. Kami dapat membantu menyiapkan domain, hosting, SSL, email bisnis, dan konfigurasi dasar sesuai kebutuhan project.'],
+                ['Apakah website bisa dipakai untuk iklan dan promosi?', 'Bisa. Website dapat disiapkan sebagai tujuan iklan Google, media sosial, WhatsApp campaign, atau landing page penawaran agar promosi lebih terukur.'],
+                ['Apakah ada revisi desain?', 'Ada. Revisi mengikuti scope yang disepakati di awal, agar desain, konten, dan fitur tetap terarah sampai website siap online.'],
+                ['Apakah bisa dibantu isi konten website?', 'Bisa. Kami dapat membantu menyusun struktur halaman dan copy awal seperti profil bisnis, layanan, keunggulan, CTA, dan FAQ.'],
+            ];
+        @endphp
+
+        <section class="serang-murah-benefits" aria-label="Manfaat utama website Serang murah">
+            <div class="seo-service-shell serang-murah-benefit-grid">
+                <div><span aria-hidden="true">Rp</span><strong>Harga sesuai budget</strong></div>
+                <div><span aria-hidden="true">↗</span><strong>Proses pengerjaan cepat</strong></div>
+                <div><span aria-hidden="true">◇</span><strong>Desain modern &amp; responsive</strong></div>
+                <div><span aria-hidden="true">⌕</span><strong>Siap dioptimasi SEO</strong></div>
+            </div>
+        </section>
+
+        <section class="serang-murah-section serang-murah-services" aria-labelledby="serang-murah-services-title">
+            <div class="seo-service-shell">
+                <div class="serang-murah-heading">
+                    <p class="seo-service-label">Layanan website</p>
+                    <h2 id="serang-murah-services-title">Website sederhana yang tepat untuk kebutuhan bisnis Anda.</h2>
+                    <p>Dari halaman profil sederhana sampai website dengan pengelolaan konten, JASAIBNU membantu memilih bentuk website yang paling realistis untuk target bisnis dan budget.</p>
+                </div>
+                <div class="serang-murah-service-grid">
+                    <article><span>CP</span><h3>Company Profile</h3><p>Website profil perusahaan untuk menampilkan layanan, legalitas, portfolio, kontak, dan kredibilitas bisnis.</p></article>
+                    <article><span>CAT</span><h3>Katalog Produk</h3><p>Website katalog untuk menampilkan produk, kategori, detail, dan jalur pemesanan melalui WhatsApp atau form.</p></article>
+                    <article><span>LP</span><h3>Landing Page</h3><p>Halaman khusus untuk campaign, iklan, launching produk, pendaftaran, atau penawaran jasa tertentu.</p></article>
+                    <article><span>APP</span><h3>Website System Custom</h3><p>Fondasi website bisa dikembangkan menjadi sistem booking, dashboard, member area, atau aplikasi bisnis.</p></article>
+                    <article><span>CMS</span><h3>Website Sekolah / Instansi</h3><p>Konten website dapat dikelola sendiri, seperti artikel, portfolio, layanan, halaman, dan pengaturan umum.</p></article>
+                    <article><span>UMK</span><h3>Website UMKM / Toko Online</h3><p>Website untuk bisnis lokal agar calon pelanggan lebih mudah melihat layanan, harga awal, lokasi, dan kontak.</p></article>
+                </div>
+                <details class="serang-murah-details">
+                    <summary>Informasi lengkap website hemat untuk bisnis lokal</summary>
+                    <p><strong>{{ $landing['impact_title'] }}</strong> {{ $landing['impact_copy'] }}</p>
+                    <p>{{ $landing['badge'] }}</p>
+                    @if ($primarySerangLink)
+                        <p>{{ $primarySerangLink['before'] }}<a href="{{ route('website-development-serang') }}">{{ $primarySerangLink['anchor'] }}</a>{{ $primarySerangLink['after'] }}</p>
+                    @endif
+                    <p><strong>Meningkatkan penjualan.</strong> Calon pelanggan bisa menemukan layanan, memahami penawaran, dan langsung menghubungi bisnis. <strong>Membangun branding.</strong> Tampilan, pesan, portfolio, dan identitas bisnis tersusun konsisten dalam satu tempat.</p>
+                    <p><strong>Menambah kepercayaan.</strong> Bisnis terlihat lebih serius dengan profil, alamat, kontak, testimoni, dan bukti pekerjaan. <strong>Siap dipromosikan.</strong> Website bisa jadi tujuan iklan, Google Search, media sosial, WhatsApp, dan campaign digital.</p>
+                </details>
+            </div>
+        </section>
+
+        <section class="serang-murah-section serang-murah-advantages" aria-labelledby="serang-murah-advantages-title">
+            <div class="seo-service-shell">
+                <div class="serang-murah-heading">
+                    <p class="seo-service-label">Kenapa JASAIBNU</p>
+                    <h2 id="serang-murah-advantages-title">Fondasi penting untuk website yang profesional.</h2>
+                    <p>Kami membangun website dengan pendekatan teknis yang rapi: desain responsive, performa cepat, struktur konten jelas, keamanan dasar, dan fondasi SEO agar lebih siap masuk pencarian Google.</p>
+                </div>
+                <div class="serang-murah-advantage-grid">
+                    <article><span>01</span><h3>Berpengalaman</h3><p>Tujuan, halaman penting, fitur, dan arah konten dipetakan sejak awal.</p></article>
+                    <article><span>02</span><h3>SEO Friendly</h3><p>Title, meta description, heading, canonical, sitemap, dan schema dasar disusun rapi untuk indexing.</p></article>
+                    <article><span>03</span><h3>Aman &amp; Terpercaya</h3><p>Form, route, validasi input, dan konfigurasi HTTPS disiapkan agar website lebih aman digunakan.</p></article>
+                    <article><span>04</span><h3>Mudah Dikelola</h3><p>Website bisa dilengkapi admin panel untuk mengubah konten dan pengaturan bisnis.</p></article>
+                    <article><span>05</span><h3>Dukungan Penuh</h3><p>Struktur teknis yang rapi memudahkan perawatan dan pengembangan bertahap.</p></article>
+                    <article><span>06</span><h3>Fleksibel</h3><p>Fondasi dapat dilanjutkan menjadi katalog, booking, dashboard internal, SaaS, atau integrasi AI.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="serang-murah-section serang-murah-process-faq" aria-labelledby="serang-murah-process-title">
+            <div class="seo-service-shell serang-murah-split">
+                <div>
+                    <div class="serang-murah-heading align-left"><p class="seo-service-label">Proses kerja</p><h2 id="serang-murah-process-title">Tiga langkah sampai website online.</h2></div>
+                    <div class="serang-murah-process-list">
+                        <article><span>01</span><div><h3>Analisis Kebutuhan</h3><p>Kami petakan tujuan website, target pengguna, halaman penting, fitur, dan arah konten yang dibutuhkan.</p></div></article>
+                        <article><span>02</span><div><h3>Desain &amp; Development</h3><p>Website dibangun dengan tampilan profesional, struktur teknis rapi, dan pengalaman pengguna yang mudah dipahami.</p></div></article>
+                        <article><span>03</span><div><h3>Testing &amp; Go Live</h3><p>Sebelum online, halaman dicek dari sisi performa, mobile view, form kontak, SEO dasar, dan kesiapan indexing.</p></div></article>
+                    </div>
+                </div>
+                <div>
+                    <div class="serang-murah-heading align-left"><p class="seo-service-label">FAQ</p><h2 id="website-faq-title">Pertanyaan yang sering diajukan.</h2></div>
+                    <div class="serang-murah-faq-list">
+                        @foreach ($serangMurahFaqs as $index => [$question, $answer])
+                            <details class="serang-murah-faq" @if ($index === 0) open @endif>
+                                <summary><h3>{{ $question }}</h3></summary>
+                                <p>{{ $answer }}</p>
+                            </details>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="serang-murah-cta" aria-labelledby="website-cta-title">
+            <div class="seo-service-shell">
+                <div><h2 id="website-cta-title">Mulai website bisnis Anda dengan langkah yang realistis.</h2><p>Ceritakan kebutuhan website, target bisnis, dan fitur yang ingin dibangun. JASAIBNU akan membantu memetakan solusi yang realistis sebelum masuk tahap produksi.</p></div>
+                <a class="seo-service-button" href="{{ route('contact') }}" data-national-whatsapp-cta>Konsultasi via WhatsApp</a>
+            </div>
+        </section>
+    @elseif ($isConversionLanding)
         <div class="national-trust-strip" aria-label="Nilai utama layanan website">
             <div class="seo-service-shell national-trust-grid">
                 <div class="national-trust-item">{{ $isBantenLanding ? 'SEO Friendly' : 'Kolaborasi seluruh Indonesia' }}</div>
@@ -2087,7 +2338,9 @@
                 <a class="seo-service-button" href="{{ route('contact') }}" data-national-whatsapp-cta>Konsultasi via WhatsApp</a>
             </div>
         </section>
-    @else
+    @endif
+
+    @if (!$isConversionLanding && !$isSerangMurahLanding)
     <section class="seo-service-impact" aria-labelledby="website-impact-title">
         <div class="seo-service-shell">
             <div class="seo-service-impact-grid">
