@@ -138,6 +138,66 @@ class ExampleTest extends TestCase
         $this->assertSame(1, count($h1Matches[0]));
     }
 
+    public function test_banten_locked_ui_preserves_seo_contract_and_isolates_protected_pages()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('website-development-banten'));
+        $html = $response->getContent();
+
+        $response
+            ->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Banten | Website Bisnis &amp; UMKM</title>', false)
+            ->assertSee('<meta name="description" content="Jasa pembuatan website Banten untuk bisnis, UMKM, company profile, landing page, dan website layanan yang cepat, mobile-friendly, SEO-ready, aman, dan mudah dikembangkan.">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('rel="canonical" href="' . route('website-development-banten') . '"', false)
+            ->assertSee('<meta property="og:title" content="Jasa Pembuatan Website Banten | Website Bisnis &amp; UMKM">', false)
+            ->assertSee('<meta property="og:description" content="Jasa pembuatan website Banten untuk bisnis, UMKM, company profile, landing page, dan website layanan yang cepat, mobile-friendly, SEO-ready, aman, dan mudah dikembangkan.">', false)
+            ->assertSee('<meta property="og:url" content="' . route('website-development-banten') . '">', false)
+            ->assertSee('<h1 id="website-service-title">Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional</h1>', false)
+            ->assertSee('href="' . route('website-development-serang') . '">jasa website untuk area Serang</a>', false)
+            ->assertSee('class="banten-hero-visual" aria-hidden="true"', false)
+            ->assertDontSee('assets/images/hero-banten.jpeg', false)
+            ->assertSee('services-page startup2-home banten-conversion-page', false)
+            ->assertSee('data-national-faq-button', false)
+            ->assertSee('<h3>Testing &amp; Launching</h3>', false)
+            ->assertSee('<body class="services-page startup2-home banten-conversion-page">', false);
+
+        $this->assertSame(1, preg_match_all('/<section\b[^>]*aria-labelledby="website-faq-title"/i', $html));
+        $this->assertSame(8, preg_match_all('/<button\b[^>]*data-national-faq-button/i', $html));
+        $this->assertSame(3, substr_count($html, 'type="application/ld+json"'));
+        $this->assertSame(1, $this->anchorCountForUrl($html, route('website-development-serang')));
+
+        $sectionMarkers = [
+            'website-service-title',
+            'national-trust-strip',
+            'national-offer-title',
+            'national-proof-title',
+            'website-benefits-title',
+            'website-process-title',
+            'website-faq-title',
+            'website-cta-title',
+        ];
+        $bodyPosition = strpos($html, '<body');
+        $lastPosition = $bodyPosition;
+        foreach ($sectionMarkers as $marker) {
+            $position = strpos($html, $marker, $bodyPosition);
+            $this->assertNotFalse($position, "Missing locked Banten section marker: {$marker}");
+            $this->assertGreaterThan($lastPosition, $position, "Incorrect Banten section order at: {$marker}");
+            $lastPosition = $position;
+        }
+
+        foreach ([
+            'website-development' => 'services-page startup2-home national-conversion-page',
+            'website-development-serang' => 'services-page startup2-home',
+            'website-development-serang-murah' => 'services-page startup2-home',
+            'website-development-umkm-serang' => 'services-page startup2-home',
+        ] as $routeName => $expectedClass) {
+            $protected = $this->get(route($routeName));
+            $protected->assertOk()->assertSee('<body class="' . $expectedClass . '">', false);
+        }
+    }
+
     public function test_serang_affordable_website_development_landing_page_targets_local_keyword()
     {
         $this->withoutVite();
@@ -295,12 +355,6 @@ class ExampleTest extends TestCase
                 'title' => 'Jasa Website UMKM Serang | Website Usaha Lokal',
                 'h1' => 'Jasa Website UMKM Serang untuk Usaha Lokal yang Ingin Lebih Mudah Ditemukan',
                 'first_h2' => 'Website membantu UMKM Serang terlihat lebih dipercaya saat pelanggan mencari produk atau layanan secara online.',
-                'serang_links' => 1,
-            ],
-            'website-development-banten' => [
-                'title' => 'Jasa Pembuatan Website Banten | Website Bisnis &amp; UMKM',
-                'h1' => 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional',
-                'first_h2' => 'Website membantu bisnis di Banten tampil lebih kredibel dan lebih mudah dijangkau calon pelanggan online.',
                 'serang_links' => 1,
             ],
         ];

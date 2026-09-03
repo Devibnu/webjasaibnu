@@ -33,13 +33,18 @@
     ];
     $primarySerangLink = $primarySerangLinks[request()->route()?->getName()] ?? null;
     $isNationalLanding = request()->routeIs('website-development');
+    $isBantenLanding = request()->routeIs('website-development-banten');
+    $isConversionLanding = $isNationalLanding || $isBantenLanding;
     $nationalPortfolioItems = $nationalPortfolioItems ?? collect();
+    $conversionPortfolioItems = $isBantenLanding
+        ? \App\Models\PortfolioItem::with('category')->published()->ordered()->limit(3)->get()
+        : $nationalPortfolioItems;
 @endphp
 
 @section('title', $landing['title'])
 @section('meta_description', $landing['meta_description'])
 @section('canonical', $landing['canonical'])
-@section('body_class', 'services-page startup2-home' . ($isNationalLanding ? ' national-conversion-page' : ''))
+@section('body_class', 'services-page startup2-home' . ($isNationalLanding ? ' national-conversion-page' : '') . ($isBantenLanding ? ' banten-conversion-page' : ''))
 
 @push('head')
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -583,7 +588,7 @@
             }
         }
     </style>
-    @if ($isNationalLanding)
+    @if ($isConversionLanding)
         <style>
             .national-service-section {
                 padding: clamp(64px, 7vw, 96px) 0;
@@ -1591,6 +1596,201 @@
                 .national-process-grid { gap: 30px; }
                 .national-final-cta .seo-service-shell { padding: 26px 22px; }
             }
+
+            /* UIUX-BANTEN-001: isolated Banten conversion presentation. */
+            .banten-conversion-page { background: #fff; color: #0b2147; }
+            .banten-conversion-page > .container-fluid.bg-dark.px-5.d-none.d-lg-block { display: none !important; }
+            .banten-conversion-page .sticky-top { position: static !important; }
+            .banten-conversion-page .startup-inner-shell .navbar { background: #fff !important; }
+            .banten-conversion-page .startup-inner-shell .ji-header-logo-public { visibility: hidden; opacity: 0; }
+            .banten-conversion-page .startup-inner-shell .ji-header-logo-dark { visibility: visible; opacity: 1; }
+            .banten-conversion-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link { color: #17253a !important; }
+            .banten-conversion-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link:hover,
+            .banten-conversion-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link.active { color: #087cf0 !important; }
+            .banten-conversion-page .seo-service-shell { width: min(100% - 40px, 1180px); }
+            .banten-conversion-page .seo-service-hero {
+                min-height: 560px;
+                padding: 66px 0 76px;
+                overflow: visible;
+                background: #fff;
+                color: #0b2147;
+            }
+            .banten-conversion-page .seo-service-hero::before {
+                inset: 22px 0 auto auto;
+                width: 58%;
+                height: 510px;
+                border-radius: 54% 0 0 54%;
+                background: radial-gradient(circle at 55% 46%, #dff3ff 0, #eef9ff 58%, rgba(255,255,255,0) 72%);
+            }
+            .banten-conversion-page .seo-service-hero::after { display: none; }
+            .banten-conversion-page .seo-service-hero-grid {
+                grid-template-columns: minmax(0, .94fr) minmax(520px, 1.06fr);
+                gap: 48px;
+            }
+            .banten-conversion-page .seo-service-copy-block { max-width: 570px; margin: 0; text-align: left; }
+            .banten-conversion-page .seo-service-label { margin-bottom: 12px; background: #edf8ff; color: #0879ee; }
+            .banten-conversion-page .seo-service-hero h1 {
+                max-width: 570px;
+                margin: 0 0 18px;
+                color: #0b2147;
+                font-size: clamp(36px, 3vw, 48px);
+                line-height: 1.08;
+            }
+            .banten-conversion-page .seo-service-hero-copy { max-width: 540px; margin: 0 0 24px; color: #526175; line-height: 1.65; }
+            .banten-conversion-page .seo-service-actions { justify-content: flex-start; }
+            .banten-conversion-page .seo-service-button { border-color: #087cf0; border-radius: 5px; background: #087cf0; box-shadow: 0 10px 24px rgba(8,124,240,.18); }
+            .banten-conversion-page .seo-service-button.secondary { border-color: #087cf0; background: #fff; color: #087cf0; box-shadow: none; }
+            .banten-hero-visual {
+                position: relative;
+                min-height: 390px;
+                overflow: hidden;
+                border-radius: 48% 0 0 48%;
+                background: linear-gradient(155deg, #f8fdff 4%, #e8f7ff 55%, #caeaff 100%);
+            }
+            .banten-hero-visual::after {
+                content: "";
+                position: absolute;
+                inset: 0 auto 0 0;
+                z-index: 3;
+                width: 30%;
+                background: linear-gradient(90deg, #fff 4%, rgba(255,255,255,.78) 45%, rgba(255,255,255,0));
+            }
+            .banten-hero-horizon {
+                position: absolute;
+                z-index: 1;
+                right: -8%;
+                bottom: -42px;
+                width: 105%;
+                height: 195px;
+                border-radius: 58% 0 0 0;
+                background: linear-gradient(165deg, rgba(115,195,239,.62), rgba(8,124,240,.18));
+            }
+            .banten-hero-horizon::before,
+            .banten-hero-horizon::after {
+                content: "";
+                position: absolute;
+                left: 9%;
+                width: 96%;
+                height: 72px;
+                border: 2px solid rgba(255,255,255,.82);
+                border-color: rgba(255,255,255,.82) transparent transparent;
+                border-radius: 50%;
+            }
+            .banten-hero-horizon::before { top: 42px; }
+            .banten-hero-horizon::after { top: 78px; left: 20%; opacity: .72; }
+            .banten-hero-coast {
+                position: absolute;
+                z-index: 2;
+                right: -35px;
+                bottom: -18px;
+                width: 75%;
+                height: 105px;
+                transform: rotate(-3deg);
+                border-radius: 72% 0 0 0;
+                background: linear-gradient(155deg, rgba(255,255,255,.88), rgba(220,241,252,.94));
+            }
+            .banten-hero-tower {
+                position: absolute;
+                z-index: 2;
+                right: 29%;
+                bottom: 68px;
+                width: 54px;
+                height: 170px;
+                clip-path: polygon(31% 0, 69% 0, 88% 100%, 12% 100%);
+                background: linear-gradient(90deg, #fff 0 52%, #d7edfa 52% 100%);
+                filter: drop-shadow(0 12px 12px rgba(31,99,146,.12));
+            }
+            .banten-hero-cap {
+                position: absolute;
+                z-index: 3;
+                right: calc(29% - 5px);
+                bottom: 230px;
+                width: 64px;
+                height: 27px;
+                border: 5px solid #087cf0;
+                border-radius: 4px 4px 10px 10px;
+                background: rgba(255,255,255,.96);
+            }
+            .banten-hero-cap::before {
+                content: "";
+                position: absolute;
+                left: 50%;
+                bottom: 22px;
+                width: 42px;
+                height: 17px;
+                transform: translateX(-50%);
+                clip-path: polygon(50% 0, 100% 100%, 0 100%);
+                background: #087cf0;
+            }
+            .banten-hero-beam {
+                position: absolute;
+                z-index: 1;
+                right: calc(29% + 47px);
+                bottom: 235px;
+                width: 170px;
+                height: 52px;
+                clip-path: polygon(100% 42%, 0 0, 0 100%);
+                background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.72));
+            }
+            .banten-conversion-page .national-trust-strip { margin-top: -42px; }
+            .banten-conversion-page .national-final-cta { padding: 0 0 20px; background: #fff; }
+            .banten-conversion-page .national-final-cta .seo-service-shell { padding: 28px 46px; border-radius: 6px; background: linear-gradient(110deg, #0743bf, #087cf0); }
+            .banten-conversion-page .national-final-cta h2 { margin-bottom: 3px; font-size: clamp(24px, 2.1vw, 32px); }
+            .banten-conversion-page .national-final-cta p { font-size: .9rem; line-height: 1.5; }
+            .banten-conversion-page .national-final-cta .seo-service-button {
+                border-color: #fff;
+                background: #fff;
+                color: #087cf0;
+                box-shadow: 0 8px 22px rgba(6,31,80,.16);
+            }
+            .banten-conversion-page .jasaibnu-startup-footer { margin-top: 0 !important; }
+            .banten-conversion-page .jasaibnu-startup-footer > .container { width: min(100% - 40px, 1180px); }
+            .banten-conversion-page .jasaibnu-startup-footer > .container > .row { align-items: start; }
+            .banten-conversion-page .jasaibnu-startup-footer .footer-about > div {
+                align-items: flex-start !important;
+                padding: 30px 20px 24px 0 !important;
+                background: transparent !important;
+                text-align: left !important;
+            }
+            .banten-conversion-page .jasaibnu-startup-footer .footer-about img { filter: brightness(0) invert(1); }
+            .banten-conversion-page .jasaibnu-startup-footer .footer-about .btn { display: none; }
+            .banten-conversion-page .jasaibnu-startup-footer .pt-5 { padding-top: 30px !important; }
+            .banten-conversion-page .jasaibnu-startup-footer .mb-5 { margin-bottom: 24px !important; }
+            .banten-conversion-page .jasaibnu-startup-copyright .row { justify-content: center !important; }
+            .banten-conversion-page .jasaibnu-startup-copyright .col-lg-8 { width: 100%; }
+            .banten-conversion-page .jasaibnu-startup-copyright .d-flex { height: 54px !important; }
+
+            @media (max-width: 991.98px) {
+                .banten-conversion-page .seo-service-hero { padding-top: 48px; }
+                .banten-conversion-page .seo-service-hero::before { top: 46%; width: 100%; height: 48%; }
+                .banten-conversion-page .seo-service-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+                .banten-conversion-page .seo-service-copy-block { margin-inline: auto; text-align: center; }
+                .banten-conversion-page .seo-service-hero h1,
+                .banten-conversion-page .seo-service-hero-copy { margin-left: auto; margin-right: auto; }
+                .banten-conversion-page .seo-service-actions { justify-content: center; }
+                .banten-hero-visual { width: min(100%, 620px); min-height: 340px; margin-inline: auto; }
+                .banten-conversion-page .jasaibnu-startup-footer .footer-about > div {
+                    align-items: center !important;
+                    padding-right: 0 !important;
+                    text-align: center !important;
+                }
+            }
+
+            @media (max-width: 575.98px) {
+                .banten-conversion-page .seo-service-shell { width: min(100% - 28px, 1180px); }
+                .banten-conversion-page .seo-service-hero { padding: 36px 0 54px; }
+                .banten-conversion-page .seo-service-hero h1 { font-size: clamp(31px, 9.3vw, 39px); }
+                .banten-conversion-page .seo-service-hero-copy { font-size: .92rem; }
+                .banten-hero-visual { min-height: 250px; height: 250px; border-radius: 42% 8px 8px 42%; }
+                .banten-hero-horizon { height: 130px; bottom: -30px; }
+                .banten-hero-coast { height: 72px; }
+                .banten-hero-tower { right: 27%; bottom: 45px; width: 40px; height: 115px; }
+                .banten-hero-cap { right: calc(27% - 4px); bottom: 154px; width: 48px; height: 22px; border-width: 4px; }
+                .banten-hero-cap::before { bottom: 17px; width: 32px; height: 13px; }
+                .banten-hero-beam { right: calc(27% + 36px); bottom: 157px; width: 105px; height: 38px; }
+                .banten-conversion-page .national-trust-strip { margin-top: -24px; }
+                .banten-conversion-page .national-final-cta .seo-service-shell { padding: 26px 22px; }
+            }
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -1627,7 +1827,7 @@
                     <h1 id="website-service-title">{{ $landing['h1'] }}</h1>
                     <p class="seo-service-hero-copy">{{ $landing['hero_copy'] }}</p>
                     <div class="seo-service-actions">
-                        <a class="seo-service-button" href="{{ route('contact') }}" @if ($isNationalLanding) data-national-whatsapp-cta @endif>{{ $isNationalLanding ? 'Konsultasi via WhatsApp' : 'Konsultasi Website' }}</a>
+                        <a class="seo-service-button" href="{{ route('contact') }}" @if ($isConversionLanding) data-national-whatsapp-cta @endif>{{ $isConversionLanding ? 'Konsultasi via WhatsApp' : 'Konsultasi Website' }}</a>
                         <a class="seo-service-button secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio</a>
                     </div>
                 </div>
@@ -1648,28 +1848,36 @@
                             </div>
                         </div>
                     </div>
+                @elseif ($isBantenLanding)
+                    <div class="banten-hero-visual" aria-hidden="true">
+                        <span class="banten-hero-horizon"></span>
+                        <span class="banten-hero-coast"></span>
+                        <span class="banten-hero-beam"></span>
+                        <span class="banten-hero-tower"></span>
+                        <span class="banten-hero-cap"></span>
+                    </div>
                 @endif
             </div>
         </div>
     </section>
 
-    @if ($isNationalLanding)
+    @if ($isConversionLanding)
         <div class="national-trust-strip" aria-label="Nilai utama layanan website">
             <div class="seo-service-shell national-trust-grid">
-                <div class="national-trust-item">Kolaborasi seluruh Indonesia</div>
-                <div class="national-trust-item">Tampilan responsive</div>
-                <div class="national-trust-item">Fondasi SEO teknis</div>
-                <div class="national-trust-item">Dukungan setelah go-live</div>
+                <div class="national-trust-item">{{ $isBantenLanding ? 'SEO Friendly' : 'Kolaborasi seluruh Indonesia' }}</div>
+                <div class="national-trust-item">{{ $isBantenLanding ? 'Mobile-friendly' : 'Tampilan responsive' }}</div>
+                <div class="national-trust-item">{{ $isBantenLanding ? 'Fondasi keamanan' : 'Fondasi SEO teknis' }}</div>
+                <div class="national-trust-item">{{ $isBantenLanding ? 'Support berkelanjutan' : 'Dukungan setelah go-live' }}</div>
             </div>
         </div>
     @endif
 
-    @if ($isNationalLanding)
+    @if ($isConversionLanding)
         <section class="national-service-section alt" aria-labelledby="national-offer-title">
             <div class="seo-service-shell">
                 <div class="seo-service-heading">
                     <p class="seo-service-label">Cakupan layanan</p>
-                    <h2 id="national-offer-title">Layanan website utama untuk mendukung pertumbuhan bisnis.</h2>
+                    <h2 id="national-offer-title">{{ $isBantenLanding ? 'Website disesuaikan dengan kebutuhan bisnis Anda.' : 'Layanan website utama untuk mendukung pertumbuhan bisnis.' }}</h2>
                     <p>Setiap project dimulai dengan pemetaan tujuan, halaman, materi, fitur, dan kebutuhan pengelolaan agar solusi yang dibangun tetap relevan dan dapat dikembangkan.</p>
                 </div>
                 <div class="national-primary-grid">
@@ -1695,8 +1903,18 @@
                     </article>
                 </div>
                 <div class="national-compact-facts national-service-disclosure">
-                    <details aria-label="Tahapan kolaborasi jarak jauh">
+                    <details aria-label="{{ $isBantenLanding ? 'Informasi lengkap layanan website' : 'Tahapan kolaborasi jarak jauh' }}">
                         <summary>Informasi lengkap layanan dan kolaborasi</summary>
+                        @if ($isBantenLanding)
+                        <p><strong>{{ $landing['impact_title'] }}</strong> {{ $landing['impact_copy'] }}</p>
+                        <p>{{ $landing['badge'] }}</p>
+                        @if ($primarySerangLink)
+                            <p>{{ $primarySerangLink['before'] }}<a href="{{ route('website-development-serang') }}">{{ $primarySerangLink['anchor'] }}</a>{{ $primarySerangLink['after'] }}</p>
+                        @endif
+                        <p>Company profile, landing page promosi, website UMKM dan jasa, katalog produk, website dengan admin panel, serta fondasi aplikasi web dapat disusun mengikuti tujuan bisnis dan kesiapan materi.</p>
+                        <p>Struktur halaman, tampilan responsive, jalur kontak, keamanan dasar, dan fondasi SEO teknis disiapkan sesuai scope yang disepakati.</p>
+                        <p>Durasi dipengaruhi jumlah halaman, kesiapan materi, kompleksitas fitur, kebutuhan integrasi, dan proses peninjauan. Akses pengelolaan dan dukungan setelah go-live dibahas mengikuti scope project.</p>
+                        @else
                         <p><strong>Pembuatan website untuk bisnis di berbagai wilayah Indonesia.</strong> JASAIBNU dapat mendampingi bisnis melalui proses kolaborasi jarak jauh. Diskusi kebutuhan, penyiapan materi, peninjauan desain, pengembangan, dan koordinasi sebelum website online dapat dilakukan secara terstruktur tanpa harus berada di kota yang sama.</p>
                         <p><strong>Scope website disusun mengikuti kebutuhan dan kesiapan bisnis.</strong> Setiap project dipetakan berdasarkan tujuan, halaman, materi, fitur, dan kebutuhan pengelolaan.</p>
                         <p>Company profile, landing page, website layanan, katalog, website dengan admin panel, dan fondasi aplikasi web dapat disusun sesuai tujuan bisnis. Halaman khusus untuk campaign, iklan, launching produk, pendaftaran, atau penawaran jasa tertentu juga dapat disiapkan.</p>
@@ -1704,12 +1922,13 @@
                         <p>Proses mencakup analisis kebutuhan, penyusunan struktur, desain dan development, testing, serta persiapan go-live.</p>
                         <p>Durasi dipengaruhi jumlah halaman, kesiapan materi, kompleksitas fitur, kebutuhan integrasi, dan kecepatan proses peninjauan.</p>
                         <p>Akses pengelolaan dapat disiapkan saat project menggunakan admin panel. Kebutuhan pengembangan dan dukungan setelah go-live dibahas mengikuti scope project.</p>
+                        @endif
                     </details>
                 </div>
             </div>
         </section>
 
-        @if ($nationalPortfolioItems->isNotEmpty())
+        @if ($conversionPortfolioItems->isNotEmpty())
             <section class="national-service-section" aria-labelledby="national-proof-title">
                 <div class="seo-service-shell">
                     <div class="seo-service-heading">
@@ -1718,7 +1937,7 @@
                         <p>Contoh berikut diambil langsung dari portfolio terpublikasi dan menunjukkan cakupan website serta sistem digital yang tersedia.</p>
                     </div>
                     <div class="national-proof-grid">
-                        @foreach ($nationalPortfolioItems as $item)
+                        @foreach ($conversionPortfolioItems as $item)
                             <article class="national-proof-card">
                                 <div class="national-proof-media">
                                     @if ($item->imageUrl())
@@ -1751,33 +1970,33 @@
         @endif
     @endif
 
-    @if ($isNationalLanding)
+    @if ($isConversionLanding)
         <section class="national-conversion-section alt" aria-labelledby="website-benefits-title">
             <div class="seo-service-shell">
                 <div class="national-conversion-heading">
                     <p class="seo-service-label">Kenapa JASAIBNU</p>
-                    <h2 id="website-benefits-title">Fondasi website yang rapi, cepat, aman, dan siap berkembang.</h2>
+                    <h2 id="website-benefits-title">{{ $isBantenLanding ? 'Keunggulan yang memberi nilai lebih untuk bisnis Anda.' : 'Fondasi website yang rapi, cepat, aman, dan siap berkembang.' }}</h2>
                     <p>Kami membangun website dengan pendekatan teknis yang rapi: desain responsive, performa cepat, struktur konten jelas, keamanan dasar, dan fondasi SEO agar lebih siap masuk pencarian Google.</p>
                 </div>
                 <div class="national-why-grid">
                     <article class="national-why-card">
                         <span aria-hidden="true">↗</span>
-                        <h3>Responsive dan cepat</h3>
+                        <h3>{{ $isBantenLanding ? 'Desain Modern' : 'Responsive dan cepat' }}</h3>
                         <p>Website disiapkan agar nyaman dibuka di mobile maupun desktop, dengan optimasi gambar dan struktur halaman yang ringan.</p>
                     </article>
                     <article class="national-why-card">
                         <span aria-hidden="true">⌕</span>
-                        <h3>Siap SEO teknis</h3>
+                        <h3>{{ $isBantenLanding ? 'SEO Friendly' : 'Siap SEO teknis' }}</h3>
                         <p>Title, meta description, canonical, sitemap, robots, dan struktur heading dibuat agar Google lebih mudah memahami halaman.</p>
                     </article>
                     <article class="national-why-card">
                         <span aria-hidden="true">◇</span>
-                        <h3>Keamanan dasar</h3>
+                        <h3>{{ $isBantenLanding ? 'Aman & Terpercaya' : 'Keamanan dasar' }}</h3>
                         <p>Form, route, validasi input, dan konfigurasi HTTPS disiapkan agar website lebih aman digunakan.</p>
                     </article>
                     <article class="national-why-card">
                         <span aria-hidden="true">♧</span>
-                        <h3>Mudah dikelola dan dikembangkan</h3>
+                        <h3>{{ $isBantenLanding ? 'Support & Maintenance' : 'Mudah dikelola dan dikembangkan' }}</h3>
                         <p>Website bisa dilengkapi admin panel untuk mengubah konten, portfolio, artikel, layanan, dan pengaturan bisnis.</p>
                     </article>
                 </div>
@@ -1816,8 +2035,8 @@
                         <p>Website dibangun dengan tampilan profesional, struktur teknis rapi, dan pengalaman pengguna yang mudah dipahami.</p>
                     </article>
                     <article class="national-process-card">
-                        <span>03 — Testing &amp; launch</span>
-                        <h3>Testing &amp; Launch</h3>
+                        <span>03 — Testing &amp; {{ $isBantenLanding ? 'launching' : 'launch' }}</span>
+                        <h3>Testing &amp; {{ $isBantenLanding ? 'Launching' : 'Launch' }}</h3>
                         <p>Sebelum online, halaman dicek dari sisi performa, mobile view, form kontak, SEO dasar, dan kesiapan indexing.</p>
                     </article>
                 </div>
@@ -1862,8 +2081,8 @@
         <section class="national-final-cta" aria-labelledby="website-cta-title">
             <div class="seo-service-shell">
                 <div class="national-final-cta-copy">
-                    <h2 id="website-cta-title">Butuh jasa pembuatan website untuk bisnis Anda?</h2>
-                    <p>Ceritakan kebutuhan website, target bisnis, dan fitur yang ingin dibangun. JASAIBNU akan membantu memetakan solusi yang realistis sebelum masuk tahap produksi.</p>
+                    <h2 id="website-cta-title">{{ $isBantenLanding ? 'Siap membangun website bisnis di Banten?' : 'Butuh jasa pembuatan website untuk bisnis Anda?' }}</h2>
+                    <p>{{ $isBantenLanding ? 'Ceritakan kebutuhan website dan target bisnis Anda untuk memulai konsultasi.' : 'Ceritakan kebutuhan website, target bisnis, dan fitur yang ingin dibangun. JASAIBNU akan membantu memetakan solusi yang realistis sebelum masuk tahap produksi.' }}</p>
                 </div>
                 <a class="seo-service-button" href="{{ route('contact') }}" data-national-whatsapp-cta>Konsultasi via WhatsApp</a>
             </div>
