@@ -1752,7 +1752,7 @@
                 background: transparent !important;
                 text-align: left !important;
             }
-            .banten-conversion-page .jasaibnu-startup-footer .footer-about img { filter: brightness(0) invert(1); }
+            .banten-conversion-page .jasaibnu-startup-footer .footer-about img { filter: none; }
             .banten-conversion-page .jasaibnu-startup-footer .footer-about .btn { display: none; }
             .banten-conversion-page .jasaibnu-startup-footer .pt-5 { padding-top: 30px !important; }
             .banten-conversion-page .jasaibnu-startup-footer .mb-5 { margin-bottom: 24px !important; }

@@ -23,7 +23,9 @@
             <div class="col-lg-4 col-md-6 footer-about">
                 <div class="d-flex flex-column align-items-center justify-content-center text-center h-100 bg-primary p-4">
                     <a href="{{ route('home') }}" class="navbar-brand">
-                        @if ($siteSettings->logo_dark_path)
+                        @if (request()->routeIs('website-development-banten') && $siteSettings->logo_path)
+                            <img src="{{ asset('storage/' . $siteSettings->logo_path) }}" alt="{{ $siteSettings->company_name }}" style="max-height: 45px;" class="mb-2 banten-footer-logo">
+                        @elseif ($siteSettings->logo_dark_path)
                             <img src="{{ asset('storage/' . $siteSettings->logo_dark_path) }}" alt="{{ $siteSettings->company_name }}" style="max-height: 45px;" class="mb-2">
                         @elseif ($siteSettings->logo_path)
                             <img src="{{ asset('storage/' . $siteSettings->logo_path) }}" alt="{{ $siteSettings->company_name }}" style="max-height: 45px;" class="mb-2">
