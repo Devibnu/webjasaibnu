@@ -1795,6 +1795,13 @@
 
             /* UIUX-SERANG-MURAH-001: isolated simple landing-page body. */
             .serang-murah-simple-page { background: #fff; color: #0b2147; }
+            .serang-murah-simple-page .startup-inner-shell .navbar { background: #fff !important; }
+            .serang-murah-simple-page .startup-inner-shell .ji-header-logo-public { visibility: hidden; opacity: 0; }
+            .serang-murah-simple-page .startup-inner-shell .ji-header-logo-dark { visibility: visible; opacity: 1; }
+            .serang-murah-simple-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link { color: #17253a !important; }
+            .serang-murah-simple-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link:hover,
+            .serang-murah-simple-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link.active { color: #087cf0 !important; }
+            .serang-murah-simple-page .startup-inner-shell .navbar-dark .navbar-brand .ji-brand-heading { color: #0b2147; }
             .serang-murah-simple-page .seo-service-shell { width: min(100% - 40px, 1180px); }
             .serang-murah-simple-page .seo-service-hero {
                 min-height: 540px;
