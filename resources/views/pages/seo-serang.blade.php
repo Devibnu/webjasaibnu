@@ -72,7 +72,7 @@
 @section('canonical', $canonicalUrl)
 @section('robots', 'index,follow')
 @section('og_type', 'website')
-@section('body_class', 'seo-serang-page')
+@section('body_class', 'startup2-home seo-serang-page')
 
 @push('head')
     <script type="application/ld+json">@json($serviceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
@@ -150,6 +150,13 @@
         .seo-serang-page .site-header .brand-text span { color: #68788b; }
         .seo-serang-page .site-header .menu-toggle { border-color: #cad8e6; background: #fff; }
         .seo-serang-page .site-header .menu-toggle span { background: var(--seo-navy); }
+
+        .seo-serang-page .startup-inner-shell .navbar { background: #fff !important; }
+        .seo-serang-page .startup-inner-shell .ji-header-logo-public { visibility: hidden; opacity: 0; }
+        .seo-serang-page .startup-inner-shell .ji-header-logo-dark { visibility: visible; opacity: 1; }
+        .seo-serang-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link { color: #17253a !important; }
+        .seo-serang-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link:hover,
+        .seo-serang-page .startup-inner-shell .navbar-dark .navbar-nav .nav-link.active { color: var(--seo-blue) !important; }
 
         .seo-serang-shell { width: min(100% - 40px, 1180px); margin-inline: auto; }
         .seo-serang-section { padding: 76px 0; }
