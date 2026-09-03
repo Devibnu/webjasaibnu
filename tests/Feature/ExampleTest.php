@@ -82,6 +82,7 @@ class ExampleTest extends TestCase
 
         $pages = [
             route('services.index') => 'Solusi Digital untuk Mendukung Pertumbuhan Bisnis Anda',
+            route('seo-serang') => 'Jasa SEO Serang untuk Meningkatkan Visibilitas Website Bisnis',
             route('website-development-serang') => 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional',
             route('website-development-banten') => 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional',
             route('website-development-serang-murah') => 'Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional',
@@ -373,6 +374,105 @@ class ExampleTest extends TestCase
 
             $this->assertSame(1, $this->anchorCountForUrl($response->getContent(), $nationalUrl));
         }
+    }
+
+    public function test_seo_serang_page_preserves_locked_contract_content_and_schema()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('seo-serang'));
+        $html = $response->getContent();
+        $canonical = 'https://jasaibnu.com/jasa-seo-serang';
+        $description = 'Jasa SEO Serang untuk membantu website bisnis lebih mudah dipahami Google melalui audit teknis, optimasi on-page, struktur konten, dan monitoring.';
+
+        $response
+            ->assertOk()
+            ->assertSee('<title>Jasa SEO Serang untuk Optimasi Website | JASAIBNU</title>', false)
+            ->assertSee('<meta name="description" content="' . $description . '">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . $canonical . '">', false)
+            ->assertSee('<meta property="og:title" content="Jasa SEO Serang untuk Optimasi Website | JASAIBNU">', false)
+            ->assertSee('<meta property="og:description" content="' . $description . '">', false)
+            ->assertSee('<meta property="og:url" content="' . $canonical . '">', false)
+            ->assertSee('<meta property="og:type" content="website">', false)
+            ->assertSee('<h1 id="seo-serang-title">Jasa SEO Serang untuk Meningkatkan Visibilitas Website Bisnis</h1>', false)
+            ->assertSee('class="seo-serang-visual" aria-hidden="true"', false)
+            ->assertSee('Konsultasi SEO via WhatsApp')
+            ->assertSee('Lihat Ruang Lingkup SEO')
+            ->assertSee('Kesiapan Crawl &amp; Indexing', false)
+            ->assertSee('Review Crawl, Indexing &amp; Performa', false)
+            ->assertSee('Review &amp; Monitoring Teknis', false)
+            ->assertSee('Konsultasikan SEO Website')
+            ->assertSee('href="' . route('website-development-serang') . '">jasa pembuatan website di Serang</a>', false)
+            ->assertSee('href="' . route('website-development') . '">layanan pembuatan website profesional</a>', false)
+            ->assertSee('href="' . route('insights.show', 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun') . '">panduan fondasi SEO teknis</a>', false)
+            ->assertSee('href="' . route('portfolio.index') . '">portfolio website JASAIBNU</a>', false)
+            ->assertSee('href="' . route('contact') . '" style="color: #fff;">hubungi tim JASAIBNU</a>', false)
+            ->assertDontSee('Ranking #1')
+            ->assertDontSee('traffic guarantee')
+            ->assertDontSee('backlink campaign')
+            ->assertDontSee('Google Partner')
+            ->assertDontSee('Google Search Console');
+
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
+        $this->assertSame(6, preg_match_all('/<details class="seo-serang-faq-item">/i', $html));
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $jsonLdMatches);
+        $schemas = collect($jsonLdMatches[1])->map(function ($json) {
+            $decoded = json_decode($json, true);
+            $this->assertIsArray($decoded, 'SEO Serang JSON-LD must be valid JSON.');
+
+            return $decoded;
+        });
+
+        $service = $schemas->firstWhere('@type', 'Service');
+        $breadcrumb = $schemas->firstWhere('@type', 'BreadcrumbList');
+        $faqPage = $schemas->firstWhere('@type', 'FAQPage');
+        $this->assertNotNull($service);
+        $this->assertNotNull($breadcrumb);
+        $this->assertNotNull($faqPage);
+        $this->assertSame(['@id' => 'https://jasaibnu.com#professional-service'], $service['provider'] ?? null);
+        $this->assertSame(['@type' => 'City', 'name' => 'Serang'], $service['areaServed'] ?? null);
+        $this->assertSame(['Home', 'Services', 'Jasa SEO Serang'], collect($breadcrumb['itemListElement'])->pluck('name')->all());
+        $this->assertCount(6, $faqPage['mainEntity'] ?? []);
+
+        foreach ($faqPage['mainEntity'] as $faq) {
+            $response->assertSee($faq['name']);
+            $response->assertSee($faq['acceptedAnswer']['text']);
+        }
+    }
+
+    public function test_approved_sources_link_to_seo_serang_without_touching_locked_landings()
+    {
+        $this->withoutVite();
+
+        $seoUrl = route('seo-serang');
+        $sources = [
+            route('home') => 'Lihat layanan SEO di Serang',
+            route('services.index') => 'Pelajari jasa SEO Serang',
+            route('insights.show', 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun') => 'layanan SEO untuk bisnis di Serang',
+            route('insights.show', 'cara-memilih-jasa-pembuatan-website-di-serang') => 'optimasi SEO lanjutan untuk website bisnis',
+        ];
+
+        foreach ($sources as $sourceUrl => $anchor) {
+            $response = $this->get($sourceUrl);
+            $response->assertOk()->assertSee('href="' . $seoUrl . '"', false)->assertSee($anchor);
+            $this->assertSame(1, $this->anchorCountForUrl($response->getContent(), $seoUrl));
+        }
+
+        foreach (['website-development', 'website-development-serang', 'website-development-serang-murah', 'website-development-umkm-serang', 'website-development-banten'] as $routeName) {
+            $protected = $this->get(route($routeName));
+            $protected->assertOk()->assertDontSee('href="' . $seoUrl . '"', false);
+        }
+    }
+
+    public function test_seo_serang_appears_once_in_sitemap()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('sitemap'));
+        $response->assertOk();
+        $this->assertSame(1, substr_count($response->getContent(), '<loc>' . route('seo-serang') . '</loc>'));
     }
 
     public function test_national_changes_do_not_modify_local_landing_page_output_contracts()
@@ -1819,6 +1919,7 @@ class ExampleTest extends TestCase
             '/jasa-pembuatan-website-banten',
             '/jasa-pembuatan-website-serang-murah',
             '/jasa-website-umkm-serang',
+            '/jasa-seo-serang',
             '/services',
             '/solutions',
             '/portfolio',

@@ -258,6 +258,9 @@
                             @endforeach
                             @if ($article->slug === 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun')
                                 <p>Jika fondasi ini perlu diterapkan sejak awal project, pelajari juga <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a> JASAIBNU.</p>
+                                <p>Jika fondasi teknis website Anda perlu ditinjau lebih lanjut, pelajari <a href="{{ route('seo-serang') }}">layanan SEO untuk bisnis di Serang</a> dari JASAIBNU.</p>
+                            @elseif ($article->slug === 'cara-memilih-jasa-pembuatan-website-di-serang')
+                                <p>Setelah website tersedia, bisnis juga dapat mempertimbangkan <a href="{{ route('seo-serang') }}">optimasi SEO lanjutan untuk website bisnis</a> agar struktur teknis dan halaman penting tetap terarah.</p>
                             @elseif ($article->slug === 'keamanan-website-bisnis-yang-tidak-boleh-diabaikan')
                                 <p>Keamanan dasar sebaiknya direncanakan sejak proses <a href="{{ route('website-development') }}">pengembangan website untuk bisnis</a>, bukan hanya setelah website online.</p>
                             @endif

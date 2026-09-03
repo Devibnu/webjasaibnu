@@ -91,6 +91,7 @@ Route::view('/jasa-website-umkm-serang', 'pages.website-development', [
         'badge' => 'Cocok untuk toko, jasa lokal, kuliner, bengkel, klinik, komunitas, dan usaha kecil di Serang yang ingin mulai serius online.',
     ],
 ])->name('website-development-umkm-serang');
+Route::view('/jasa-seo-serang', 'pages.seo-serang')->name('seo-serang');
 Route::get('/services', function () {
     return view('pages.services', [
         'services' => \App\Models\Service::active()->ordered()->get(),

@@ -128,6 +128,16 @@
                 overflow-wrap: anywhere;
             }
         }
+
+        .services-page .services-card-link.services-card-link-text {
+            width: auto;
+            min-width: 176px;
+            padding-inline: 12px;
+            margin-left: 0;
+            transform: translateX(-50%);
+            font-size: .78rem;
+            line-height: 1.2;
+        }
     </style>
 @endpush
 
@@ -145,9 +155,13 @@
                         <div class="services-card-icon" aria-hidden="true"><span>{{ $service->icon }}</span></div>
                         <h2>{{ $service->title }}</h2>
                         <p>{{ $service->description }}</p>
-                        <a class="services-card-link" href="{{ route('contact') }}" aria-label="Diskusikan {{ $service->title }}">
-                            <span aria-hidden="true">→</span>
-                        </a>
+                        @if ($service->slug === 'seo-services')
+                            <a class="services-card-link services-card-link-text" href="{{ route('seo-serang') }}">Pelajari jasa SEO Serang</a>
+                        @else
+                            <a class="services-card-link" href="{{ route('contact') }}" aria-label="Diskusikan {{ $service->title }}">
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        @endif
                     </article>
                 @endforeach
             </div>

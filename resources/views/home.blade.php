@@ -928,7 +928,7 @@
             <div class="row g-5">
                 @foreach ([
                     ['title' => 'Website Development', 'body' => 'Website perusahaan yang cepat, responsive, SEO-ready, dan mudah dikembangkan.', 'icon' => '01', 'url' => route('website-development-serang'), 'label' => 'Lihat Jasa Pembuatan Website di Serang'],
-                    ['title' => 'SEO Services', 'body' => 'Optimasi teknis, struktur konten, dan fondasi search visibility yang rapi untuk membantu website bisnis lebih mudah dipahami Google.', 'icon' => '02', 'url' => route('services.index'), 'label' => 'Lihat layanan SEO JASAIBNU'],
+                    ['title' => 'SEO Services', 'body' => 'Optimasi teknis, struktur konten, dan fondasi search visibility yang rapi untuk membantu website bisnis lebih mudah dipahami Google.', 'icon' => '02', 'url' => route('seo-serang'), 'label' => 'Lihat layanan SEO di Serang'],
                     ['title' => 'Web Application', 'body' => 'Aplikasi web custom untuk workflow, data, dan proses operasional bisnis.', 'icon' => '03', 'url' => route('services.index'), 'label' => 'Lihat layanan Web Application'],
                     ['title' => 'Mobile Application', 'body' => 'Aplikasi mobile untuk kebutuhan internal, pelanggan, atau operasional lapangan.', 'icon' => '04', 'url' => route('services.index'), 'label' => 'Lihat layanan Mobile Application'],
                     ['title' => 'SaaS Development', 'body' => 'Platform SaaS dengan fondasi produk, akun pengguna, dan roadmap fitur.', 'icon' => '05', 'url' => route('services.index'), 'label' => 'Lihat layanan SaaS Development'],
