@@ -40,6 +40,41 @@
     $conversionPortfolioItems = $isBantenLanding
         ? \App\Models\PortfolioItem::with('category')->published()->ordered()->limit(3)->get()
         : $nationalPortfolioItems;
+    $conversionFaqs = [
+        ['Berapa lama pembuatan website?', 'Durasi bergantung pada jumlah halaman dan fitur. Website company profile sederhana biasanya bisa dimulai dari kebutuhan konten dan desain yang sudah jelas.'],
+        ['Apakah website sudah SEO?', 'Kami menyiapkan fondasi SEO teknis seperti title, meta description, struktur heading, sitemap, canonical, dan performa halaman. Ranking Google tetap membutuhkan waktu, konten, dan authority.'],
+        ['Bisa dibuat dengan admin panel?', 'Bisa. Website dapat dibuat dengan CMS/admin panel agar konten seperti portfolio, artikel, layanan, atau pengaturan website bisa dikelola sendiri.'],
+        ['Bisa lanjut ke aplikasi web?', 'Bisa. Jika kebutuhan berkembang, website dapat dilanjutkan menjadi sistem bisnis, dashboard internal, SaaS, atau integrasi AI.'],
+        ['Apakah harga website sudah termasuk domain dan hosting?', 'Bisa disesuaikan. Kami dapat membantu menyiapkan domain, hosting, SSL, email bisnis, dan konfigurasi dasar sesuai kebutuhan project.'],
+        ['Apakah website bisa dipakai untuk iklan dan promosi?', 'Bisa. Website dapat disiapkan sebagai tujuan iklan Google, media sosial, WhatsApp campaign, atau landing page penawaran agar promosi lebih terukur.'],
+        ['Apakah ada revisi desain?', 'Ada. Revisi mengikuti scope yang disepakati di awal, agar desain, konten, dan fitur tetap terarah sampai website siap online.'],
+        ['Apakah bisa dibantu isi konten website?', 'Bisa. Kami dapat membantu menyusun struktur halaman dan copy awal seperti profil bisnis, layanan, keunggulan, CTA, dan FAQ.'],
+    ];
+
+    if ($isNationalLanding) {
+        $conversionFaqs[0][1] = 'Durasi ditentukan oleh jenis website, jumlah halaman dan fitur, kompleksitas desain, kesiapan konten, kebutuhan integrasi, serta siklus revisi. Timeline yang konkret disepakati saat kebutuhan dan ruang lingkup project sudah dipetakan.';
+        $conversionFaqs[1][1] = 'Website dapat disiapkan dengan fondasi SEO teknis dan on-page seperti title, meta description, struktur heading, sitemap, canonical, dan performa halaman sesuai scope. Optimasi SEO berkelanjutan dan pekerjaan ranking merupakan layanan terpisah kecuali dinyatakan dalam ruang lingkup project.';
+        $conversionFaqs[4][1] = 'Domain, hosting, SSL, email bisnis, dan konfigurasi dapat disiapkan sesuai ruang lingkup yang disepakati. Kepemilikan, akses, serta biaya perpanjangan dijelaskan secara transparan dalam penawaran karena kebutuhannya dapat berbeda pada setiap project.';
+        $conversionFaqs[6][1] = 'Ada. Revisi dilakukan berdasarkan ruang lingkup pekerjaan dan kesepakatan project yang disetujui sebelum development, sehingga perubahan desain, konten, dan fitur tetap terarah.';
+    }
+
+    $nationalServiceSchema = [
+        '@context' => 'https://schema.org', '@type' => 'Service',
+        '@id' => route('website-development') . '#service',
+        'name' => 'Jasa Pembuatan Website Profesional',
+        'description' => $landing['meta_description'], 'url' => route('website-development'),
+        'provider' => ['@id' => rtrim(route('home'), '/') . '#professional-service'],
+        'areaServed' => ['@type' => 'Country', 'name' => 'Indonesia'],
+        'serviceType' => 'Jasa pembuatan website',
+    ];
+    $nationalFaqSchema = [
+        '@context' => 'https://schema.org', '@type' => 'FAQPage',
+        '@id' => route('website-development') . '#faq',
+        'mainEntity' => collect($conversionFaqs)->map(fn ($faq) => [
+            '@type' => 'Question', 'name' => $faq[0],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq[1]],
+        ])->values()->all(),
+    ];
 @endphp
 
 @section('title', $landing['title'])
@@ -776,11 +811,18 @@
                 -webkit-line-clamp: 3;
             }
 
+            .national-proof-technology-label {
+                margin: 16px 0 0;
+                color: #637084;
+                font-size: .76rem;
+                font-weight: 700;
+            }
+
             .national-proof-tags {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 8px;
-                margin-top: 18px;
+                margin-top: 7px;
             }
 
             .national-proof-tags span {
@@ -1111,6 +1153,30 @@
                 font-weight: 800;
             }
 
+            .national-deliverables-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 14px;
+            }
+
+            .national-deliverable {
+                padding: 20px;
+                border: 1px solid #dfebf3;
+                border-radius: 8px;
+                background: #fff;
+            }
+
+            .national-deliverable h3 { margin: 0 0 8px; color: #091e3e; font-size: 1rem; }
+            .national-deliverable p { margin: 0; color: #626d7b; line-height: 1.62; }
+            .national-commercial-note {
+                margin: 20px 0 0;
+                padding: 18px 20px;
+                border-left: 3px solid #06a3da;
+                background: #eef9fd;
+                color: #425269;
+                line-height: 1.65;
+            }
+
             .national-faq-list {
                 display: grid;
                 max-width: 900px;
@@ -1350,6 +1416,7 @@
                 .national-faq-list { grid-template-columns: 1fr; max-width: 760px; }
                 .national-compact-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
                 .national-final-cta .seo-service-shell { align-items: flex-start; flex-direction: column; gap: 24px; }
+                .national-deliverables-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             }
 
             @media (max-width: 575.98px) {
@@ -1367,6 +1434,7 @@
                 .national-conversion-section { padding: 52px 0; }
                 .national-primary-card { min-height: 0; }
                 .national-compact-facts { grid-template-columns: 1fr; }
+                .national-deliverables-grid { grid-template-columns: 1fr; }
                 .national-proof-media,
                 .national-proof-media img { height: 210px; min-height: 210px; }
                 .national-process-grid { gap: 34px; }
@@ -1967,6 +2035,10 @@
             });
         </script>
     @endif
+    @if ($isNationalLanding)
+        <script type="application/ld+json">@json($nationalServiceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
+        <script type="application/ld+json">@json($nationalFaqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
+    @endif
 @endpush
 
 @section('content')
@@ -2187,6 +2259,27 @@
             </div>
         </section>
 
+        @if ($isNationalLanding)
+            <section class="national-conversion-section alt" aria-labelledby="national-deliverables-title">
+                <div class="seo-service-shell">
+                    <div class="national-conversion-heading">
+                        <p class="seo-service-label">Ruang lingkup project</p>
+                        <h2 id="national-deliverables-title">Yang dapat disiapkan dalam project website Anda.</h2>
+                        <p>Deliverables menyesuaikan kebutuhan dan ruang lingkup project yang disepakati sebelum development.</p>
+                    </div>
+                    <div class="national-deliverables-grid">
+                        <article class="national-deliverable"><h3>Responsive &amp; mobile-friendly</h3><p>Tampilan disiapkan agar nyaman digunakan pada perangkat mobile, tablet, dan desktop.</p></article>
+                        <article class="national-deliverable"><h3>CMS atau admin panel</h3><p>Akses pengelolaan konten dapat disiapkan bila kebutuhan project memerlukan pembaruan mandiri.</p></article>
+                        <article class="national-deliverable"><h3>Fondasi SEO teknis</h3><p>Struktur heading, metadata, canonical, sitemap, dan kesiapan indexing disusun sesuai kebutuhan halaman.</p></article>
+                        <article class="national-deliverable"><h3>Performa &amp; keamanan dasar</h3><p>Struktur asset, validasi input, HTTPS, dan pengujian dasar disiapkan sebagai fondasi website.</p></article>
+                        <article class="national-deliverable"><h3>Kontak &amp; lead generation</h3><p>Form, WhatsApp, atau jalur kontak lain dapat disusun agar pengunjung mudah menghubungi bisnis.</p></article>
+                        <article class="national-deliverable"><h3>Deployment &amp; go-live</h3><p>Pengujian dan bantuan penyiapan website hingga online dilakukan mengikuti lingkungan dan scope project.</p></article>
+                    </div>
+                    <p class="national-commercial-note"><strong>Akses dan handover:</strong> serah terima dapat mencakup akses CMS/admin, deployment, domain atau hosting, serta dokumentasi yang relevan sesuai kebutuhan dan kesepakatan project. Ketersediaan support, maintenance, dan pengembangan setelah go-live mengikuti pengaturan yang disepakati secara terpisah.</p>
+                </div>
+            </section>
+        @endif
+
         @if ($conversionPortfolioItems->isNotEmpty())
             <section class="national-service-section" aria-labelledby="national-proof-title">
                 <div class="seo-service-shell">
@@ -2210,6 +2303,7 @@
                                     <h3>{{ $item->title }}</h3>
                                     <p class="national-proof-excerpt">{{ $item->excerpt ?: $item->description }}</p>
                                     @if ($item->technologyList())
+                                        <p class="national-proof-technology-label">Teknologi yang digunakan</p>
                                         <div class="national-proof-tags" aria-label="Teknologi {{ $item->title }}">
                                             @foreach ($item->technologyList() as $technology)
                                                 <span>{{ $technology }}</span>
@@ -2309,16 +2403,7 @@
                     <h2 id="website-faq-title">Pertanyaan umum tentang jasa pembuatan website.</h2>
                 </div>
                 @php
-                    $nationalFaqs = [
-                        ['Berapa lama pembuatan website?', 'Durasi bergantung pada jumlah halaman dan fitur. Website company profile sederhana biasanya bisa dimulai dari kebutuhan konten dan desain yang sudah jelas.'],
-                        ['Apakah website sudah SEO?', 'Kami menyiapkan fondasi SEO teknis seperti title, meta description, struktur heading, sitemap, canonical, dan performa halaman. Ranking Google tetap membutuhkan waktu, konten, dan authority.'],
-                        ['Bisa dibuat dengan admin panel?', 'Bisa. Website dapat dibuat dengan CMS/admin panel agar konten seperti portfolio, artikel, layanan, atau pengaturan website bisa dikelola sendiri.'],
-                        ['Bisa lanjut ke aplikasi web?', 'Bisa. Jika kebutuhan berkembang, website dapat dilanjutkan menjadi sistem bisnis, dashboard internal, SaaS, atau integrasi AI.'],
-                        ['Apakah harga website sudah termasuk domain dan hosting?', 'Bisa disesuaikan. Kami dapat membantu menyiapkan domain, hosting, SSL, email bisnis, dan konfigurasi dasar sesuai kebutuhan project.'],
-                        ['Apakah website bisa dipakai untuk iklan dan promosi?', 'Bisa. Website dapat disiapkan sebagai tujuan iklan Google, media sosial, WhatsApp campaign, atau landing page penawaran agar promosi lebih terukur.'],
-                        ['Apakah ada revisi desain?', 'Ada. Revisi mengikuti scope yang disepakati di awal, agar desain, konten, dan fitur tetap terarah sampai website siap online.'],
-                        ['Apakah bisa dibantu isi konten website?', 'Bisa. Kami dapat membantu menyusun struktur halaman dan copy awal seperti profil bisnis, layanan, keunggulan, CTA, dan FAQ.'],
-                    ];
+                    $nationalFaqs = $conversionFaqs;
                 @endphp
                 <div class="national-faq-list">
                     @foreach ($nationalFaqs as $index => [$question, $answer])

@@ -421,6 +421,87 @@ class ExampleTest extends TestCase
         }
     }
 
+    public function test_national_commercial_reinforcement_preserves_contract_and_schema_parity()
+    {
+        $this->withoutVite();
+
+        SiteSetting::current()->update([
+            'city' => 'Serang',
+            'region' => 'Banten',
+            'country' => 'Indonesia',
+        ]);
+
+        $response = $this->get(route('website-development'));
+        $html = $response->getContent();
+        $description = 'JASAIBNU menyediakan jasa pembuatan website profesional untuk company profile, landing page, website bisnis, SEO, dan sistem web yang cepat, aman, dan mudah dikembangkan.';
+
+        $response->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Profesional | JASAIBNU</title>', false)
+            ->assertSee('<meta name="description" content="' . $description . '">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . route('website-development') . '">', false)
+            ->assertSee('<h1 id="website-service-title">Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh</h1>', false)
+            ->assertSee('Yang dapat disiapkan dalam project website Anda.')
+            ->assertSee('Deliverables menyesuaikan kebutuhan dan ruang lingkup project')
+            ->assertSee('Akses dan handover:')
+            ->assertSee('Optimasi SEO berkelanjutan dan pekerjaan ranking merupakan layanan terpisah')
+            ->assertDontSee('unlimited revisions')
+            ->assertDontSee('gratis domain')
+            ->assertDontSee('garansi ranking');
+
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
+        $this->assertSame(1, $this->anchorCountForUrl($html, route('website-development-banten')));
+        $response->assertSee('href="' . route('website-development-banten') . '">jasa pembuatan website Banten</a>', false);
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $matches);
+        $schemas = collect($matches[1])->map(function ($json) {
+            $schema = json_decode($json, true);
+            $this->assertIsArray($schema, 'National JSON-LD must be valid JSON.');
+            return $schema;
+        });
+        $service = $schemas->firstWhere('@type', 'Service');
+        $faqPage = $schemas->firstWhere('@type', 'FAQPage');
+        $professionalService = $schemas->firstWhere('@type', 'ProfessionalService');
+
+        $this->assertNotNull($service);
+        $this->assertNotNull($faqPage);
+        $this->assertSame(['@id' => rtrim(route('home'), '/') . '#professional-service'], $service['provider'] ?? null);
+        $this->assertSame(['@type' => 'Country', 'name' => 'Indonesia'], $service['areaServed'] ?? null);
+        $this->assertCount(8, $faqPage['mainEntity'] ?? []);
+        foreach ($faqPage['mainEntity'] as $faq) {
+            $response->assertSee($faq['name']);
+            $response->assertSee($faq['acceptedAnswer']['text']);
+        }
+        $this->assertSame(rtrim(route('home'), '/') . '#professional-service', $professionalService['@id'] ?? null);
+        $this->assertContains(['@type' => 'City', 'name' => 'Serang'], $professionalService['areaServed'] ?? []);
+        $this->assertContains(['@type' => 'AdministrativeArea', 'name' => 'Banten'], $professionalService['areaServed'] ?? []);
+        $this->assertContains(['@type' => 'Country', 'name' => 'Indonesia'], $professionalService['areaServed'] ?? []);
+        $this->assertStringNotContainsString('"@type":"AggregateRating"', $html);
+        $this->assertStringNotContainsString('"@type":"Review"', $html);
+        $this->assertStringNotContainsString('"@type":"Offer"', json_encode($service));
+        $this->assertSame(0, substr_count($html, '"@type": "Country",\n            "name": "Banten"'));
+
+        $this->get('/jasa-website-profesional')->assertNotFound();
+
+        $sitemap = $this->get(route('sitemap'));
+        $sitemap->assertOk();
+        $this->assertSame(1, substr_count($sitemap->getContent(), '<loc>' . route('website-development') . '</loc>'));
+        $this->assertMatchesRegularExpression('/<loc>' . preg_quote(route('website-development'), '/') . '<\/loc>\s*<changefreq>weekly<\/changefreq>\s*<priority>0\.95<\/priority>/', $sitemap->getContent());
+    }
+
+    public function test_homepage_links_once_to_national_website_service_without_replacing_local_links()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('home'));
+        $response->assertOk()
+            ->assertSee('href="' . route('website-development') . '">layanan pembuatan website profesional</a>', false)
+            ->assertSee(route('website-development-serang'), false)
+            ->assertSee(route('website-development-banten'), false)
+            ->assertSee(route('website-development-umkm-serang'), false);
+        $this->assertSame(1, $this->anchorCountForUrl($response->getContent(), route('website-development')));
+    }
+
     public function test_seo_serang_page_preserves_locked_contract_content_and_schema()
     {
         $this->withoutVite();
