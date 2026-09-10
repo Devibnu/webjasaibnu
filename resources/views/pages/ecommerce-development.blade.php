@@ -59,38 +59,65 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .ecommerce-service-page { --ec-navy:#071b36; --ec-blue:#0967d2; --ec-cyan:#00aee8; --ec-pale:#f1f8ff; --ec-line:#dce9f6; color:#172b44; font-family:"Rubik",sans-serif; overflow-x:hidden; }
+        .ecommerce-service-page { --ec-navy:#071b36; --ec-blue:#0967d2; --ec-cyan:#00aee8; --ec-pale:#f4f9fe; --ec-line:#dce9f6; --ec-muted:#52677f; color:#172b44; font-family:"Rubik",sans-serif; overflow-x:hidden; }
         .ec-shell { width:min(100% - 40px,1160px); margin-inline:auto; }
-        .ec-hero { position:relative; padding:clamp(72px,9vw,120px) 0; overflow:hidden; background:radial-gradient(circle at 80% 20%,rgba(0,174,232,.28),transparent 27%),linear-gradient(135deg,#071b36,#0b315d); color:#fff; }
-        .ec-hero-grid { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(340px,.92fr); gap:72px; align-items:center; }
+        .ec-hero { position:relative; padding:clamp(72px,9vw,118px) 0; overflow:hidden; background:linear-gradient(135deg,#071b36 0%,#0a315c 100%); color:#fff; }
+        .ec-hero::after { position:absolute; inset:auto -10% -45% auto; width:520px; height:520px; border:1px solid rgba(0,174,232,.18); border-radius:50%; content:""; }
+        .ec-hero-grid { position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1.08fr) minmax(380px,.92fr); gap:64px; align-items:center; }
         .ec-kicker,.ec-eyebrow { margin:0 0 14px; color:var(--ec-cyan); font:800 .78rem/1.2 "Nunito",sans-serif; letter-spacing:.14em; text-transform:uppercase; }
         .ec-hero h1 { max-width:790px; margin:0; color:#fff; font-size:clamp(2.35rem,5vw,4.35rem); line-height:1.04; letter-spacing:-.045em; }
         .ec-hero-copy { max-width:720px; margin:24px 0 0; color:#dcecff; font-size:clamp(1rem,1.6vw,1.16rem); line-height:1.75; }
         .ec-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
-        .ec-button { display:inline-flex; min-height:50px; align-items:center; justify-content:center; padding:13px 22px; border:1px solid var(--ec-cyan); border-radius:8px; background:var(--ec-cyan); color:#03182e; font-weight:800; text-decoration:none; transition:.2s ease; }
-        .ec-button:hover { transform:translateY(-2px); color:#03182e; }
+        .ec-button { display:inline-flex; min-height:50px; align-items:center; justify-content:center; padding:13px 22px; border:1px solid var(--ec-cyan); border-radius:10px; background:var(--ec-cyan); color:#03182e; font-weight:800; text-decoration:none; box-shadow:0 10px 24px rgba(0,174,232,.16); transition:transform .2s ease,box-shadow .2s ease,background .2s ease; }
+        .ec-button:hover { transform:translateY(-2px); color:#03182e; box-shadow:0 14px 30px rgba(0,174,232,.24); }
         .ec-button.secondary { border-color:rgba(255,255,255,.42); background:transparent; color:#fff; }
-        .ec-hero-panel { padding:28px; border:1px solid rgba(255,255,255,.16); border-radius:20px; background:rgba(255,255,255,.08); box-shadow:0 24px 70px rgba(0,0,0,.24); backdrop-filter:blur(10px); }
-        .ec-hero-flow { display:grid; gap:12px; }
-        .ec-hero-flow div { display:flex; gap:14px; align-items:center; padding:15px; border-radius:12px; background:rgba(255,255,255,.09); }
-        .ec-hero-flow span { display:grid; width:34px; height:34px; flex:0 0 34px; place-items:center; border-radius:50%; background:var(--ec-cyan); color:#05203b; font-weight:800; }
+        .ec-button:focus-visible,.ec-table-wrap:focus-visible,.ec-faq summary:focus-visible,.ec-solution-link:focus-visible { outline:3px solid #ffd65a; outline-offset:3px; }
+        .ec-solution-link { display:inline-block; margin-top:18px; color:#bcecff; font-weight:700; text-underline-offset:4px; }
+        .ec-trust-list { display:flex; flex-wrap:wrap; gap:10px 18px; margin:28px 0 0; padding:0; list-style:none; color:#dcecff; font-size:.88rem; }
+        .ec-trust-list li::before { margin-right:8px; color:var(--ec-cyan); content:"✓"; font-weight:800; }
+        .ec-storefront { position:relative; padding:14px; border:1px solid rgba(255,255,255,.18); border-radius:22px; background:rgba(255,255,255,.09); box-shadow:0 28px 70px rgba(0,0,0,.28); }
+        .ec-browser { overflow:hidden; border-radius:15px; background:#fff; color:var(--ec-navy); }
+        .ec-browser-bar { display:flex; gap:6px; padding:12px 14px; border-bottom:1px solid var(--ec-line); background:#f5f8fb; }
+        .ec-browser-bar i { width:7px; height:7px; border-radius:50%; background:#b8c6d4; }
+        .ec-browser-body { padding:20px; }
+        .ec-browser-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .ec-browser-head strong { font-size:.95rem; }
+        .ec-browser-head span { padding:6px 9px; border-radius:8px; background:#e8f7fd; color:#0879a1; font-size:.72rem; font-weight:800; }
+        .ec-product-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:18px; }
+        .ec-product { padding:8px; border:1px solid var(--ec-line); border-radius:10px; }
+        .ec-product-image { height:64px; border-radius:7px; background:#eaf3fb; }
+        .ec-product b,.ec-product small { display:block; }
+        .ec-product b { margin-top:8px; font-size:.66rem; }
+        .ec-product small { margin-top:4px; color:#657a90; font-size:.56rem; }
+        .ec-commerce-bar { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+        .ec-commerce-bar div { padding:11px; border-radius:9px; background:var(--ec-pale); }
+        .ec-commerce-bar small,.ec-commerce-bar strong { display:block; }
+        .ec-commerce-bar small { color:#6d8094; font-size:.58rem; }
+        .ec-commerce-bar strong { margin-top:3px; font-size:.72rem; }
+        .ec-order-card { position:absolute; right:-24px; bottom:32px; width:155px; padding:14px; border:1px solid var(--ec-line); border-radius:13px; background:#fff; color:var(--ec-navy); box-shadow:0 18px 40px rgba(0,0,0,.2); }
+        .ec-order-card span { display:block; color:#60758a; font-size:.64rem; }
+        .ec-order-card strong { display:block; margin-top:4px; font-size:.82rem; }
+        .ec-order-card i { display:block; height:5px; margin-top:10px; border-radius:5px; background:linear-gradient(90deg,var(--ec-cyan) 72%,#e4edf5 72%); }
         .ec-section { padding:clamp(64px,8vw,104px) 0; }
         .ec-section.alt { background:var(--ec-pale); }
         .ec-heading { max-width:820px; margin-bottom:36px; }
         .ec-heading h2 { margin:0; color:var(--ec-navy); font-size:clamp(1.85rem,3.6vw,3rem); line-height:1.14; letter-spacing:-.035em; }
         .ec-heading > p:last-child { margin:18px 0 0; color:#52677f; line-height:1.75; }
         .ec-problem-grid,.ec-audience-grid,.ec-foundation-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
-        .ec-card { padding:26px; border:1px solid var(--ec-line); border-radius:16px; background:#fff; box-shadow:0 12px 34px rgba(20,60,100,.06); }
+        .ec-card { padding:26px; border:1px solid var(--ec-line); border-radius:16px; background:#fff; box-shadow:0 12px 34px rgba(20,60,100,.06); transition:transform .2s ease,border-color .2s ease; }
+        .ec-card:hover { transform:translateY(-3px); border-color:#b6d6f1; }
         .ec-card strong { display:block; margin-bottom:12px; color:var(--ec-blue); }
         .ec-card h3 { margin:0 0 10px; color:var(--ec-navy); font-size:1.12rem; }
         .ec-card p { margin:0; color:#5a6e84; line-height:1.65; }
-        .ec-level-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
-        .ec-level { display:grid; grid-template-columns:auto 1fr; gap:20px; padding:30px; border:1px solid var(--ec-line); border-radius:18px; background:#fff; }
+        .ec-level-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+        .ec-level { display:flex; min-width:0; flex-direction:column; padding:24px; border:1px solid var(--ec-line); border-radius:18px; background:#fff; box-shadow:0 12px 32px rgba(20,60,100,.05); }
         .ec-level-number { display:grid; width:54px; height:54px; place-items:center; border-radius:14px; background:var(--ec-navy); color:#fff; font-weight:800; }
-        .ec-level h3 { margin:0 0 8px; color:var(--ec-navy); font-size:1.35rem; }
+        .ec-level h3 { margin:20px 0 8px; color:var(--ec-navy); font-size:1.15rem; }
         .ec-level p { margin:0 0 14px; color:#5a6e84; line-height:1.6; }
-        .ec-level ul { margin:0 0 20px; padding-left:20px; color:#314b67; line-height:1.75; }
-        .ec-level .ec-button { min-height:42px; padding:9px 16px; font-size:.9rem; }
+        .ec-level ul { margin:0 0 22px; padding-left:20px; color:#314b67; font-size:.9rem; line-height:1.7; }
+        .ec-level .ec-level-content { display:flex; height:100%; flex-direction:column; }
+        .ec-level .ec-button { width:100%; margin-top:auto; text-align:center; }
+        .ec-level .ec-button { min-height:44px; padding:9px 16px; font-size:.9rem; }
         .ec-table-wrap { overflow-x:auto; border:1px solid var(--ec-line); border-radius:16px; background:#fff; -webkit-overflow-scrolling:touch; }
         .ec-table { width:100%; min-width:760px; border-collapse:collapse; text-align:center; }
         .ec-table th,.ec-table td { padding:16px 14px; border-bottom:1px solid var(--ec-line); }
@@ -120,17 +147,24 @@
         .ec-integration-aside p { margin-bottom:0; color:#d6e6f6; line-height:1.7; }
         .ec-faq { display:grid; gap:12px; }
         .ec-faq details { border:1px solid var(--ec-line); border-radius:12px; background:#fff; }
-        .ec-faq summary { padding:20px 54px 20px 22px; color:var(--ec-navy); font-weight:800; cursor:pointer; }
+        .ec-faq summary { position:relative; padding:20px 58px 20px 22px; color:var(--ec-navy); font-weight:800; cursor:pointer; list-style:none; }
+        .ec-faq summary::-webkit-details-marker { display:none; }
+        .ec-faq summary::after { position:absolute; top:50%; right:22px; color:var(--ec-blue); content:"+"; font-size:1.5rem; line-height:1; transform:translateY(-50%); }
+        .ec-faq details[open] summary::after { content:"−"; }
         .ec-faq details p { margin:0; padding:0 22px 22px; color:#52677f; line-height:1.7; }
-        .ec-final { padding:64px 0; background:linear-gradient(135deg,var(--ec-blue),#073764); color:#fff; }
+        .ec-final { padding:64px 0; background:#073764; color:#fff; }
         .ec-final-row { display:flex; gap:32px; align-items:center; justify-content:space-between; }
         .ec-final h2 { max-width:720px; margin:0; font-size:clamp(1.8rem,3.5vw,2.8rem); }
         .ec-final p { max-width:700px; margin:14px 0 0; color:#dcecff; line-height:1.7; }
         .ec-final .ec-button { flex:0 0 auto; }
         .ec-portfolio-link { margin-top:28px; }
-        @media (max-width:1024px) { .ec-hero-grid { grid-template-columns:1fr; gap:40px; } .ec-hero-panel { max-width:700px; } .ec-problem-grid,.ec-audience-grid,.ec-foundation-grid { grid-template-columns:repeat(2,1fr); } .ec-process { grid-template-columns:repeat(3,1fr); } }
-        @media (max-width:768px) { .ec-shell { width:min(100% - 30px,1160px); } .ec-level-grid,.ec-flow-grid,.ec-integration { grid-template-columns:1fr; } .ec-process { grid-template-columns:1fr 1fr; } .ec-final-row { align-items:flex-start; flex-direction:column; } }
-        @media (max-width:480px) { .ec-hero { padding:58px 0 68px; } .ec-hero h1 { font-size:clamp(2rem,11vw,2.7rem); } .ec-actions,.ec-actions .ec-button { width:100%; } .ec-problem-grid,.ec-audience-grid,.ec-foundation-grid,.ec-process,.ec-integration-list { grid-template-columns:1fr; } .ec-level { grid-template-columns:1fr; padding:24px; } .ec-card { padding:22px; } }
+        @media (max-width:1100px) { .ec-level-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+        @media (max-width:1024px) { .ec-hero-grid { grid-template-columns:1fr; gap:46px; } .ec-storefront { max-width:700px; } .ec-problem-grid,.ec-audience-grid,.ec-foundation-grid { grid-template-columns:repeat(2,1fr); } .ec-process { grid-template-columns:repeat(3,1fr); } }
+        @media (min-width:769px) { .ec-table-wrap { overflow-x:visible; } .ec-table { min-width:0; } }
+        @media (max-width:768px) { .ec-shell { width:min(100% - 30px,1160px); } .ec-flow-grid,.ec-integration { grid-template-columns:1fr; } .ec-process { grid-template-columns:1fr 1fr; } .ec-final-row { align-items:flex-start; flex-direction:column; } .ec-order-card { right:-4px; } }
+        @media (max-width:560px) { .ec-level-grid { grid-template-columns:1fr; } }
+        @media (max-width:480px) { .ec-hero { padding:58px 0 68px; } .ec-hero h1 { font-size:clamp(2rem,11vw,2.7rem); } .ec-actions,.ec-actions .ec-button { width:100%; } .ec-problem-grid,.ec-audience-grid,.ec-foundation-grid,.ec-process,.ec-integration-list { grid-template-columns:1fr; } .ec-card,.ec-level { padding:22px; } .ec-storefront { padding:9px; } .ec-browser-body { padding:14px; } .ec-order-card { display:none; } }
+        @media (prefers-reduced-motion:reduce) { .ec-button,.ec-card { transition:none; } }
     </style>
     <script type="application/ld+json">@json($serviceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
     <script type="application/ld+json">@json($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
@@ -145,16 +179,23 @@
                 <p class="ec-hero-copy">Mulai dari katalog dengan pemesanan WhatsApp, toko online standar dengan cart dan checkout, ecommerce lengkap, hingga integrasi custom untuk kebutuhan operasional yang lebih kompleks.</p>
                 <div class="ec-actions">
                     <a class="ec-button" href="{{ $whatsappUrl }}" @if(str_starts_with($whatsappUrl, 'http')) target="_blank" rel="noopener noreferrer" @endif>Konsultasikan Toko Online Anda</a>
-                    <a class="ec-button secondary" href="#jenis-solusi">Pilih Jenis Solusi</a>
+                    <a class="ec-button secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio JASAIBNU</a>
                 </div>
+                <a class="ec-solution-link" href="#jenis-solusi">Pilih Jenis Solusi ↓</a>
+                <ul class="ec-trust-list" aria-label="Pendekatan layanan"><li>Empat tingkat solusi</li><li>Scope sesuai kebutuhan</li><li>Konsultasi sebelum development</li></ul>
             </div>
-            <div class="ec-hero-panel" aria-label="Pilihan tingkat solusi toko online">
-                <div class="ec-hero-flow">
-                    <div><span>1</span><strong>Katalog dan order WhatsApp</strong></div>
-                    <div><span>2</span><strong>Cart, checkout, dan pembayaran</strong></div>
-                    <div><span>3</span><strong>Operasional ecommerce lengkap</strong></div>
-                    <div><span>4</span><strong>Workflow dan integrasi custom</strong></div>
+            <div class="ec-storefront" aria-hidden="true">
+                <div class="ec-browser">
+                    <div class="ec-browser-bar"><i></i><i></i><i></i></div>
+                    <div class="ec-browser-body">
+                        <div class="ec-browser-head"><strong>Katalog Produk</strong><span>Cart · Checkout</span></div>
+                        <div class="ec-product-grid">
+                            @foreach(['Produk A','Produk B','Produk C'] as $product)<div class="ec-product"><div class="ec-product-image"></div><b>{{ $product }}</b><small>Detail produk</small></div>@endforeach
+                        </div>
+                        <div class="ec-commerce-bar"><div><small>Pengelolaan</small><strong>Order & stok</strong></div><div><small>Integrasi</small><strong>Payment & ongkir</strong></div></div>
+                    </div>
                 </div>
+                <div class="ec-order-card"><span>Alur ecommerce</span><strong>Sesuai proses bisnis</strong><i></i></div>
             </div>
         </div>
     </section>
@@ -179,7 +220,7 @@
                     @php $levelMessage = $whatsappMessage . "\n\nPilihan awal: " . $level['name']; $levelUrl = $ecommerceSiteSettings->whatsappContactUrl($levelMessage) ?: route('contact'); @endphp
                     <article class="ec-level">
                         <span class="ec-level-number">{{ $level['number'] }}</span>
-                        <div><h3>{{ $level['name'] }}</h3><p>{{ $level['summary'] }}</p><ul>@foreach($level['features'] as $feature)<li>{{ $feature }}</li>@endforeach</ul><a class="ec-button" href="{{ $levelUrl }}" @if(str_starts_with($levelUrl, 'http')) target="_blank" rel="noopener noreferrer" @endif>{{ $level['number'] === '04' ? 'Diskusikan Custom Ecommerce' : 'Konsultasikan ' . $level['name'] }}</a></div>
+                        <div class="ec-level-content"><h3>{{ $level['name'] }}</h3><p>{{ $level['summary'] }}</p><ul>@foreach($level['features'] as $feature)<li>{{ $feature }}</li>@endforeach</ul><a class="ec-button" href="{{ $levelUrl }}" @if(str_starts_with($levelUrl, 'http')) target="_blank" rel="noopener noreferrer" @endif>{{ $level['number'] === '04' ? 'Diskusikan Custom Ecommerce' : 'Konsultasikan ' . $level['name'] }}</a></div>
                     </article>
                 @endforeach
             </div>
@@ -205,7 +246,7 @@
 
     <section class="ec-section" aria-labelledby="commerce-flow-title"><div class="ec-shell"><div class="ec-heading"><p class="ec-eyebrow">Dua sisi satu sistem</p><h2 id="commerce-flow-title">Rancang alur belanja pelanggan dan alur kerja tim dalam satu scope.</h2><p>Tahapan yang digunakan mengikuti tingkat layanan; tidak setiap solusi memerlukan seluruh langkah.</p></div><div class="ec-flow-grid"><article class="ec-flow-card"><h3>Sisi pelanggan</h3><div class="ec-flow-steps"><span>Katalog</span><b>→</b><span>Produk</span><b>→</b><span>Cart atau WhatsApp</span><b>→</b><span>Checkout</span><b>→</b><span>Pembayaran</span></div><p class="ec-flow-note">Pada toko sederhana, pelanggan dapat langsung berpindah dari detail produk ke WhatsApp tanpa cart dan checkout.</p></article><article class="ec-flow-card"><h3>Sisi operasional</h3><div class="ec-flow-steps"><span>Produk</span><b>→</b><span>Stok</span><b>→</b><span>Order</span><b>→</b><span>Status</span><b>→</b><span>Integrasi</span></div><p class="ec-flow-note">Pengelolaan stok, order, status, dan integrasi digunakan pada level yang membutuhkannya.</p></article></div></div></section>
 
-    <section class="ec-section alt" aria-labelledby="development-process-title"><div class="ec-shell"><div class="ec-heading"><p class="ec-eyebrow">Proses pengembangan</p><h2 id="development-process-title">Proses pengembangan dimulai dari pemetaan kebutuhan.</h2></div><div class="ec-process">@foreach([['Analisis alur penjualan','Memahami produk, pelanggan, transaksi, dan proses operasional.'],['Penentuan level dan scope','Memilih tingkat solusi serta fungsi yang benar-benar diperlukan.'],['Desain dan development','Menyusun pengalaman pelanggan dan pengelolaan sistem.'],['Pengujian alur transaksi','Memeriksa alur yang termasuk dalam scope sebelum peluncuran.'],['Go-live dan handover','Menyiapkan peluncuran serta akses pengelolaan sesuai kesepakatan.']] as $index => $step)<article><span>0{{ $index + 1 }}</span><h3>{{ $step[0] }}</h3><p>{{ $step[1] }}</p></article>@endforeach</div></div></section>
+    <section class="ec-section alt" aria-labelledby="development-process-title"><div class="ec-shell"><div class="ec-heading"><p class="ec-eyebrow">Proses pengembangan</p><h2 id="development-process-title">Proses pengembangan dimulai dari pemetaan kebutuhan.</h2></div><div class="ec-process">@foreach([['Konsultasi','Memahami produk, pelanggan, transaksi, dan proses operasional.'],['Perencanaan','Memilih tingkat solusi serta fungsi yang benar-benar diperlukan.'],['Pengembangan','Menyusun pengalaman pelanggan dan pengelolaan sistem.'],['Pengujian','Memeriksa alur yang termasuk dalam scope sebelum peluncuran.'],['Go Live','Menyiapkan peluncuran serta akses pengelolaan sesuai kesepakatan.']] as $index => $step)<article><span>0{{ $index + 1 }}</span><h3>{{ $step[0] }}</h3><p>{{ $step[1] }}</p></article>@endforeach</div></div></section>
 
     <section class="ec-section" aria-labelledby="integration-title"><div class="ec-shell ec-integration"><div><div class="ec-heading"><p class="ec-eyebrow">Custom ecommerce</p><h2 id="integration-title">Integrasi ecommerce untuk kebutuhan operasional yang lebih kompleks.</h2><p>Custom Ecommerce digunakan ketika website perlu mengikuti workflow khusus atau bertukar data dengan sistem lain.</p></div><div class="ec-integration-list"><div>ERP integration</div><div>POS integration</div><div>API integration</div><div>Marketplace integration</div><div>Custom workflow</div><div>Sistem lain sesuai scope</div></div></div><aside class="ec-integration-aside"><h3>Discovery sebelum integrasi</h3><p>Sistem, data, hak akses, dependensi, dan alur operasional perlu dipetakan sebelum scope integrasi ditetapkan. Integrasi tidak diasumsikan kompatibel dengan provider tertentu tanpa pemeriksaan teknis.</p></aside></div></section>
 
