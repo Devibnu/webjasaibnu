@@ -2220,6 +2220,9 @@
                         <span aria-hidden="true">⌑</span>
                         <h3>Website Toko Online</h3>
                         <p>Katalog produk dan informasi bisnis dengan jalur pemesanan melalui WhatsApp atau form.</p>
+                        @if ($isNationalLanding)
+                            <a href="{{ route('website-development-ecommerce') }}">Pelajari solusi website toko online dan ecommerce</a>
+                        @endif
                     </article>
                     <article class="national-primary-card">
                         <span aria-hidden="true">▤</span>

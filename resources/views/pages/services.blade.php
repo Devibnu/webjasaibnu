@@ -198,6 +198,10 @@
                 <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a>
                 yang mencakup perencanaan, development, testing, dan persiapan go-live.
             </p>
+            <p class="mt-3 mb-0">
+                Untuk bisnis yang membutuhkan katalog, checkout, pengelolaan pesanan, atau integrasi sistem, pelajari
+                <a href="{{ route('website-development-ecommerce') }}">jasa pembuatan website toko online</a>.
+            </p>
             <p class="mt-4 mb-0">
                 Untuk kebutuhan lokal, JASAIBNU juga menyediakan
                 <a href="{{ route('website-development-serang') }}">Jasa Pembuatan Website di Serang</a>,

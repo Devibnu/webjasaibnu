@@ -35,6 +35,8 @@ Route::get('/jasa-pembuatan-website', function () {
             ->get(),
     ]);
 })->name('website-development');
+Route::view('/jasa-pembuatan-website-toko-online', 'pages.ecommerce-development')
+    ->name('website-development-ecommerce');
 Route::view('/jasa-pembuatan-website-serang', 'pages.website-development', [
     'landing' => [
         'title' => 'Jasa Pembuatan Website Serang & Banten | JASAIBNU',

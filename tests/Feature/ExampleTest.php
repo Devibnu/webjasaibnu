@@ -398,6 +398,120 @@ class ExampleTest extends TestCase
             ->assertDontSee('National Draft Website Proof');
     }
 
+    public function test_ecommerce_landing_preserves_its_locked_contract_and_cannibalization_guards()
+    {
+        $this->withoutVite();
+
+        SiteSetting::current()->update([
+            'whatsapp_number' => '6281234567890',
+            'whatsapp_url' => null,
+        ]);
+
+        $url = route('website-development-ecommerce');
+        $response = $this->get($url);
+        $html = $response->getContent();
+        $title = 'Jasa Pembuatan Website Toko Online & Ecommerce | JASAIBNU';
+        $description = 'JASAIBNU menyediakan jasa pembuatan website toko online dari katalog WhatsApp, cart dan checkout, hingga ecommerce lengkap dan integrasi custom.';
+        $h1 = 'Jasa Pembuatan Website Toko Online untuk Sistem Penjualan yang Sesuai Bisnis Anda';
+
+        $response->assertOk()
+            ->assertSee('<title>' . e($title) . '</title>', false)
+            ->assertSee('<meta name="description" content="' . $description . '">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . $url . '">', false)
+            ->assertSee('<h1 id="ecommerce-service-title">' . $h1 . '</h1>', false)
+            ->assertSee('Pilih tingkat toko online sesuai alur penjualan Anda.')
+            ->assertSee('Bandingkan fitur setiap tingkat toko online.')
+            ->assertSee('Rancang alur belanja pelanggan dan alur kerja tim dalam satu scope.')
+            ->assertSee('Proses pengembangan dimulai dari pemetaan kebutuhan.')
+            ->assertSee('Integrasi ecommerce untuk kebutuhan operasional yang lebih kompleks.')
+            ->assertSee('Fondasi website untuk pelanggan dan pengelola.')
+            ->assertSee('Diskusikan toko online yang sesuai dengan proses bisnis Anda.')
+            ->assertSee('Konsultasikan Toko Online Anda')
+            ->assertSee('Pilih Jenis Solusi')
+            ->assertSee('Lihat Portfolio JASAIBNU')
+            ->assertDontSee('portfolio ecommerce')
+            ->assertDontSee('best seller')
+            ->assertDontSee('garansi ranking')
+            ->assertDontSee('unlimited');
+
+        foreach (['Toko Online Sederhana', 'Toko Online Standar', 'Ecommerce Lengkap', 'Custom Ecommerce'] as $level) {
+            $response->assertSee($level);
+        }
+
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
+        $this->assertSame(11, preg_match_all('/<details class="ec-faq-item">/i', $html));
+        $this->assertStringNotContainsString('Serang', $this->extractTagContent($html, 'title'));
+        $this->assertStringNotContainsString('Banten', $this->extractTagContent($html, 'title'));
+        $this->assertStringNotContainsString('Serang', $this->extractTagContent($html, 'h1'));
+        $this->assertStringNotContainsString('Banten', $this->extractTagContent($html, 'h1'));
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $matches);
+        $schemas = collect($matches[1])->map(function ($json) {
+            $decoded = json_decode($json, true);
+            $this->assertIsArray($decoded, 'Ecommerce JSON-LD must be valid JSON.');
+            return $decoded;
+        });
+        $service = $schemas->firstWhere('@type', 'Service');
+        $faq = $schemas->firstWhere('@type', 'FAQPage');
+
+        $this->assertSame($url . '#service', $service['@id'] ?? null);
+        $this->assertSame($url, $service['url'] ?? null);
+        $this->assertSame('Jasa Pembuatan Website Toko Online', $service['name'] ?? null);
+        $this->assertSame('Jasa pembuatan website toko online dan ecommerce', $service['serviceType'] ?? null);
+        $this->assertSame(['@type' => 'Country', 'name' => 'Indonesia'], $service['areaServed'] ?? null);
+        $this->assertSame(['@id' => rtrim(route('home'), '/') . '#professional-service'], $service['provider'] ?? null);
+        $this->assertSame($url . '#faq', $faq['@id'] ?? null);
+        $this->assertCount(11, $faq['mainEntity'] ?? []);
+        foreach ($faq['mainEntity'] as $item) {
+            $response->assertSee($item['name']);
+            $response->assertSee($item['acceptedAnswer']['text']);
+        }
+        $this->assertStringNotContainsString('"@type":"Product"', json_encode($schemas));
+        $this->assertStringNotContainsString('"@type":"Review"', json_encode($schemas));
+        $this->assertStringNotContainsString('"@type":"AggregateRating"', json_encode($schemas));
+        $this->assertStringNotContainsString('"@type":"Offer"', json_encode($service));
+
+        $routes = collect(app('router')->getRoutes()->getRoutes());
+        $this->assertSame(1, $routes->where('uri', 'jasa-pembuatan-website-toko-online')->count());
+        $this->get('/jasa-website-toko-online')->assertNotFound();
+        $this->get('/jasa-pembuatan-website-ecommerce')->assertNotFound();
+    }
+
+    public function test_ecommerce_internal_links_sitemap_contact_and_protected_pages()
+    {
+        $this->withoutVite();
+
+        $ecommerceUrl = route('website-development-ecommerce');
+        $this->get(route('services.index'))
+            ->assertOk()
+            ->assertSee('href="' . $ecommerceUrl . '">jasa pembuatan website toko online</a>', false);
+
+        $national = $this->get(route('website-development'));
+        $national->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Profesional | JASAIBNU</title>', false)
+            ->assertSee('<h1 id="website-service-title">Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh</h1>', false)
+            ->assertSee('href="' . $ecommerceUrl . '">Pelajari solusi website toko online dan ecommerce</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($national->getContent(), $ecommerceUrl));
+
+        foreach (['website-development-serang', 'website-development-banten'] as $protectedRoute) {
+            $response = $this->get(route($protectedRoute));
+            $response->assertOk();
+            $this->assertSame(0, $this->anchorCountForUrl($response->getContent(), $ecommerceUrl));
+        }
+
+        $this->get(route('contact'))
+            ->assertOk()
+            ->assertSee('value="Website Toko Online / Ecommerce"', false)
+            ->assertSee('Website Toko Online / Ecommerce');
+
+        $sitemap = $this->get(route('sitemap'));
+        $sitemap->assertOk();
+        $this->assertSame(1, substr_count($sitemap->getContent(), '<loc>' . $ecommerceUrl . '</loc>'));
+        $this->assertStringNotContainsString('/jasa-website-toko-online', $sitemap->getContent());
+        $this->assertStringNotContainsString('/jasa-pembuatan-website-ecommerce', $sitemap->getContent());
+    }
+
     public function test_national_page_receives_contextual_internal_links_from_approved_sources()
     {
         $this->withoutVite();
@@ -664,6 +778,13 @@ class ExampleTest extends TestCase
         preg_match_all('/<a\b[^>]*\bhref="' . preg_quote($url, '/') . '"[^>]*>/i', $html, $matches);
 
         return count($matches[0]);
+    }
+
+    private function extractTagContent(string $html, string $tag): string
+    {
+        preg_match('/<' . preg_quote($tag, '/') . '\\b[^>]*>(.*?)<\\/' . preg_quote($tag, '/') . '>/si', $html, $matches);
+
+        return html_entity_decode(trim(strip_tags($matches[1] ?? '')), ENT_QUOTES, 'UTF-8');
     }
 
     public function test_insight_detail_page_is_available()

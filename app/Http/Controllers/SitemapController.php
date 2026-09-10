@@ -12,6 +12,7 @@ class SitemapController extends Controller
         $urls = collect([
             ['loc' => rtrim(route('home'), '/'), 'changefreq' => 'daily', 'priority' => '1.0'],
             ['loc' => route('website-development'), 'changefreq' => 'weekly', 'priority' => '0.95'],
+            ['loc' => route('website-development-ecommerce'), 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => route('website-development-serang'), 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => route('website-development-banten'), 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => route('website-development-serang-murah'), 'changefreq' => 'weekly', 'priority' => '0.85'],

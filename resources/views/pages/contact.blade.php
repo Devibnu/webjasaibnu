@@ -206,6 +206,7 @@
                             <option value="">Pilih layanan</option>
                             @foreach ([
                                 'Website Development',
+                                'Website Toko Online / Ecommerce',
                                 'SEO Services',
                                 'Web Application',
                                 'Mobile Application',
