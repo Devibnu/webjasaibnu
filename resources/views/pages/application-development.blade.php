@@ -54,6 +54,10 @@
 @push('head')
     <style>
         .application-development-page { --app-navy: #061429; --app-blue: #06a3da; --app-ink: #243247; --app-muted: #627084; --app-soft: #f2f6f9; color: var(--app-ink); overflow-x: hidden; }
+        .application-development-page > .container-fluid.bg-dark,
+        .application-development-page > .startup-inner-shell { font-family: "Rubik", Arial, sans-serif; }
+        .application-development-page .navbar-dark .navbar-nav .nav-link { margin-left: 18px; font-size: 14px; font-weight: 500; }
+        .application-development-page .navbar .btn { padding: .48rem 1.05rem !important; font-size: .9rem; }
         .app-shell { width: min(100% - 48px, 1180px); margin-inline: auto; }
         .app-hero { padding: 86px 0 74px; background: var(--app-navy); color: #fff; }
         .app-hero-grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(330px, .88fr); gap: 58px; align-items: center; }
@@ -124,8 +128,18 @@
         .app-final p { max-width: 780px; margin: 0; line-height: 1.7; }
         .app-final .app-button { border-color: #fff; background: #fff; color: var(--app-navy); }
         .app-inline-link { color: inherit; font-weight: 700; text-decoration: underline; }
+        @media (max-width: 1199.98px) { .application-development-page .navbar-dark .navbar-nav .nav-link { margin-left: 12px; font-size: 13.5px; } }
         @media (max-width: 1024px) { .app-hero-grid { gap: 34px; } .app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .app-process { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (max-width: 991.98px) {
+            .application-development-page .navbar { min-height: 74px; padding-top: .75rem !important; padding-bottom: .75rem !important; background: #fff; }
+            .application-development-page .ji-header-logo-stack { display: inline-block; max-width: min(230px, 62vw); }
+            .application-development-page .ji-header-logo { width: auto; max-height: 42px; }
+            .application-development-page .ji-header-logo-public { display: none; }
+            .application-development-page .ji-header-logo-dark { display: inline-block; }
+            .application-development-page .navbar-toggler { width: 42px; height: 42px; border: 1px solid #06a3da; border-radius: 2px; background: #fff; color: #06a3da; }
+        }
         @media (max-width: 767.98px) { .app-shell { width: min(100% - 32px, 680px); } .app-hero { padding: 62px 0 54px; } .app-hero-grid, .app-problem-layout, .app-proof, .app-final-row { grid-template-columns: 1fr; } .app-section { padding: 56px 0; } .app-grid, .app-technical { grid-template-columns: 1fr; } .app-matrix { grid-template-columns: 1fr; } .app-matrix-column + .app-matrix-column { border-top: 1px solid #d5e0e7; border-left: 0; } .app-process { grid-template-columns: repeat(2, minmax(0, 1fr)); } .app-proof img { min-height: 260px; } }
+        @media (max-width: 575.98px) { .application-development-page .navbar { min-height: 68px; padding-right: 16px !important; padding-left: 16px !important; } .application-development-page .ji-header-logo-stack { max-width: min(190px, 58vw); } }
         @media (max-width: 430px) { .app-shell { width: min(100% - 24px, 406px); } .app-hero { padding: 48px 0 42px; } .app-hero h1 { font-size: 2.18rem; } .app-actions { display: grid; } .app-button { width: 100%; text-align: center; } .app-system-map { display: none; } .app-card, .app-matrix-column, .app-proof-content { padding: 21px; } .app-flow, .app-signals, .app-process { grid-template-columns: 1fr; } .app-flow span:last-child { grid-column: auto; } .app-signals article, .app-signals article:nth-child(odd), .app-signals article:nth-last-child(-n+2) { border-right: 0; border-bottom: 1px solid #d8e2e9; } .app-signals article:last-child { border-bottom: 0; } }
     </style>
     <script type="application/ld+json">@json($serviceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>

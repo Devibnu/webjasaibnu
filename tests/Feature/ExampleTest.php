@@ -2242,7 +2242,10 @@ class ExampleTest extends TestCase
             ->assertSee('Jasa Pembuatan Aplikasi untuk Kebutuhan Bisnis')
             ->assertSee('CUSTOM BUSINESS APPLICATION')
             ->assertSee('Konsultasikan Kebutuhan Aplikasi')
-            ->assertSee('class="site-header"', false)
+            ->assertSee('class="container-fluid position-relative p-0 startup-inner-shell"', false)
+            ->assertSee('class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0"', false)
+            ->assertSee('href="' . route('services.index') . '" class="nav-item nav-link  active "', false)
+            ->assertDontSee('class="site-header"', false)
             ->assertSee('jasaibnu-startup-footer', false);
 
         $html = $response->getContent();
