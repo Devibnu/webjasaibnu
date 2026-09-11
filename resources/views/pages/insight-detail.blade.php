@@ -256,7 +256,9 @@
                                     <p>{{ $block['text'] }}</p>
                                 @endif
                             @endforeach
-                            @if ($article->slug === 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun')
+                            @if ($article->slug === 'kapan-bisnis-membutuhkan-aplikasi-web-custom')
+                                <p>Jika kebutuhan tersebut sudah perlu dipetakan menjadi sistem, pelajari layanan <a href="{{ route('application-development') }}">pengembangan aplikasi bisnis custom</a> dari JASAIBNU.</p>
+                            @elseif ($article->slug === 'fondasi-seo-teknis-yang-perlu-dipersiapkan-sejak-website-dibangun')
                                 <p>Jika fondasi ini perlu diterapkan sejak awal project, pelajari juga <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a> JASAIBNU.</p>
                                 <p>Jika fondasi teknis website Anda perlu ditinjau lebih lanjut, pelajari <a href="{{ route('seo-serang') }}">layanan SEO untuk bisnis di Serang</a> dari JASAIBNU.</p>
                             @elseif ($article->slug === 'cara-memilih-jasa-pembuatan-website-di-serang')

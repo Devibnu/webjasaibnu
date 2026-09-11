@@ -2226,6 +2226,141 @@ class ExampleTest extends TestCase
         $response->assertSee($insight->title);
     }
 
+    public function test_application_development_landing_matches_locked_seo_content_and_schema_contract()
+    {
+        $this->withoutVite();
+
+        $url = route('application-development');
+        $this->assertSame('/jasa-pembuatan-aplikasi', parse_url($url, PHP_URL_PATH));
+
+        $response = $this->get($url);
+        $response->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Aplikasi Custom untuk Bisnis | JASAIBNU</title>', false)
+            ->assertSee('<meta name="description" content="JASAIBNU menyediakan jasa pembuatan aplikasi bisnis berbasis web sesuai kebutuhan untuk workflow, dashboard, reporting, integrasi, dan operasional perusahaan.">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . $url . '">', false)
+            ->assertSee('Jasa Pembuatan Aplikasi untuk Kebutuhan Bisnis')
+            ->assertSee('CUSTOM BUSINESS APPLICATION')
+            ->assertSee('Konsultasikan Kebutuhan Aplikasi')
+            ->assertSee('class="site-header"', false)
+            ->assertSee('jasaibnu-startup-footer', false);
+
+        $html = $response->getContent();
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
+        $this->assertSame('Jasa Pembuatan Aplikasi untuk Kebutuhan Bisnis', $this->extractTagContent($html, 'h1'));
+        $this->assertSame(1, preg_match_all('/<link\s+rel="canonical"/i', $html));
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $jsonLdMatches);
+        $schemas = collect($jsonLdMatches[1])->map(function ($json) {
+            $decoded = json_decode($json, true);
+            $this->assertIsArray($decoded, 'Application Development JSON-LD must be valid JSON.');
+
+            return $decoded;
+        });
+        $service = $schemas->firstWhere('@type', 'Service');
+        $faqPage = $schemas->firstWhere('@type', 'FAQPage');
+
+        $this->assertSame($url . '#service', $service['@id'] ?? null);
+        $this->assertSame($url, $service['url'] ?? null);
+        $this->assertSame('Jasa Pembuatan Aplikasi untuk Kebutuhan Bisnis', $service['name'] ?? null);
+        $this->assertSame('JASAIBNU menyediakan jasa pembuatan aplikasi bisnis berbasis web sesuai kebutuhan untuk workflow, dashboard, reporting, integrasi, dan operasional perusahaan.', $service['description'] ?? null);
+        $this->assertSame('Jasa pembuatan aplikasi', $service['serviceType'] ?? null);
+        $this->assertSame(['@type' => 'Country', 'name' => 'Indonesia'], $service['areaServed'] ?? null);
+        $this->assertSame(['@id' => rtrim(route('home'), '/') . '#professional-service'], $service['provider'] ?? null);
+        $this->assertSame($url . '#faq', $faqPage['@id'] ?? null);
+        $this->assertCount(14, $faqPage['mainEntity'] ?? []);
+
+        preg_match_all('/<details class="app-faq"[^>]*>\s*<summary><h3>(.*?)<\/h3><\/summary><p>(.*?)<\/p><\/details>/si', $html, $visibleFaqs, PREG_SET_ORDER);
+        $this->assertCount(14, $visibleFaqs);
+        foreach ($faqPage['mainEntity'] as $index => $faq) {
+            $this->assertSame($faq['name'], html_entity_decode(strip_tags($visibleFaqs[$index][1]), ENT_QUOTES, 'UTF-8'));
+            $this->assertSame($faq['acceptedAnswer']['text'], html_entity_decode(strip_tags($visibleFaqs[$index][2]), ENT_QUOTES, 'UTF-8'));
+        }
+
+        $encodedPageSchemas = json_encode([$service, $faqPage]);
+        foreach (['Product', 'Offer', 'Review', 'AggregateRating'] as $forbiddenType) {
+            $this->assertStringNotContainsString('"@type":"' . $forbiddenType . '"', $encodedPageSchemas);
+        }
+
+        foreach (['100% secure', 'unhackable', 'guaranteed security', 'guaranteed ROI', 'fixed timeline', 'fixed price', 'free hosting', 'free domain', 'native Android', 'native iOS', 'Flutter', 'React Native', 'Play Store', 'App Store', 'full ERP', 'payroll', 'POS hardware'] as $unsupportedClaim) {
+            $this->assertStringNotContainsStringIgnoringCase($unsupportedClaim, $html);
+        }
+    }
+
+    public function test_application_development_routes_links_and_sitemap_match_locked_contract()
+    {
+        $this->withoutVite();
+
+        $url = route('application-development');
+        $aliases = [
+            '/jasa-pembuatan-aplikasi-custom',
+            '/jasa-pembuatan-aplikasi-perusahaan',
+            '/jasa-pembuatan-software',
+            '/jasa-pembuatan-sistem-informasi',
+            '/jasa-pembuatan-aplikasi-web',
+            '/jasa-pembuatan-aplikasi-mobile',
+            '/jasa-pembuatan-aplikasi-crm',
+        ];
+        foreach ($aliases as $alias) {
+            $this->get($alias)->assertNotFound();
+        }
+
+        $home = $this->get(route('home'));
+        $home->assertOk()->assertSee('href="' . $url . '" aria-label="Lihat layanan Web Application"', false);
+        $this->assertSame(1, $this->anchorCountForUrl($home->getContent(), $url));
+
+        $services = $this->get(route('services.index'));
+        $services->assertOk()->assertSee('href="' . $url . '">Pelajari pengembangan aplikasi bisnis</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($services->getContent(), $url));
+
+        $insight = $this->get(route('insights.show', 'kapan-bisnis-membutuhkan-aplikasi-web-custom'));
+        $insight->assertOk()->assertSee('href="' . $url . '">pengembangan aplikasi bisnis custom</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($insight->getContent(), $url));
+
+        foreach (['website-development-serang', 'website-development-banten', 'website-development-serang-murah', 'website-development-umkm-serang', 'seo-serang'] as $protectedRoute) {
+            $protected = $this->get(route($protectedRoute));
+            $protected->assertOk()->assertDontSee('href="' . $url . '"', false);
+            $this->assertSame(0, $this->anchorCountForUrl($protected->getContent(), $url));
+        }
+
+        $landing = $this->get($url);
+        foreach ([route('portfolio.index'), route('solutions.index'), route('insights.show', 'kapan-bisnis-membutuhkan-aplikasi-web-custom'), route('contact')] as $outboundUrl) {
+            $landing->assertSee('href="' . $outboundUrl . '"', false);
+        }
+
+        $sitemap = $this->get(route('sitemap'));
+        $sitemap->assertOk();
+        $this->assertSame(1, substr_count($sitemap->getContent(), '<loc>' . $url . '</loc>'));
+        $this->assertMatchesRegularExpression('/<loc>' . preg_quote($url, '/') . '<\/loc>\s*<changefreq>weekly<\/changefreq>\s*<priority>0\.9<\/priority>/', $sitemap->getContent());
+        foreach ($aliases as $alias) {
+            $this->assertStringNotContainsString('<loc>' . rtrim(route('home'), '/') . $alias . '</loc>', $sitemap->getContent());
+        }
+    }
+
+    public function test_application_development_change_preserves_protected_seo_contracts()
+    {
+        $this->withoutVite();
+
+        $contracts = [
+            'home' => ['Jasa Pembuatan Website, Aplikasi & SEO | JASAIBNU', 'Solusi Digital untuk Bisnis yang Siap Bertumbuh'],
+            'website-development' => ['Jasa Pembuatan Website Profesional | JASAIBNU', 'Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh'],
+            'website-development-serang' => ['Jasa Pembuatan Website Serang & Banten | JASAIBNU', 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional'],
+            'website-development-banten' => ['Jasa Pembuatan Website Banten | Website Bisnis & UMKM', 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional'],
+            'website-development-serang-murah' => ['Jasa Pembuatan Website Serang Murah & Profesional | JASAIBNU', 'Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional'],
+            'website-development-umkm-serang' => ['Jasa Website UMKM Serang | Website Usaha Lokal', 'Jasa Website UMKM Serang untuk Usaha Lokal yang Ingin Lebih Mudah Ditemukan'],
+            'seo-serang' => ['Jasa SEO Serang untuk Optimasi Website | JASAIBNU', 'Jasa SEO Serang untuk Meningkatkan Visibilitas Website Bisnis'],
+            'website-development-ecommerce' => ['Jasa Pembuatan Website Toko Online & Ecommerce | JASAIBNU', 'Jasa Pembuatan Website Toko Online untuk Sistem Penjualan yang Sesuai Bisnis Anda'],
+            'website-development-company-profile' => ['Jasa Pembuatan Website Company Profile | JASAIBNU', 'Jasa Pembuatan Website Company Profile Profesional'],
+        ];
+
+        foreach ($contracts as $routeName => [$title, $h1]) {
+            $response = $this->get(route($routeName));
+            $response->assertOk()->assertSee('<title>' . e($title) . '</title>', false);
+            $this->assertSame($h1, $this->extractTagContent($response->getContent(), 'h1'));
+            $this->assertSame(1, preg_match_all('/<h1\b/i', $response->getContent()));
+        }
+    }
+
     public function test_technical_seo_endpoints_and_metadata()
     {
         $this->withoutVite();

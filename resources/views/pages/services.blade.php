@@ -155,7 +155,9 @@
                         <div class="services-card-icon" aria-hidden="true"><span>{{ $service->icon }}</span></div>
                         <h2>{{ $service->title }}</h2>
                         <p>{{ $service->description }}</p>
-                        @if ($service->slug === 'seo-services')
+                        @if ($service->slug === 'web-application')
+                            <a class="services-card-link services-card-link-text" href="{{ route('application-development') }}">Pelajari pengembangan aplikasi bisnis</a>
+                        @elseif ($service->slug === 'seo-services')
                             <a class="services-card-link services-card-link-text" href="{{ route('seo-serang') }}">Pelajari jasa SEO Serang</a>
                         @else
                             <a class="services-card-link" href="{{ route('contact') }}" aria-label="Diskusikan {{ $service->title }}">

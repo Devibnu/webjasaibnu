@@ -26,6 +26,8 @@ Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 Route::view('/', 'home')->name('home');
+Route::view('/jasa-pembuatan-aplikasi', 'pages.application-development')
+    ->name('application-development');
 Route::get('/jasa-pembuatan-website', function () {
     return view('pages.website-development', [
         'nationalPortfolioItems' => \App\Models\PortfolioItem::with('category')
