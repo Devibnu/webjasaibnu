@@ -778,6 +778,142 @@ class ExampleTest extends TestCase
         }
     }
 
+    public function test_company_profile_landing_preserves_locked_seo_content_and_schema_contract()
+    {
+        $this->withoutVite();
+
+        $url = route('website-development-company-profile');
+        $response = $this->get($url);
+        $html = $response->getContent();
+        $description = 'JASAIBNU menyediakan jasa pembuatan website company profile profesional untuk menampilkan profil bisnis, layanan, portfolio, dan kontak secara kredibel.';
+
+        $response->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Website Company Profile | JASAIBNU</title>', false)
+            ->assertSee('<meta name="description" content="' . $description . '">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . $url . '">', false)
+            ->assertSee('<h1 id="company-profile-title">Jasa Pembuatan Website Company Profile Profesional</h1>', false)
+            ->assertSee('Informasi perusahaan perlu hadir dalam satu tempat yang resmi dan mudah diperiksa.')
+            ->assertSee('Informasi yang dapat disusun dalam website company profile.')
+            ->assertSee('Cocok untuk bisnis yang perlu menjelaskan identitas dan kapabilitasnya.')
+            ->assertSee('Fondasi utama dan kemampuan yang mengikuti kebutuhan project.')
+            ->assertSee('Susun alur informasi agar pengunjung memahami bisnis secara bertahap.')
+            ->assertSee('Tahapan kerja dari kebutuhan sampai website siap digunakan.')
+            ->assertSee('Website disiapkan agar rapi digunakan dan realistis dikembangkan.')
+            ->assertSee('Tinjau portfolio yang tersedia sebelum menentukan arah website.')
+            ->assertSee('Pertanyaan tentang website company profile.')
+            ->assertSee('Diskusikan website company profile yang sesuai dengan kebutuhan perusahaan Anda.')
+            ->assertSee('class="container-fluid bg-dark px-5 d-none d-lg-block"', false)
+            ->assertSee('class="container-fluid bg-dark text-light mt-5 wow fadeInUp jasaibnu-startup-footer"', false)
+            ->assertSee('Konsultasikan Website Company Profile')
+            ->assertSee('data-back-to-top', false);
+
+        $this->assertSame('website-development-company-profile', request()->route()?->getName());
+        $this->assertSame(1, preg_match_all('/<title\b/i', $html));
+        $this->assertSame(1, preg_match_all('/<meta\s+name="description"/i', $html));
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
+        $this->assertSame(1, preg_match_all('/<link\s+rel="canonical"/i', $html));
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $jsonLdMatches);
+        $schemas = collect($jsonLdMatches[1])->map(function ($json) {
+            $decoded = json_decode($json, true);
+            $this->assertIsArray($decoded, 'Company Profile JSON-LD must be valid JSON.');
+            return $decoded;
+        });
+        $service = $schemas->firstWhere('@type', 'Service');
+        $faqPage = $schemas->firstWhere('@type', 'FAQPage');
+
+        $this->assertSame($url . '#service', $service['@id'] ?? null);
+        $this->assertSame($url, $service['url'] ?? null);
+        $this->assertSame('Jasa pembuatan website company profile', $service['serviceType'] ?? null);
+        $this->assertSame(['@type' => 'Country', 'name' => 'Indonesia'], $service['areaServed'] ?? null);
+        $this->assertSame(['@id' => rtrim(route('home'), '/') . '#professional-service'], $service['provider'] ?? null);
+        $this->assertSame($url . '#faq', $faqPage['@id'] ?? null);
+        $this->assertCount(12, $faqPage['mainEntity'] ?? []);
+
+        preg_match_all('/<details class="cp-faq"[^>]*>\s*<summary><h3>(.*?)<\/h3><\/summary>\s*<p>(.*?)<\/p>/si', $html, $visibleFaqs, PREG_SET_ORDER);
+        $this->assertCount(12, $visibleFaqs);
+        foreach ($faqPage['mainEntity'] as $index => $faq) {
+            $this->assertSame($faq['name'], html_entity_decode(strip_tags($visibleFaqs[$index][1]), ENT_QUOTES, 'UTF-8'));
+            $this->assertSame($faq['acceptedAnswer']['text'], html_entity_decode(strip_tags($visibleFaqs[$index][2]), ENT_QUOTES, 'UTF-8'));
+        }
+
+        $pageSchemas = [$service, $faqPage];
+        $encodedPageSchemas = json_encode($pageSchemas);
+        foreach (['Product', 'Offer', 'Review', 'AggregateRating'] as $forbiddenType) {
+            $this->assertStringNotContainsString('"@type":"' . $forbiddenType . '"', $encodedPageSchemas);
+        }
+
+        foreach (['harga tetap', 'timeline tetap', 'unlimited revisions', 'gratis domain', 'gratis hosting', 'garansi ranking', 'garansi leads', 'rating pelanggan'] as $unsupportedClaim) {
+            $this->assertStringNotContainsStringIgnoringCase($unsupportedClaim, $html);
+        }
+    }
+
+    public function test_company_profile_route_links_and_sitemap_follow_locked_contract()
+    {
+        $this->withoutVite();
+
+        $url = route('website-development-company-profile');
+        $this->assertSame('/jasa-pembuatan-website-company-profile', parse_url($url, PHP_URL_PATH));
+
+        foreach (['/jasa-website-company-profile', '/website-company-profile', '/company-profile', '/jasa-company-profile'] as $alias) {
+            $this->get($alias)->assertNotFound();
+        }
+
+        $services = $this->get(route('services.index'));
+        $services->assertOk()->assertSee('href="' . $url . '">jasa pembuatan website company profile</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($services->getContent(), $url));
+
+        $national = $this->get(route('website-development'));
+        $national->assertOk()->assertSee('href="' . $url . '">website company profile untuk bisnis dan perusahaan</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($national->getContent(), $url));
+
+        $landing = $this->get($url);
+        $landing->assertOk()
+            ->assertSee('href="' . route('website-development') . '">layanan pembuatan website profesional</a>', false)
+            ->assertSee('href="' . route('portfolio.index') . '">Lihat Portfolio JASAIBNU</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($landing->getContent(), route('website-development')));
+        $this->assertGreaterThanOrEqual(2, $this->anchorCountForUrl($landing->getContent(), route('portfolio.index')));
+
+        foreach (['home', 'website-development-serang', 'website-development-banten', 'website-development-serang-murah', 'website-development-umkm-serang', 'seo-serang'] as $protectedRoute) {
+            $protected = $this->get(route($protectedRoute));
+            $protected->assertOk()->assertDontSee('href="' . $url . '"', false);
+            $this->assertSame(0, $this->anchorCountForUrl($protected->getContent(), $url));
+        }
+
+        $sitemap = $this->get(route('sitemap'));
+        $sitemap->assertOk();
+        $this->assertSame(1, substr_count($sitemap->getContent(), '<loc>' . $url . '</loc>'));
+        $this->assertMatchesRegularExpression('/<loc>' . preg_quote($url, '/') . '<\/loc>\s*<changefreq>weekly<\/changefreq>\s*<priority>0\.9<\/priority>/', $sitemap->getContent());
+        foreach (['/jasa-website-company-profile', '/website-company-profile', '/company-profile', '/jasa-company-profile'] as $aliasPath) {
+            $aliasUrl = rtrim(route('home'), '/') . $aliasPath;
+            $this->assertStringNotContainsString('<loc>' . $aliasUrl . '</loc>', $sitemap->getContent());
+        }
+    }
+
+    public function test_company_profile_change_preserves_protected_page_seo_contracts()
+    {
+        $this->withoutVite();
+
+        $contracts = [
+            'website-development' => ['Jasa Pembuatan Website Profesional | JASAIBNU', 'Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh'],
+            'website-development-serang' => ['Jasa Pembuatan Website Serang & Banten | JASAIBNU', 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional'],
+            'website-development-banten' => ['Jasa Pembuatan Website Banten | Website Bisnis & UMKM', 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional'],
+            'website-development-ecommerce' => ['Jasa Pembuatan Website Toko Online & Ecommerce | JASAIBNU', 'Jasa Pembuatan Website Toko Online untuk Sistem Penjualan yang Sesuai Bisnis Anda'],
+        ];
+
+        foreach ($contracts as $routeName => [$title, $h1]) {
+            $url = route($routeName);
+            $response = $this->get($url);
+            $html = $response->getContent();
+            $response->assertOk()
+                ->assertSee('<title>' . e($title) . '</title>', false)
+                ->assertSee('<link rel="canonical" href="' . $url . '">', false);
+            $this->assertSame($h1, $this->extractTagContent($html, 'h1'));
+            $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
+        }
+    }
+
     private function anchorCountForUrl(string $html, string $url): int
     {
         preg_match_all('/<a\b[^>]*\bhref="' . preg_quote($url, '/') . '"[^>]*>/i', $html, $matches);

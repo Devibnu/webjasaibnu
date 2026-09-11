@@ -199,6 +199,10 @@
                 yang mencakup perencanaan, development, testing, dan persiapan go-live.
             </p>
             <p class="mt-3 mb-0">
+                Untuk kebutuhan profil bisnis yang lebih spesifik, pelajari
+                <a href="{{ route('website-development-company-profile') }}">jasa pembuatan website company profile</a>.
+            </p>
+            <p class="mt-3 mb-0">
                 Untuk bisnis yang membutuhkan katalog, checkout, pengelolaan pesanan, atau integrasi sistem, pelajari
                 <a href="{{ route('website-development-ecommerce') }}">jasa pembuatan website toko online</a>.
             </p>

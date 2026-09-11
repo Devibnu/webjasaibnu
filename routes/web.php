@@ -35,6 +35,8 @@ Route::get('/jasa-pembuatan-website', function () {
             ->get(),
     ]);
 })->name('website-development');
+Route::view('/jasa-pembuatan-website-company-profile', 'pages.company-profile-development')
+    ->name('website-development-company-profile');
 Route::view('/jasa-pembuatan-website-toko-online', 'pages.ecommerce-development')
     ->name('website-development-ecommerce');
 Route::view('/jasa-pembuatan-website-serang', 'pages.website-development', [
