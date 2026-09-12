@@ -2242,6 +2242,14 @@ class ExampleTest extends TestCase
             ->assertSee('Jasa Pembuatan Aplikasi untuk Kebutuhan Bisnis')
             ->assertSee('CUSTOM BUSINESS APPLICATION')
             ->assertSee('Konsultasikan Kebutuhan Aplikasi')
+            ->assertSee('Visualisasi generik dashboard aplikasi bisnis')
+            ->assertSee('BUSINESS PROBLEMS')
+            ->assertSee('SOLUSI APLIKASI')
+            ->assertSee('DEVELOPMENT PROCESS')
+            ->assertSee('CAPABILITY &amp; MODULE OVERVIEW', false)
+            ->assertSee('OWNERSHIP &amp; HANDOVER', false)
+            ->assertSee('CAPABILITY PROOF')
+            ->assertSee('Diskusikan Kebutuhan Aplikasi Anda')
             ->assertSee('class="container-fluid position-relative p-0 startup-inner-shell"', false)
             ->assertSee('class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0"', false)
             ->assertSee('href="' . route('services.index') . '" class="nav-item nav-link  active "', false)
@@ -2252,6 +2260,17 @@ class ExampleTest extends TestCase
         $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
         $this->assertSame('Jasa Pembuatan Aplikasi untuk Kebutuhan Bisnis', $this->extractTagContent($html, 'h1'));
         $this->assertSame(1, preg_match_all('/<link\s+rel="canonical"/i', $html));
+
+        foreach (['CRM &amp; Sales', 'Service Management', 'Workflow &amp; Operational', 'Dashboard &amp; Reporting', 'Portal Pengguna', 'Integrasi Sistem'] as $solution) {
+            $this->assertStringContainsString($solution, $html);
+        }
+        $this->assertSame(6, preg_match_all('/<article class="app-solution">/i', $html));
+
+        foreach (['Konsultasi / Discovery', 'Analisis Proses Bisnis', 'Perancangan Sistem &amp; UI', 'Development', 'Testing', 'Deployment / Go Live', 'Handover / Support'] as $stage) {
+            $this->assertStringContainsString($stage, $html);
+        }
+        preg_match('/<div class="app-process">\s*(.*?)<\/div><\/div><\/section>/si', $html, $processMatches);
+        $this->assertSame(7, preg_match_all('/<article>/', $processMatches[1] ?? ''));
 
         preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $jsonLdMatches);
         $schemas = collect($jsonLdMatches[1])->map(function ($json) {
@@ -2338,6 +2357,26 @@ class ExampleTest extends TestCase
         foreach ($aliases as $alias) {
             $this->assertStringNotContainsString('<loc>' . rtrim(route('home'), '/') . $alias . '</loc>', $sitemap->getContent());
         }
+    }
+
+    public function test_application_development_consultation_links_use_whatsapp_with_contact_fallback()
+    {
+        $this->withoutVite();
+
+        $settings = SiteSetting::current();
+        $settings->update([
+            'phone' => 'Konsultasi via WhatsApp',
+            'whatsapp_number' => null,
+            'whatsapp_url' => null,
+        ]);
+
+        $fallbackHtml = $this->get(route('application-development'))->assertOk()->getContent();
+        $fallbackPattern = '/<a class="app-button" href="' . preg_quote(route('contact'), '/') . '"[^>]*>Konsultasikan Kebutuhan Aplikasi<\/a>/';
+        $this->assertSame(2, preg_match_all($fallbackPattern, $fallbackHtml));
+
+        $settings->update(['whatsapp_number' => '6281234567890']);
+        $whatsappHtml = $this->get(route('application-development'))->assertOk()->getContent();
+        $this->assertSame(2, preg_match_all('/<a class="app-button" href="https:\/\/wa\.me\/6281234567890\?text=[^"]+"[^>]*>Konsultasikan Kebutuhan Aplikasi<\/a>/', $whatsappHtml));
     }
 
     public function test_application_development_change_preserves_protected_seo_contracts()
