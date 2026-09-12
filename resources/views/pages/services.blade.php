@@ -138,6 +138,14 @@
             font-size: .78rem;
             line-height: 1.2;
         }
+
+        .services-page .services-context-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--primary);
+            font-size: .84rem;
+            font-weight: 600;
+        }
     </style>
 @endpush
 
@@ -155,6 +163,9 @@
                         <div class="services-card-icon" aria-hidden="true"><span>{{ $service->icon }}</span></div>
                         <h2>{{ $service->title }}</h2>
                         <p>{{ $service->description }}</p>
+                        @if ($service->slug === 'website-development')
+                            <a class="services-context-link" href="{{ route('landing-page-development') }}">Jasa pembuatan landing page untuk campaign bisnis</a>
+                        @endif
                         @if ($service->slug === 'web-application')
                             <a class="services-card-link services-card-link-text" href="{{ route('application-development') }}">Pelajari pengembangan aplikasi bisnis</a>
                         @elseif ($service->slug === 'seo-services')

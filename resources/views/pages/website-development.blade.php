@@ -2253,6 +2253,7 @@
                         <p>Untuk kebutuhan profil bisnis yang lebih terarah, pelajari <a href="{{ route('website-development-company-profile') }}">website company profile untuk bisnis dan perusahaan</a>.</p>
                         <p>Untuk kebutuhan bisnis di tingkat provinsi, pelajari juga <a href="{{ route('website-development-banten') }}">jasa pembuatan website Banten</a>.</p>
                         <p>Company profile, landing page, website layanan, katalog, website dengan admin panel, dan fondasi aplikasi web dapat disusun sesuai tujuan bisnis. Halaman khusus untuk campaign, iklan, launching produk, pendaftaran, atau penawaran jasa tertentu juga dapat disiapkan.</p>
+                        <p>Jika kebutuhannya hanya satu halaman dengan satu tujuan utama, pelajari <a href="{{ route('landing-page-development') }}">jasa pembuatan landing page untuk campaign bisnis</a>.</p>
                         <p>Struktur halaman, tampilan responsive, jalur kontak, keamanan dasar, dan fondasi SEO teknis disiapkan sesuai scope yang disepakati.</p>
                         <p>Proses mencakup analisis kebutuhan, penyusunan struktur, desain dan development, testing, serta persiapan go-live.</p>
                         <p>Durasi dipengaruhi jumlah halaman, kesiapan materi, kompleksitas fitur, kebutuhan integrasi, dan kecepatan proses peninjauan.</p>

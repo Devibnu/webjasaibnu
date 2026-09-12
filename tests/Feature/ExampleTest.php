@@ -2566,4 +2566,149 @@ class ExampleTest extends TestCase
         $this->assertSame($homeUrl . '#website', $websiteSchema['@id'] ?? null);
         $this->assertSame(['@id' => $homeUrl . '#organization'], $websiteSchema['publisher'] ?? null);
     }
+    public function test_landing_page_development_matches_locked_seo_schema_and_content_contract()
+    {
+        $this->withoutVite();
+
+        $url = route('landing-page-development');
+        $description = 'JASAIBNU menyediakan jasa pembuatan landing page profesional untuk campaign, penawaran, dan lead capture dengan desain responsif, CTA jelas, serta fondasi SEO.';
+        $response = $this->get($url);
+        $html = $response->getContent();
+
+        $this->assertSame('/jasa-pembuatan-landing-page', parse_url($url, PHP_URL_PATH));
+        $this->assertSame('landing-page-development', request()->route()?->getName());
+        $response->assertOk()
+            ->assertSee('<title>Jasa Pembuatan Landing Page Profesional | JASAIBNU</title>', false)
+            ->assertSee('<meta name="description" content="' . $description . '">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . $url . '">', false)
+            ->assertSee('<h1 id="landing-page-title">Jasa Pembuatan Landing Page Profesional untuk Campaign Bisnis</h1>', false)
+            ->assertSee('Landing page dan website reguler melayani kebutuhan yang berbeda.')
+            ->assertSee('Fondasi utama dan opsi yang mengikuti kebutuhan campaign.')
+            ->assertSee('Tracking dan analytics')
+            ->assertSeeText('Handover & maintenance')
+            ->assertSee('scope-based quotation')
+            ->assertSee('class="container-fluid position-relative p-0 startup-inner-shell"', false)
+            ->assertSee('class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0"', false)
+            ->assertSee('href="' . route('services.index') . '" class="nav-item nav-link  active "', false)
+            ->assertDontSee('class="site-header"', false);
+
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
+        $this->assertSame('Jasa Pembuatan Landing Page Profesional untuk Campaign Bisnis', $this->extractTagContent($html, 'h1'));
+        $this->assertSame(1, preg_match_all('/<link\s+rel="canonical"/i', $html));
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $jsonLdMatches);
+        $schemas = collect($jsonLdMatches[1])->map(function ($json) {
+            $decoded = json_decode($json, true);
+            $this->assertIsArray($decoded, 'Landing Page JSON-LD must be valid JSON.');
+
+            return $decoded;
+        });
+        $service = $schemas->firstWhere('@id', $url . '#service');
+        $faqPage = $schemas->firstWhere('@id', $url . '#faq');
+
+        $this->assertSame('Service', $service['@type'] ?? null);
+        $this->assertSame($url, $service['url'] ?? null);
+        $this->assertSame('Jasa Pembuatan Landing Page Profesional untuk Campaign Bisnis', $service['name'] ?? null);
+        $this->assertSame($description, $service['description'] ?? null);
+        $this->assertSame('Jasa pembuatan landing page', $service['serviceType'] ?? null);
+        $this->assertSame(['@type' => 'Country', 'name' => 'Indonesia'], $service['areaServed'] ?? null);
+        $this->assertSame(['@id' => rtrim(route('home'), '/') . '#professional-service'], $service['provider'] ?? null);
+        $this->assertSame('FAQPage', $faqPage['@type'] ?? null);
+        $this->assertCount(12, $faqPage['mainEntity'] ?? []);
+
+        preg_match_all('/<details class="lp-faq"[^>]*>\s*<summary><h3>(.*?)<\/h3><\/summary><p>(.*?)<\/p><\/details>/si', $html, $visibleFaqs, PREG_SET_ORDER);
+        $this->assertCount(12, $visibleFaqs);
+        foreach ($faqPage['mainEntity'] as $index => $faq) {
+            $this->assertSame($faq['name'], html_entity_decode(strip_tags($visibleFaqs[$index][1]), ENT_QUOTES, 'UTF-8'));
+            $this->assertSame($faq['acceptedAnswer']['text'], html_entity_decode(strip_tags($visibleFaqs[$index][2]), ENT_QUOTES, 'UTF-8'));
+        }
+
+        $encodedPageSchemas = json_encode([$service, $faqPage]);
+        foreach (['Product', 'Offer', 'Review', 'AggregateRating'] as $forbiddenType) {
+            $this->assertStringNotContainsString('"@type":"' . $forbiddenType . '"', $encodedPageSchemas);
+        }
+        foreach (['guaranteed conversion', 'guaranteed sales', 'guaranteed leads', 'guaranteed ROAS', 'guaranteed rankings', 'conversion percentages', 'revenue increases', 'high-converting', 'guaranteed PageSpeed', 'fixed turnaround', 'fixed pricing', 'A/B testing', 'Meta Pixel', 'full copywriting', 'fake testimonials', 'client logos'] as $forbiddenClaim) {
+            $this->assertStringNotContainsStringIgnoringCase($forbiddenClaim, $html);
+        }
+    }
+
+    public function test_landing_page_routes_links_sitemap_and_aliases_follow_locked_contract()
+    {
+        $this->withoutVite();
+
+        $url = route('landing-page-development');
+        $aliases = [
+            '/jasa-landing-page',
+            '/jasa-buat-landing-page',
+            '/jasa-bikin-landing-page',
+            '/jasa-desain-landing-page',
+            '/landing-page',
+            '/jasa-landing-page-jualan',
+            '/jasa-landing-page-serang',
+            '/jasa-landing-page-banten',
+        ];
+        foreach ($aliases as $alias) {
+            $this->get($alias)->assertNotFound();
+        }
+
+        $services = $this->get(route('services.index'));
+        $services->assertOk()->assertSee('href="' . $url . '">Jasa pembuatan landing page untuk campaign bisnis</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($services->getContent(), $url));
+
+        $national = $this->get(route('website-development'));
+        $national->assertOk()->assertSee('href="' . $url . '">jasa pembuatan landing page untuk campaign bisnis</a>', false);
+        $this->assertSame(1, $this->anchorCountForUrl($national->getContent(), $url));
+
+        foreach (['website-development-serang', 'website-development-banten', 'website-development-serang-murah', 'website-development-umkm-serang'] as $localRoute) {
+            $local = $this->get(route($localRoute));
+            $local->assertOk()->assertDontSee('href="' . $url . '"', false);
+            $this->assertSame(0, $this->anchorCountForUrl($local->getContent(), $url));
+        }
+
+        $landing = $this->get($url);
+        foreach ([route('website-development'), route('portfolio.index'), route('contact')] as $outboundUrl) {
+            $landing->assertOk()->assertSee('href="' . $outboundUrl . '"', false);
+        }
+
+        $sitemap = $this->get(route('sitemap'));
+        $sitemap->assertOk();
+        $this->assertSame(1, substr_count($sitemap->getContent(), '<loc>' . $url . '</loc>'));
+        $this->assertMatchesRegularExpression('/<loc>' . preg_quote($url, '/') . '<\/loc>\s*<changefreq>weekly<\/changefreq>\s*<priority>0\.9<\/priority>/', $sitemap->getContent());
+        foreach ($aliases as $alias) {
+            $this->assertStringNotContainsString('<loc>' . rtrim(route('home'), '/') . $alias . '</loc>', $sitemap->getContent());
+        }
+    }
+
+    public function test_landing_page_consultation_fallback_and_protected_seo_contracts()
+    {
+        $this->withoutVite();
+
+        $settings = SiteSetting::current();
+        $settings->update(['whatsapp_number' => null, 'whatsapp_url' => null]);
+        $fallbackHtml = $this->get(route('landing-page-development'))->assertOk()->getContent();
+        $this->assertGreaterThanOrEqual(2, $this->anchorCountForUrl($fallbackHtml, route('contact')));
+
+        $settings->update(['whatsapp_number' => '6281234567890']);
+        $whatsappHtml = $this->get(route('landing-page-development'))->assertOk()->getContent();
+        $this->assertSame(2, preg_match_all('/<a class="lp-button" href="https:\/\/wa\.me\/6281234567890\?text=[^"]+"[^>]*>(Konsultasikan Landing Page|Mulai Konsultasi)<\/a>/', $whatsappHtml));
+
+        $contracts = [
+            'website-development' => ['Jasa Pembuatan Website Profesional | JASAIBNU', 'Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh'],
+            'website-development-serang' => ['Jasa Pembuatan Website Serang &amp; Banten | JASAIBNU', 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional'],
+            'website-development-banten' => ['Jasa Pembuatan Website Banten | Website Bisnis &amp; UMKM', 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional'],
+            'website-development-serang-murah' => ['Jasa Pembuatan Website Serang Murah &amp; Profesional | JASAIBNU', 'Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional'],
+            'website-development-umkm-serang' => ['Jasa Website UMKM Serang | Website Usaha Lokal', 'Jasa Website UMKM Serang untuk Usaha Lokal yang Ingin Lebih Mudah Ditemukan'],
+            'website-development-ecommerce' => ['Jasa Pembuatan Website Toko Online &amp; Ecommerce | JASAIBNU', 'Jasa Pembuatan Website Toko Online untuk Sistem Penjualan yang Sesuai Bisnis Anda'],
+            'website-development-company-profile' => ['Jasa Pembuatan Website Company Profile | JASAIBNU', 'Jasa Pembuatan Website Company Profile Profesional'],
+            'application-development' => ['Jasa Pembuatan Aplikasi Custom untuk Bisnis | JASAIBNU', 'Jasa Pembuatan Aplikasi untuk Kebutuhan Bisnis'],
+        ];
+        foreach ($contracts as $route => [$title, $h1]) {
+            $response = $this->get(route($route));
+            $response->assertOk()->assertSee('<title>' . $title . '</title>', false);
+            $this->assertSame($h1, $this->extractTagContent($response->getContent(), 'h1'));
+            $response->assertSee('<meta name="robots" content="index,follow">', false)
+                ->assertSee('<link rel="canonical" href="' . route($route) . '">', false);
+        }
+    }
 }
