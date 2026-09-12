@@ -1177,10 +1177,24 @@ class ExampleTest extends TestCase
             'code' => 'PUB',
             'excerpt' => 'Visible portfolio item for testing.',
             'description' => 'Visible portfolio item for testing.',
+            'featured_image' => 'assets/startup2/img/blog-1.jpg',
+            'client_name' => 'PT Example & Company',
+            'project_url' => 'https://example.com/project',
             'technologies' => ['Laravel', 'CMS'],
             'status' => PortfolioItem::STATUS_PUBLISHED,
             'published_at' => now()->subDay(),
             'sort_order' => 1,
+        ]);
+
+        PortfolioItem::create([
+            'portfolio_category_id' => $category->id,
+            'title' => 'No Client Portfolio Test',
+            'slug' => 'no-client-portfolio-test',
+            'code' => 'NOC',
+            'excerpt' => 'Published item without a client name.',
+            'status' => PortfolioItem::STATUS_PUBLISHED,
+            'published_at' => now()->subDay(),
+            'sort_order' => 2,
         ]);
 
         PortfolioItem::create([
@@ -1200,13 +1214,35 @@ class ExampleTest extends TestCase
             'published_at' => now()->addDay(),
         ]);
 
-        $this->get(route('portfolio.index'))
+        $response = $this->get(route('portfolio.index'))
             ->assertOk()
             ->assertSee('Published Portfolio Test')
-            ->assertSee('PUB')
+            ->assertSee('NOC')
             ->assertSee('Laravel')
+            ->assertSee('<span>Client:</span> PT Example &amp; Company', false)
+            ->assertSee('src="' . asset('assets/startup2/img/blog-1.jpg') . '"', false)
+            ->assertSee('href="https://example.com/project" target="_blank" rel="noopener noreferrer">Visit Project</a>', false)
+            ->assertSee('No Client Portfolio Test')
             ->assertDontSee('Draft Portfolio Test')
             ->assertDontSee('Future Portfolio Test');
+
+        foreach ([
+            'Enterprise CRM Platform',
+            'Business Website Development',
+            'Online Examination Platform',
+            'Service Management System',
+            'Sales Management Platform',
+            'AI & System Integration',
+        ] as $existingTitle) {
+            $response->assertSee($existingTitle);
+        }
+
+        preg_match_all('/<article class="portfolio-card">.*?<\/article>/s', $response->getContent(), $portfolioCards);
+        $noClientCard = collect($portfolioCards[0])
+            ->first(fn (string $card) => str_contains($card, 'No Client Portfolio Test'));
+
+        $this->assertNotNull($noClientCard);
+        $this->assertStringNotContainsString('Client:', $noClientCard);
     }
 
     public function test_admin_portfolio_requires_admin_and_can_create_items()

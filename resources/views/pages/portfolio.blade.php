@@ -153,6 +153,9 @@
                         <div class="portfolio-card-body">
                             <p>{{ $item->categoryName() }}</p>
                             <h2>{{ $item->title }}</h2>
+                            @if (filled(trim((string) $item->client_name)))
+                                <p class="portfolio-client-name"><span>Client:</span> {{ $item->client_name }}</p>
+                            @endif
                             <span>{{ $item->excerpt ?: $item->description }}</span>
                             @if ($item->technologyList())
                                 <div class="portfolio-tags">
