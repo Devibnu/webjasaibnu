@@ -58,6 +58,9 @@
         .application-development-page > .startup-inner-shell { font-family: "Rubik", Arial, sans-serif; }
         .application-development-page .navbar-dark .navbar-nav .nav-link { margin-left: 18px; font-size: 14px; font-weight: 500; }
         .application-development-page .navbar .btn { padding: .48rem 1.05rem !important; font-size: .9rem; }
+        @media (min-width: 992px) {
+            .application-development-page > .startup-inner-shell .navbar:not(.sticky-top) { background: #091e3e; }
+        }
         .application-development-page .app-shell { width: min(100% - 48px, 1180px); margin-inline: auto; }
         .application-development-page .app-hero { padding: 76px 0 68px; background: linear-gradient(120deg, #fff 0%, #fff 58%, #edf8fc 100%); }
         .application-development-page .app-hero-grid { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(400px, .98fr); gap: 64px; align-items: center; }
