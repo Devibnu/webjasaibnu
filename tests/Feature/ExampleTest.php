@@ -1291,6 +1291,8 @@ class ExampleTest extends TestCase
                 'excerpt' => 'Created from a feature test.',
                 'description' => 'Created from a feature test.',
                 'technologies' => 'Laravel, MySQL, Soft UI',
+                'client_name' => 'Synthetic Client Company',
+                'project_url' => 'https://example.com/synthetic-project',
                 'status' => PortfolioItem::STATUS_DRAFT,
                 'sort_order' => 7,
                 'is_featured' => '1',
@@ -1301,6 +1303,8 @@ class ExampleTest extends TestCase
             'slug' => 'admin-created-portfolio',
             'status' => PortfolioItem::STATUS_DRAFT,
             'is_featured' => true,
+            'client_name' => 'Synthetic Client Company',
+            'project_url' => 'https://example.com/synthetic-project',
         ]);
 
         $this->actingAs($adminUser)
@@ -1312,6 +1316,78 @@ class ExampleTest extends TestCase
             ])
             ->assertRedirect(route('admin.portfolio.create'))
             ->assertSessionHasErrors('slug');
+
+        $this->actingAs($adminUser)
+            ->get(route('admin.portfolio.create'))
+            ->assertOk()
+            ->assertSee('Please correct the following fields:')
+            ->assertSee('id="portfolio-slug-error"', false)
+            ->assertSee('value="admin-created-portfolio"', false);
+    }
+
+    public function test_admin_portfolio_create_and_edit_render_controlled_editor_contract()
+    {
+        $this->withoutVite();
+
+        $adminUser = User::create([
+            'name' => 'Portfolio Editor Admin',
+            'email' => 'portfolio-editor-admin@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+        ]);
+
+        $item = PortfolioItem::create([
+            'title' => 'Synthetic Existing Project',
+            'slug' => 'synthetic-existing-project',
+            'featured_image' => 'assets/startup2/img/blog-1.jpg',
+            'client_name' => 'Synthetic Existing Client',
+            'project_url' => 'https://example.com/existing-project',
+            'technologies' => ['Laravel', 'CSS'],
+            'status' => PortfolioItem::STATUS_DRAFT,
+            'sort_order' => 4,
+        ]);
+
+        $create = $this->actingAs($adminUser)->get(route('admin.portfolio.create'));
+        $create
+            ->assertOk()
+            ->assertSee('Project Information')
+            ->assertSee('Project Content')
+            ->assertSee('Project Media')
+            ->assertSee('Publishing')
+            ->assertSee('Content &amp; SEO Readiness', false)
+            ->assertSee('Individual public project pages are not currently enabled.')
+            ->assertSee('action="' . route('admin.portfolio.store') . '" method="POST"', false)
+            ->assertSee('JPG, PNG, or WebP • Max 2 MB')
+            ->assertDontSee('jasaibnu.com/portfolio/slug');
+
+        foreach ([
+            'title', 'slug', 'portfolio_category_id', 'code', 'client_name', 'project_url',
+            'excerpt', 'description', 'technologies', 'featured_image', 'status',
+            'published_at', 'is_featured', 'sort_order', 'seo_title', 'seo_description',
+        ] as $fieldName) {
+            $create->assertSee('name="' . $fieldName . '"', false);
+        }
+
+        foreach ([
+            'portfolio-seo-score-val', 'portfolio-seo-status-badge', 'portfolio-seo-progress-bar',
+            'portfolio-seo-checklist', 'portfolio-preview-url', 'portfolio-preview-title',
+            'portfolio-preview-desc', 'portfolio-seo-title-counter', 'portfolio-seo-desc-counter',
+            'portfolio-title', 'portfolio-slug', 'portfolio-excerpt', 'portfolio-description',
+            'portfolio-technologies', 'portfolio-category', 'portfolio-status', 'portfolio-image',
+            'portfolio-project-url', 'portfolio-seo-title', 'portfolio-seo-desc',
+        ] as $hookId) {
+            $create->assertSee('id="' . $hookId . '"', false);
+        }
+
+        $edit = $this->actingAs($adminUser)->get(route('admin.portfolio.edit', $item));
+        $edit
+            ->assertOk()
+            ->assertSee('action="' . route('admin.portfolio.update', $item) . '" method="POST"', false)
+            ->assertSee('<input type="hidden" name="_method" value="PUT">', false)
+            ->assertSee('Synthetic Existing Client')
+            ->assertSee('https://example.com/existing-project', false)
+            ->assertSee('id="portfolio-image-preview" src="' . $item->imageUrl() . '"', false)
+            ->assertSee('Current featured image for Synthetic Existing Project');
     }
 
     public function test_portfolio_page_settings_control_public_intro_and_cta_copy()

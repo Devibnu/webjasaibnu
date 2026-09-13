@@ -1,137 +1,4 @@
-<div class="card">
-    <div class="card-header pb-0">
-        <h6>{{ $button }}</h6>
-    </div>
-    <div class="card-body">
-        @if ($errors->any())
-            <div class="alert alert-danger text-white">
-                <ul class="mb-0 ps-3">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ $action }}" method="POST" enctype="multipart/form-data" id="portfolio-form">
-            @csrf
-            @if ($method !== 'POST')
-                @method($method)
-            @endif
-
-            <div class="row">
-                <div class="col-md-8">
-                    <label>Title</label>
-                    <input name="title" id="portfolio-title" class="form-control mb-3" value="{{ old('title', $item->title) }}" required>
-
-                    <label>Slug</label>
-                    <input name="slug" id="portfolio-slug" class="form-control mb-3" value="{{ old('slug', $item->slug) }}" placeholder="Generated from title if blank">
-
-                    <label>Excerpt</label>
-                    <textarea name="excerpt" id="portfolio-excerpt" class="form-control mb-3" rows="3">{{ old('excerpt', $item->excerpt) }}</textarea>
-
-                    <label>Description</label>
-                    <textarea name="description" id="portfolio-description" class="form-control mb-3" rows="10">{{ old('description', $item->description) }}</textarea>
-
-                    <label>Technologies</label>
-                    <input name="technologies" id="portfolio-technologies" class="form-control mb-3" value="{{ old('technologies', implode(', ', $item->technologyList())) }}" placeholder="Laravel, PostgreSQL, REST API">
-                    <p class="text-xs text-secondary">Separate technologies with commas.</p>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card border mb-3 shadow-none bg-gray-100">
-                        <div class="card-body p-3">
-                            <h6 class="text-uppercase text-xs font-weight-bolder mb-2 text-dark">Real-Time SEO Readiness</h6>
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div>
-                                    <h3 class="font-weight-bolder mb-0 text-info" id="portfolio-seo-score-val">0 / 100</h3>
-                                    <span class="badge badge-sm bg-gradient-secondary mt-1" id="portfolio-seo-status-badge">Poor</span>
-                                </div>
-                                <div class="text-end text-xs text-secondary">
-                                    <span class="d-block font-weight-bold text-dark">Project page check</span>
-                                    <span>Guidance only</span>
-                                </div>
-                            </div>
-                            <div class="progress progress-xs mb-3">
-                                <div id="portfolio-seo-progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-
-                            <div class="mb-2">
-                                <span class="text-xs font-weight-bold text-dark d-block mb-1">Google Search Preview</span>
-                                <div class="bg-white p-2 border-radius-sm border shadow-xs" style="font-size: 13px; line-height: 1.4;">
-                                    <div class="text-xs text-secondary text-truncate" id="portfolio-preview-url">jasaibnu.com/portfolio/slug</div>
-                                    <div class="text-primary font-weight-bold text-truncate" id="portfolio-preview-title" style="font-size: 15px;">Portfolio Project Title</div>
-                                    <div class="text-dark text-xs" id="portfolio-preview-desc" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Project excerpt or meta description will appear here in search results.</div>
-                                </div>
-                            </div>
-
-                            <div style="max-height: 220px; overflow-y: auto;" class="pe-1">
-                                <ul class="list-unstyled text-xs mb-0" id="portfolio-seo-checklist"></ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <label>Category</label>
-                    <select name="portfolio_category_id" id="portfolio-category" class="form-control mb-3">
-                        <option value="">No category</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" @selected((string) old('portfolio_category_id', $item->portfolio_category_id) === (string) $category->id)>{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-
-                    <label>Code</label>
-                    <input name="code" class="form-control mb-3" value="{{ old('code', $item->code) }}" placeholder="CRM">
-
-                    <label>Status</label>
-                    <select name="status" id="portfolio-status" class="form-control mb-3" required>
-                        <option value="draft" @selected(old('status', $item->status) === 'draft')>Draft</option>
-                        <option value="published" @selected(old('status', $item->status) === 'published')>Published</option>
-                    </select>
-
-                    <label>Published At</label>
-                    <input type="datetime-local" name="published_at" class="form-control mb-3" value="{{ old('published_at', $item->published_at?->format('Y-m-d\\TH:i')) }}">
-
-                    <label>Featured Image</label>
-                    <input type="file" name="featured_image" id="portfolio-image" class="form-control mb-3" accept="image/jpeg,image/png,image/webp">
-                    <input type="hidden" id="portfolio-has-existing-image" value="{{ ($item->exists && $item->imageUrl()) ? '1' : '0' }}">
-                    @if ($item->exists && $item->imageUrl())
-                        <img src="{{ $item->imageUrl() }}" class="img-fluid border-radius-lg mb-3" alt="">
-                    @endif
-
-                    <label>Client Name</label>
-                    <input name="client_name" class="form-control mb-3" value="{{ old('client_name', $item->client_name) }}">
-
-                    <label>Project URL</label>
-                    <input type="url" name="project_url" id="portfolio-project-url" class="form-control mb-3" value="{{ old('project_url', $item->project_url) }}" placeholder="https://example.com">
-
-                    <div class="form-check form-switch mb-3">
-                        <input type="hidden" name="is_featured" value="0">
-                        <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" value="1" @checked(old('is_featured', $item->is_featured))>
-                        <label class="form-check-label" for="is_featured">Featured</label>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <label class="form-label font-weight-bold mb-0">SEO Title</label>
-                        <span class="text-xs text-secondary" id="portfolio-seo-title-counter">0 / 60</span>
-                    </div>
-                    <input name="seo_title" id="portfolio-seo-title" class="form-control mb-3" value="{{ old('seo_title', $item->seo_title) }}" placeholder="Fallback to title if blank">
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <label class="form-label font-weight-bold mb-0">SEO Description</label>
-                        <span class="text-xs text-secondary" id="portfolio-seo-desc-counter">0 / 160</span>
-                    </div>
-                    <textarea name="seo_description" id="portfolio-seo-desc" class="form-control mb-3" rows="3" placeholder="Fallback to excerpt if blank">{{ old('seo_description', $item->seo_description) }}</textarea>
-
-                    <label>Sort Order</label>
-                    <input type="number" name="sort_order" class="form-control mb-4" value="{{ old('sort_order', $item->sort_order ?? 0) }}" min="0">
-
-                    <button class="btn bg-gradient-info w-100" type="submit">{{ $button }}</button>
-                    <a href="{{ route('admin.portfolio.index') }}" class="btn btn-outline-secondary w-100">Cancel</a>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+@include('admin.portfolio.editor')
 
 @push('scripts')
 <script>
@@ -146,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const imageInput = document.getElementById('portfolio-image');
     const projectUrlInput = document.getElementById('portfolio-project-url');
     const hasExistingImage = document.getElementById('portfolio-has-existing-image').value === '1';
+    const imagePreviewContainer = document.getElementById('portfolio-image-preview-container');
+    const imagePreview = document.getElementById('portfolio-image-preview');
     const seoTitleInput = document.getElementById('portfolio-seo-title');
     const seoDescInput = document.getElementById('portfolio-seo-desc');
 
@@ -192,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setCounter(titleCounter, seoTitle.length, 30, 60, 60);
         setCounter(descCounter, seoDesc.length, 120, 160, 160);
 
-        previewUrl.textContent = `jasaibnu.com/portfolio/${slug || 'slug'}`;
+        previewUrl.textContent = 'jasaibnu.com/portfolio';
         previewTitle.textContent = seoTitle || 'Portfolio Project Title';
         previewDesc.textContent = seoDesc || 'Project excerpt or meta description will appear here in search results.';
 
@@ -338,6 +207,33 @@ document.addEventListener('DOMContentLoaded', function () {
         if (el) {
             el.addEventListener('input', analyzeSEO);
             el.addEventListener('change', analyzeSEO);
+        }
+    });
+
+    let generatedPreviewUrl = null;
+    imageInput.addEventListener('change', function () {
+        if (generatedPreviewUrl) {
+            URL.revokeObjectURL(generatedPreviewUrl);
+            generatedPreviewUrl = null;
+        }
+
+        const selectedImage = imageInput.files && imageInput.files[0];
+        if (selectedImage) {
+            generatedPreviewUrl = URL.createObjectURL(selectedImage);
+            imagePreview.src = generatedPreviewUrl;
+            imagePreview.alt = `Selected featured image preview for ${titleInput.value.trim() || 'portfolio project'}`;
+            imagePreviewContainer.hidden = false;
+            return;
+        }
+
+        const existingImageUrl = imagePreview.dataset.existingSrc;
+        imagePreview.src = existingImageUrl;
+        imagePreviewContainer.hidden = ! existingImageUrl;
+    });
+
+    window.addEventListener('beforeunload', function () {
+        if (generatedPreviewUrl) {
+            URL.revokeObjectURL(generatedPreviewUrl);
         }
     });
 
