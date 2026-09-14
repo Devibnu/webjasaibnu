@@ -2530,6 +2530,60 @@ class ExampleTest extends TestCase
             ->assertOk()
             ->assertSee('Service Technologies');
 
+        $create = $this->actingAs($adminUser)
+            ->get(route('admin.service-technologies.create'))
+            ->assertOk()
+            ->assertSee('accept=".jpg,.jpeg,.png,.webp"', false)
+            ->assertDontSee('accept=".jpg,.jpeg,.png,.webp,.svg"', false);
+
+        foreach ([
+            'service-technology-form',
+            'service-technology-logo',
+            'service-technology-logo-preview-container',
+            'service-technology-logo-preview',
+            'service-technology-logo-status',
+            'service-technology-logo-error',
+            'service-technology-submit',
+        ] as $hookId) {
+            $create->assertSee('id="' . $hookId . '"', false);
+        }
+
+        $create
+            ->assertSee('MAX_LOGO_BYTES', false)
+            ->assertSee('TARGET_LOGO_BYTES', false)
+            ->assertSee('MAX_LOGO_DIMENSION', false)
+            ->assertSee('MIN_LOGO_DIMENSION', false)
+            ->assertSee('LOGO_QUALITIES', false)
+            ->assertSee("['image/jpeg', 'image/png', 'image/webp']", false)
+            ->assertSee("document.createElement('canvas')", false)
+            ->assertSee('canvas.toBlob', false)
+            ->assertSee('new DataTransfer()', false)
+            ->assertSee('URL.createObjectURL', false)
+            ->assertSee('URL.revokeObjectURL', false)
+            ->assertSee('logoSelectionVersion', false)
+            ->assertSee("form.addEventListener('submit'", false)
+            ->assertSee('Image optimized automatically for web.');
+
+        $logoRules = (new \App\Http\Requests\Admin\StoreServiceTechnologyRequest())->rules()['logo_path'];
+        $this->assertContains('nullable', $logoRules);
+        $this->assertContains('image', $logoRules);
+        $this->assertContains('mimes:jpg,jpeg,png,webp,svg', $logoRules);
+        $this->assertContains('max:2048', $logoRules);
+
+        $this->actingAs($adminUser)
+            ->post(route('admin.service-technologies.store'), [
+                'name' => 'Oversized Technology Logo',
+                'logo_path' => UploadedFile::fake()->image('oversized-logo.png')->size(2049),
+            ])
+            ->assertSessionHasErrors('logo_path');
+
+        $this->actingAs($adminUser)
+            ->post(route('admin.service-technologies.store'), [
+                'name' => 'Invalid Technology Logo',
+                'logo_path' => UploadedFile::fake()->create('not-an-image.txt', 12, 'text/plain'),
+            ])
+            ->assertSessionHasErrors('logo_path');
+
         $this->actingAs($adminUser)
             ->post(route('admin.service-technologies.store'), [
                 'name' => 'Laravel Logo Test',
@@ -2544,29 +2598,75 @@ class ExampleTest extends TestCase
 
         $this->assertNotNull($technology->logo_path);
         Storage::disk('public')->assertExists($technology->logo_path);
+        $originalLogoPath = $technology->logo_path;
 
         $this->get(route('services.index'))
             ->assertOk()
             ->assertSee('Laravel Logo Test')
             ->assertSee(asset('storage/' . $technology->logo_path), false);
 
+        $edit = $this->actingAs($adminUser)
+            ->get(route('admin.service-technologies.edit', $technology))
+            ->assertOk()
+            ->assertSee('id="service-technology-logo-preview"', false)
+            ->assertSee('data-existing-src="' . asset('storage/' . $originalLogoPath) . '"', false)
+            ->assertSee('id="remove_logo"', false)
+            ->assertSee('Image optimized automatically for web.');
+
+        $this->assertSame(1, substr_count($create->getContent(), 'const MAX_LOGO_BYTES'));
+        $this->assertSame(1, substr_count($edit->getContent(), 'const MAX_LOGO_BYTES'));
+
         $this->actingAs($adminUser)
             ->put(route('admin.service-technologies.update', $technology), [
-                'name' => 'Laravel Hidden Logo Test',
-                'mark' => 'LH',
-                'is_active' => '0',
+                'name' => 'Laravel Replacement Logo Test',
+                'mark' => 'LR',
+                'logo_path' => UploadedFile::fake()->image('replacement-logo.jpg', 240, 120),
+                'is_active' => '1',
                 'sort_order' => 2,
             ])
             ->assertRedirect(route('admin.service-technologies.index'));
 
-        $this->get(route('services.index'))
-            ->assertOk()
-            ->assertDontSee('Laravel Hidden Logo Test');
+        $technology->refresh();
+        $replacementLogoPath = $technology->logo_path;
+        $this->assertNotSame($originalLogoPath, $replacementLogoPath);
+        Storage::disk('public')->assertMissing($originalLogoPath);
+        Storage::disk('public')->assertExists($replacementLogoPath);
+
+        $this->actingAs($adminUser)
+            ->put(route('admin.service-technologies.update', $technology), [
+                'name' => 'Laravel Logo Removed Test',
+                'mark' => 'LX',
+                'remove_logo' => '1',
+                'is_active' => '1',
+                'sort_order' => 3,
+            ])
+            ->assertRedirect(route('admin.service-technologies.index'));
+
+        $technology->refresh();
+        $this->assertNull($technology->logo_path);
+        Storage::disk('public')->assertMissing($replacementLogoPath);
+
+        $this->actingAs($adminUser)
+            ->put(route('admin.service-technologies.update', $technology), [
+                'name' => 'Laravel Hidden Logo Test',
+                'mark' => 'LH',
+                'logo_path' => UploadedFile::fake()->image('destroy-logo.png', 160, 160),
+                'is_active' => '0',
+                'sort_order' => 4,
+            ])
+            ->assertRedirect(route('admin.service-technologies.index'));
+
+        $technology->refresh();
+        $destroyLogoPath = $technology->logo_path;
+        Storage::disk('public')->assertExists($destroyLogoPath);
+
+        $this->get(route('services.index'))->assertOk()->assertDontSee('Laravel Hidden Logo Test');
 
         $this->actingAs($adminUser)
             ->delete(route('admin.service-technologies.destroy', $technology))
             ->assertRedirect(route('admin.service-technologies.index'));
 
+        Storage::disk('public')->assertMissing($destroyLogoPath);
         $this->assertDatabaseMissing('service_technologies', [
             'id' => $technology->id,
         ]);
