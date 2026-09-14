@@ -132,9 +132,10 @@
 @endpush
 
 @section('content')
+    @php($isSparsePage = $articles->count() <= 2)
     <section class="insights-blog-section" aria-labelledby="insights-list-heading">
         <div class="insights-shell">
-            <div class="insights-blog-layout">
+            <div class="insights-blog-layout{{ $isSparsePage ? ' insights-blog-layout-sparse' : '' }}">
                 <div class="insights-blog-main">
                     <div class="insights-blog-grid">
                         @foreach ($articles as $article)
@@ -152,42 +153,45 @@
                                 </div>
                             </article>
                         @endforeach
-
-                        @if ($articles->hasPages())
-                            <nav class="insights-pagination" aria-label="Page navigation">
-                                @if ($articles->onFirstPage())
-                                    <span aria-hidden="true">←</span>
-                                @else
-                                    <a href="{{ $articles->previousPageUrl() }}" aria-label="Previous page">←</a>
-                                @endif
-
-                                @foreach ($articles->getUrlRange(1, $articles->lastPage()) as $page => $url)
-                                    @if ($page === $articles->currentPage())
-                                        <strong>{{ $page }}</strong>
-                                    @else
-                                        <a href="{{ $url }}">{{ $page }}</a>
-                                    @endif
-                                @endforeach
-
-                                @if ($articles->hasMorePages())
-                                    <a href="{{ $articles->nextPageUrl() }}" aria-label="Next page">→</a>
-                                @else
-                                    <span aria-hidden="true">→</span>
-                                @endif
-                            </nav>
-                        @endif
                     </div>
+
+                    @if ($articles->hasPages())
+                        <nav class="insights-pagination" aria-label="Page navigation">
+                            @if ($articles->onFirstPage())
+                                <span aria-disabled="true" aria-label="Previous page unavailable">←</span>
+                            @else
+                                <a href="{{ $articles->previousPageUrl() }}" aria-label="Previous page">←</a>
+                            @endif
+
+                            @foreach ($articles->getUrlRange(1, $articles->lastPage()) as $page => $url)
+                                @if ($page === $articles->currentPage())
+                                    <strong aria-current="page" aria-label="Page {{ $page }}">{{ $page }}</strong>
+                                @else
+                                    <a href="{{ $url }}" aria-label="Page {{ $page }}">{{ $page }}</a>
+                                @endif
+                            @endforeach
+
+                            @if ($articles->hasMorePages())
+                                <a href="{{ $articles->nextPageUrl() }}" aria-label="Next page">→</a>
+                            @else
+                                <span aria-disabled="true" aria-label="Next page unavailable">→</span>
+                            @endif
+                        </nav>
+                    @endif
                 </div>
 
                 <aside class="insights-sidebar" aria-label="Insights sidebar">
-                    <div class="insights-sidebar-block">
-                        <div class="insights-search-box">
-                            <input type="search" placeholder="Cari insight..." aria-label="Cari insight">
-                            <button type="button" aria-label="Search">⌕</button>
+                    <div class="insights-sidebar-block insights-sidebar-discovery">
+                        <div class="insights-search-box" aria-label="Insight discovery">
+                            <span aria-hidden="true">⌕</span>
+                            <div>
+                                <strong>Jelajahi Insights</strong>
+                                <small>Pilih topik atau artikel terbaru di bawah ini.</small>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="insights-sidebar-block">
+                    <div class="insights-sidebar-block insights-sidebar-categories">
                         <div class="insights-sidebar-title">
                             <h3>Categories</h3>
                         </div>
@@ -198,7 +202,7 @@
                         </div>
                     </div>
 
-                    <div class="insights-sidebar-block">
+                    <div class="insights-sidebar-block insights-sidebar-recent">
                         <div class="insights-sidebar-title">
                             <h3>Insight Terbaru</h3>
                         </div>
@@ -212,11 +216,11 @@
                         </div>
                     </div>
 
-                    <div class="insights-sidebar-block">
+                    <div class="insights-sidebar-block insights-sidebar-banner">
                         <img class="insights-sidebar-image" src="{{ asset('assets/startup2/img/blog-1.jpg') }}" alt="JASAIBNU insight visual" width="500" height="350" loading="lazy" decoding="async">
                     </div>
 
-                    <div class="insights-sidebar-block">
+                    <div class="insights-sidebar-block insights-sidebar-tags">
                         <div class="insights-sidebar-title">
                             <h3>Tag Cloud</h3>
                         </div>

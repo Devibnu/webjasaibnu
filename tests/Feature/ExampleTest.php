@@ -1283,6 +1283,89 @@ class ExampleTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_insights_listing_preserves_six_item_pagination_and_uses_sparse_supporting_layout()
+    {
+        $this->withoutVite();
+
+        Insight::query()->update([
+            'status' => Insight::STATUS_DRAFT,
+            'published_at' => null,
+        ]);
+
+        $category = InsightCategory::create([
+            'name' => 'Listing Regression',
+            'slug' => 'listing-regression',
+            'is_active' => true,
+            'sort_order' => 999,
+        ]);
+
+        foreach (range(1, 7) as $number) {
+            Insight::create([
+                'insight_category_id' => $category->id,
+                'title' => "Listing Insight {$number}",
+                'slug' => "listing-insight-{$number}",
+                'excerpt' => "Excerpt for listing insight {$number}.",
+                'content' => "Content for listing insight {$number}.",
+                'featured_image' => 'assets/startup2/img/blog-1.jpg',
+                'status' => Insight::STATUS_PUBLISHED,
+                'published_at' => now()->subMinutes($number),
+            ]);
+        }
+
+        $classToken = static fn (string $class): string => "contains(concat(' ', normalize-space(@class), ' '), ' {$class} ')";
+        $parse = static function (string $html): \DOMXPath {
+            $document = new \DOMDocument();
+            @$document->loadHTML($html);
+
+            return new \DOMXPath($document);
+        };
+
+        $firstPage = $this->get(route('insights.index'))->assertOk();
+        $firstXPath = $parse($firstPage->getContent());
+        $firstLayout = $firstXPath->query("//*[{$classToken('insights-blog-layout')}]")->item(0);
+        $firstGrid = $firstXPath->query(".//*[{$classToken('insights-blog-grid')}]", $firstLayout)->item(0);
+
+        $this->assertNotNull($firstLayout);
+        $this->assertNotNull($firstGrid);
+        $this->assertFalse(str_contains($firstLayout->getAttribute('class'), 'insights-blog-layout-sparse'));
+        $this->assertCount(6, $firstXPath->query("./*[{$classToken('startup-blog-card')}]", $firstGrid));
+        $this->assertCount(6, $firstXPath->query(".//*[{$classToken('startup-blog-read-more')}]", $firstGrid));
+        $this->assertCount(3, $firstXPath->query(".//a[@href='" . route('insights.show', 'listing-insight-1') . "']", $firstGrid));
+        $this->assertCount(1, $firstXPath->query(".//*[{$classToken('insights-pagination')}]", $firstLayout));
+        $this->assertCount(1, $firstXPath->query(".//strong[@aria-current='page' and normalize-space()='1']", $firstLayout));
+        $this->assertCount(2, $firstXPath->query(".//a[@href='" . route('insights.index') . "?page=2']", $firstLayout));
+        $this->assertCount(1, $firstXPath->query("//h1[normalize-space()='Insights']"));
+        $firstPage
+            ->assertSee('<title>Insights | PT JASA IBNU DEVELOPMENT</title>', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . route('insights.index') . '">', false);
+
+        $secondPage = $this->get(route('insights.index', ['page' => 2]))->assertOk();
+        $secondXPath = $parse($secondPage->getContent());
+        $secondLayout = $secondXPath->query("//*[{$classToken('insights-blog-layout')}]")->item(0);
+        $secondGrid = $secondXPath->query(".//*[{$classToken('insights-blog-grid')}]", $secondLayout)->item(0);
+        $sidebar = $secondXPath->query(".//*[{$classToken('insights-sidebar')}]", $secondLayout)->item(0);
+
+        $this->assertNotNull($secondLayout);
+        $this->assertStringContainsString('insights-blog-layout-sparse', $secondLayout->getAttribute('class'));
+        $this->assertCount(1, $secondXPath->query("./*[{$classToken('startup-blog-card')}]", $secondGrid));
+        $this->assertCount(3, $secondXPath->query(".//a[@href='" . route('insights.show', 'listing-insight-7') . "']", $secondGrid));
+        $this->assertCount(1, $secondXPath->query(".//strong[@aria-current='page' and normalize-space()='2']", $secondLayout));
+        $this->assertCount(2, $secondXPath->query(".//a[@href='" . route('insights.index', ['page' => 1]) . "']", $secondLayout));
+        $this->assertSame('aside', strtolower($sidebar->nodeName));
+        $this->assertSame($secondLayout, $sidebar->parentNode);
+        $this->assertCount(1, $secondXPath->query(".//*[{$classToken('insights-sidebar-discovery')}]", $sidebar));
+        $this->assertCount(1, $secondXPath->query(".//*[{$classToken('insights-sidebar-categories')}]", $sidebar));
+        $this->assertCount(4, $secondXPath->query(".//*[{$classToken('insights-recent-item')}]", $sidebar));
+        $this->assertCount(1, $secondXPath->query(".//*[{$classToken('insights-sidebar-banner')}]", $sidebar));
+        $this->assertCount(7, $secondXPath->query(".//*[{$classToken('insights-tag-list')}]/a", $sidebar));
+        $this->assertCount(0, $secondXPath->query(".//form|.//input|.//button", $sidebar));
+        $this->assertCount(1, $secondXPath->query("//h1[normalize-space()='Insights']"));
+        $secondPage
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . route('insights.index') . '">', false);
+    }
+
     public function test_public_portfolio_only_shows_published_items()
     {
         $this->withoutVite();
