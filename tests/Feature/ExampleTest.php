@@ -80,6 +80,18 @@ class ExampleTest extends TestCase
         $this->assertCount(6, $xpath->query("./*[{$classToken('col-lg-4')} and {$classToken('col-md-6')}]", $servicesGrid));
         $this->assertCount(1, $xpath->query(".//*[{$classToken('service-item')}][.//h3[normalize-space()='AI Integration']]", $servicesGrid));
 
+        foreach ([
+            route('website-development-serang') => 'Lihat Jasa Pembuatan Website di Serang',
+            route('seo-serang') => 'Lihat layanan SEO di Serang',
+            route('application-development') => 'Lihat layanan Web Application',
+            route('services.index') => ['Lihat layanan Mobile Application', 'Lihat layanan SaaS Development'],
+            route('contact') => 'Lihat layanan AI Integration',
+        ] as $url => $labels) {
+            foreach ((array) $labels as $label) {
+                $this->assertCount(1, $xpath->query(".//a[@href='{$url}' and @aria-label='{$label}' and normalize-space()='→']", $servicesGrid));
+            }
+        }
+
         $support = $xpath->query("//*[{$classToken('homepage-services-support')}]")->item(0);
         $this->assertNotNull($support);
         $this->assertSame($servicesGrid->parentNode, $support->parentNode);
@@ -107,6 +119,18 @@ class ExampleTest extends TestCase
             ->assertSee('<meta name="robots" content="index,follow">', false)
             ->assertSee('<link rel="canonical" href="' . route('home') . '">', false)
             ->assertSee('Diskusikan kebutuhan website, aplikasi, SaaS, SEO, integrasi AI, atau sistem internal yang ingin Anda bangun bersama JASAIBNU.', false);
+
+        $css = file_get_contents(resource_path('css/app.css'));
+
+        $this->assertStringContainsString('.startup2-home .homepage-services-grid .service-item', $css);
+        $this->assertStringContainsString('.startup2-home .homepage-services-grid .service-item:hover a.btn', $css);
+        $this->assertStringContainsString('.startup2-home .homepage-services-grid .service-item:focus-within a.btn', $css);
+        $this->assertStringContainsString('.startup2-home .homepage-services-grid .service-item a.btn:focus-visible', $css);
+        $this->assertStringContainsString('@media (hover: none)', $css);
+        $this->assertStringContainsString('@media (prefers-reduced-motion: reduce)', $css);
+        $this->assertMatchesRegularExpression('/\.startup2-home \.homepage-services-grid \.service-item a\.btn\s*\{[^}]*bottom:\s*18px;[^}]*pointer-events:\s*none;/s', $css);
+        $this->assertMatchesRegularExpression('/\.startup2-home \.homepage-services-grid \.service-item:hover a\.btn,[^{]+\{[^}]*bottom:\s*18px;[^}]*opacity:\s*1;[^}]*pointer-events:\s*auto;/s', $css);
+        $this->assertDoesNotMatchRegularExpression('/\.startup2-home \.homepage-services-grid[^{}]*\{[^}]*bottom:\s*-/s', $css);
     }
 
     public function test_homepage_prioritizes_lcp_hero_and_lazy_loads_below_fold_images()

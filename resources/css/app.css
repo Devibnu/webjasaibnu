@@ -2742,6 +2742,48 @@ body.startup2-home .homepage-consultation-section > .container {
     padding-top: 1.5rem !important;
 }
 
+.startup2-home .homepage-services-grid .service-item {
+    overflow: hidden;
+    padding-bottom: 64px !important;
+}
+
+.startup2-home .homepage-services-grid .service-item a.btn {
+    bottom: 18px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.startup2-home .homepage-services-grid .service-item:hover a.btn,
+.startup2-home .homepage-services-grid .service-item:focus-within a.btn,
+.startup2-home .homepage-services-grid .service-item a.btn:focus-visible {
+    bottom: 18px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.startup2-home .homepage-services-grid .service-item a.btn:focus-visible {
+    outline: 3px solid rgba(6, 163, 218, 0.28);
+    outline-offset: 3px;
+}
+
+@media (hover: none) {
+    .startup2-home .homepage-services-grid .service-item a.btn {
+        bottom: 18px;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .startup2-home .homepage-services-grid .service-item a.btn {
+        transition: none;
+    }
+}
+
 .startup2-home .homepage-services-support {
     width: min(100%, 980px);
     margin: 30px auto 0;
