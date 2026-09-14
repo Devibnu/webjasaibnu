@@ -178,6 +178,55 @@ class ExampleTest extends TestCase
         }
     }
 
+    public function test_services_related_block_preserves_content_links_and_section_flow()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('services.index'))->assertOk();
+        $html = $response->getContent();
+        $document = new \DOMDocument();
+        @$document->loadHTML($html);
+        $xpath = new \DOMXPath($document);
+        $classToken = static fn (string $class): string => "contains(concat(' ', normalize-space(@class), ' '), ' {$class} ')";
+        $related = $xpath->query("//*[{$classToken('services-related')}]");
+
+        $this->assertCount(1, $related);
+        $related = $related->item(0);
+        $this->assertSame('LAYANAN TERKAIT', trim($xpath->query(".//*[{$classToken('services-related-heading')}]/p", $related)->item(0)->textContent));
+        $this->assertSame('Temukan Layanan yang Sesuai Kebutuhan Bisnis Anda', trim($xpath->query(".//h2[@id='services-related-heading']", $related)->item(0)->textContent));
+
+        $items = $xpath->query(".//article[{$classToken('services-related-item')}]/p", $related);
+        $this->assertCount(4, $items);
+        $actualGroups = [];
+        foreach ($items as $item) {
+            $actualGroups[] = preg_replace('/\s+/', ' ', trim($item->textContent));
+        }
+        $this->assertSame([
+            'Untuk kebutuhan website bisnis secara umum, pelajari layanan pembuatan website profesional yang mencakup perencanaan, development, testing, dan persiapan go-live.',
+            'Untuk kebutuhan profil bisnis yang lebih spesifik, pelajari jasa pembuatan website company profile.',
+            'Untuk bisnis yang membutuhkan katalog, checkout, pengelolaan pesanan, atau integrasi sistem, pelajari jasa pembuatan website toko online.',
+            'Untuk kebutuhan lokal, JASAIBNU juga menyediakan Jasa Pembuatan Website di Serang, layanan website Banten, dan website UMKM Serang dengan arah kebutuhan yang berbeda.',
+        ], $actualGroups);
+
+        foreach ([
+            route('website-development') => 'layanan pembuatan website profesional',
+            route('website-development-company-profile') => 'jasa pembuatan website company profile',
+            route('website-development-ecommerce') => 'jasa pembuatan website toko online',
+            route('website-development-serang') => 'Jasa Pembuatan Website di Serang',
+            route('website-development-banten') => 'layanan website Banten',
+            route('website-development-umkm-serang') => 'website UMKM Serang',
+        ] as $url => $anchorText) {
+            $anchors = $xpath->query("//a[@href='{$url}' and normalize-space()='{$anchorText}']");
+            $this->assertCount(1, $anchors);
+            $this->assertCount(1, $xpath->query(".//a[@href='{$url}' and normalize-space()='{$anchorText}']", $related));
+            $this->assertStringNotContainsString('nofollow', $anchors->item(0)->getAttribute('rel'));
+        }
+
+        $this->assertCount(3, $xpath->query("//*[{$classToken('services-proof-row')}]/article[{$classToken('services-proof-card')}]"));
+        $this->assertCount(6, $xpath->query("//*[{$classToken('services-grid')}]/article[{$classToken('services-card')}]"));
+        $this->assertLessThan(strpos($html, 'TECHNOLOGY &amp; EXPERTISE'), strpos($html, 'class="services-related"'));
+    }
+
     public function test_serang_website_development_landing_page_targets_local_keyword()
     {
         $this->withoutVite();

@@ -141,6 +141,68 @@
             color: var(--primary);
             font-weight: 600;
         }
+
+        .services-page .services-related {
+            margin-top: 48px;
+        }
+
+        .services-page .services-related-heading {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .services-page .services-related-heading p {
+            margin: 0 0 8px;
+            color: var(--primary);
+            font-size: .82rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+        }
+
+        .services-page .services-related-heading h2 {
+            margin: 0;
+            color: #091e3e;
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+            line-height: 1.25;
+        }
+
+        .services-page .services-related-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .services-page .services-related-item {
+            border: 1px solid #dbeaf2;
+            border-radius: 4px;
+            background: #f7fcff;
+            padding: 22px 24px;
+        }
+
+        .services-page .services-related-item p {
+            margin: 0;
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        .services-page .services-related-item a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 700px) {
+            .services-page .services-related {
+                margin-top: 38px;
+            }
+
+            .services-page .services-related-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-page .services-related-item {
+                padding: 20px;
+            }
+        }
     </style>
 @endpush
 
@@ -198,26 +260,42 @@
                     </article>
                 @endforeach
             </div>
-            <p class="mt-4 mb-0">
-                Untuk kebutuhan website bisnis secara umum, pelajari
-                <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a>
-                yang mencakup perencanaan, development, testing, dan persiapan go-live.
-            </p>
-            <p class="mt-3 mb-0">
-                Untuk kebutuhan profil bisnis yang lebih spesifik, pelajari
-                <a href="{{ route('website-development-company-profile') }}">jasa pembuatan website company profile</a>.
-            </p>
-            <p class="mt-3 mb-0">
-                Untuk bisnis yang membutuhkan katalog, checkout, pengelolaan pesanan, atau integrasi sistem, pelajari
-                <a href="{{ route('website-development-ecommerce') }}">jasa pembuatan website toko online</a>.
-            </p>
-            <p class="mt-4 mb-0">
-                Untuk kebutuhan lokal, JASAIBNU juga menyediakan
-                <a href="{{ route('website-development-serang') }}">Jasa Pembuatan Website di Serang</a>,
-                <a href="{{ route('website-development-banten') }}">layanan website Banten</a>, dan
-                <a href="{{ route('website-development-umkm-serang') }}">website UMKM Serang</a>
-                dengan arah kebutuhan yang berbeda.
-            </p>
+            <section class="services-related" aria-labelledby="services-related-heading">
+                <div class="services-related-heading">
+                    <p>LAYANAN TERKAIT</p>
+                    <h2 id="services-related-heading">Temukan Layanan yang Sesuai Kebutuhan Bisnis Anda</h2>
+                </div>
+                <div class="services-related-grid">
+                    <article class="services-related-item">
+                        <p>
+                            Untuk kebutuhan website bisnis secara umum, pelajari
+                            <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a>
+                            yang mencakup perencanaan, development, testing, dan persiapan go-live.
+                        </p>
+                    </article>
+                    <article class="services-related-item">
+                        <p>
+                            Untuk kebutuhan profil bisnis yang lebih spesifik, pelajari
+                            <a href="{{ route('website-development-company-profile') }}">jasa pembuatan website company profile</a>.
+                        </p>
+                    </article>
+                    <article class="services-related-item">
+                        <p>
+                            Untuk bisnis yang membutuhkan katalog, checkout, pengelolaan pesanan, atau integrasi sistem, pelajari
+                            <a href="{{ route('website-development-ecommerce') }}">jasa pembuatan website toko online</a>.
+                        </p>
+                    </article>
+                    <article class="services-related-item">
+                        <p>
+                            Untuk kebutuhan lokal, JASAIBNU juga menyediakan
+                            <a href="{{ route('website-development-serang') }}">Jasa Pembuatan Website di Serang</a>,
+                            <a href="{{ route('website-development-banten') }}">layanan website Banten</a>, dan
+                            <a href="{{ route('website-development-umkm-serang') }}">website UMKM Serang</a>
+                            dengan arah kebutuhan yang berbeda.
+                        </p>
+                    </article>
+                </div>
+            </section>
         </div>
     </section>
 
