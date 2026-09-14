@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\VisitorEvent;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -1398,6 +1399,111 @@ class ExampleTest extends TestCase
             ->assertSee('Image optimized automatically for web.')
             ->assertSee('MAX_IMAGE_BYTES', false)
             ->assertSee('MAX_IMAGE_DIMENSION', false);
+    }
+
+    public function test_admin_portfolio_converts_jakarta_publication_time_to_utc_and_back()
+    {
+        $this->withoutVite();
+        Carbon::setTestNow(Carbon::create(2026, 9, 14, 2, 10, 0, 'UTC'));
+
+        try {
+            $adminUser = User::create([
+                'name' => 'Timezone Portfolio Admin',
+                'email' => 'timezone-portfolio-admin@example.com',
+                'password' => bcrypt('password'),
+                'is_admin' => true,
+            ]);
+
+            $this->actingAs($adminUser)->post(route('admin.portfolio.store'), [
+                'title' => 'Synthetic Jakarta Timed Project',
+                'slug' => 'synthetic-jakarta-timed-project',
+                'status' => PortfolioItem::STATUS_PUBLISHED,
+                'published_at' => '2026-09-14T09:09',
+            ])->assertRedirect(route('admin.portfolio.index'));
+
+            $timedItem = PortfolioItem::where('slug', 'synthetic-jakarta-timed-project')->firstOrFail();
+            $this->assertSame('2026-09-14 02:09:00', $timedItem->published_at->utc()->format('Y-m-d H:i:s'));
+
+            $this->actingAs($adminUser)->get(route('admin.portfolio.edit', $timedItem))
+                ->assertOk()
+                ->assertSee('value="2026-09-14T09:09"', false)
+                ->assertSee('Timezone: WIB (Asia/Jakarta).');
+
+            $this->actingAs($adminUser)->post(route('admin.portfolio.store'), [
+                'title' => 'Synthetic Immediate Project',
+                'slug' => 'synthetic-immediate-project',
+                'status' => PortfolioItem::STATUS_PUBLISHED,
+                'published_at' => '',
+            ])->assertRedirect(route('admin.portfolio.index'));
+
+            $immediateItem = PortfolioItem::where('slug', 'synthetic-immediate-project')->firstOrFail();
+            $this->assertSame('2026-09-14 02:10:00', $immediateItem->published_at->utc()->format('Y-m-d H:i:s'));
+        } finally {
+            Carbon::setTestNow();
+        }
+    }
+
+    public function test_public_portfolio_preserves_scheduling_ordering_and_unlimited_results()
+    {
+        $this->withoutVite();
+        Carbon::setTestNow(Carbon::create(2026, 9, 14, 2, 10, 0, 'UTC'));
+
+        try {
+            $future = PortfolioItem::create([
+                'title' => 'Synthetic Future Featured Project',
+                'slug' => 'synthetic-future-featured-project',
+                'status' => PortfolioItem::STATUS_PUBLISHED,
+                'published_at' => Carbon::create(2026, 9, 14, 2, 30, 0, 'UTC'),
+                'is_featured' => true,
+                'sort_order' => 600,
+            ]);
+            $past = PortfolioItem::create([
+                'title' => 'Synthetic Past Nonfeatured Project',
+                'slug' => 'synthetic-past-nonfeatured-project',
+                'status' => PortfolioItem::STATUS_PUBLISHED,
+                'published_at' => Carbon::create(2026, 9, 14, 2, 0, 0, 'UTC'),
+                'is_featured' => false,
+                'sort_order' => 601,
+            ]);
+
+            $bulkTitles = [];
+            for ($index = 1; $index <= 7; $index++) {
+                $bulkTitles[] = $title = "Synthetic Eligible Portfolio {$index}";
+                PortfolioItem::create([
+                    'title' => $title,
+                    'slug' => "synthetic-eligible-portfolio-{$index}",
+                    'status' => PortfolioItem::STATUS_PUBLISHED,
+                    'published_at' => Carbon::create(2026, 9, 14, 1, $index, 0, 'UTC'),
+                    'is_featured' => $index % 2 === 0,
+                    'sort_order' => 700 + $index,
+                ]);
+            }
+
+            $sameSortOlder = PortfolioItem::create([
+                'title' => 'Synthetic Same Sort Older', 'slug' => 'synthetic-same-sort-older',
+                'status' => PortfolioItem::STATUS_PUBLISHED, 'published_at' => Carbon::create(2026, 9, 13, 23, 0, 0, 'UTC'), 'sort_order' => 800,
+            ]);
+            $sameSortNewerFirst = PortfolioItem::create([
+                'title' => 'Synthetic Same Sort Newer First', 'slug' => 'synthetic-same-sort-newer-first',
+                'status' => PortfolioItem::STATUS_PUBLISHED, 'published_at' => Carbon::create(2026, 9, 14, 0, 0, 0, 'UTC'), 'sort_order' => 800,
+            ]);
+            $sameSortNewerSecond = PortfolioItem::create([
+                'title' => 'Synthetic Same Sort Newer Second', 'slug' => 'synthetic-same-sort-newer-second',
+                'status' => PortfolioItem::STATUS_PUBLISHED, 'published_at' => Carbon::create(2026, 9, 14, 0, 0, 0, 'UTC'), 'sort_order' => 800,
+            ]);
+
+            $response = $this->get(route('portfolio.index'));
+            $response->assertOk()->assertDontSee($future->title)->assertSee($past->title);
+            foreach ($bulkTitles as $title) {
+                $response->assertSee($title);
+            }
+
+            $html = $response->getContent();
+            $this->assertLessThan(strpos($html, $sameSortNewerFirst->title), strpos($html, $sameSortNewerSecond->title));
+            $this->assertLessThan(strpos($html, $sameSortOlder->title), strpos($html, $sameSortNewerFirst->title));
+        } finally {
+            Carbon::setTestNow();
+        }
     }
 
     public function test_portfolio_page_settings_control_public_intro_and_cta_copy()

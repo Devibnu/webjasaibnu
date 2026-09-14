@@ -156,8 +156,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label font-weight-bold" for="portfolio-published-at">Published At</label>
-                            <input type="datetime-local" name="published_at" id="portfolio-published-at" class="{{ $fieldClass('published_at') }}" value="{{ old('published_at', $item->published_at?->format('Y-m-d\TH:i')) }}" aria-describedby="{{ $describedBy('published_at', 'portfolio-published-at-help') }}" @if($errors->has('published_at')) aria-invalid="true" @endif>
-                            <div class="text-xs text-secondary mt-1" id="portfolio-published-at-help">Automatically set when publishing if left blank.</div>
+                            <input type="datetime-local" name="published_at" id="portfolio-published-at" class="{{ $fieldClass('published_at') }}" value="{{ old('published_at', $item->published_at?->copy()->timezone('Asia/Jakarta')->format('Y-m-d\TH:i')) }}" aria-describedby="{{ $describedBy('published_at', 'portfolio-published-at-help') }}" @if($errors->has('published_at')) aria-invalid="true" @endif>
+                            <div class="text-xs text-secondary mt-1" id="portfolio-published-at-help">Timezone: WIB (Asia/Jakarta). Automatically set when publishing if left blank.</div>
                             @error('published_at')<div class="invalid-feedback" id="portfolio-published-at-error">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-check form-switch mb-3">

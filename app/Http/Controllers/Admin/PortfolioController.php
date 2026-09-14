@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\PortfolioCategory;
 use App\Models\PortfolioItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PortfolioController extends Controller
 {
+    private const ADMIN_TIMEZONE = 'Asia/Jakarta';
+
     public function index(Request $request)
     {
         $query = PortfolioItem::with('category')->latest('updated_at');
@@ -127,8 +130,12 @@ class PortfolioController extends Controller
             ->values()
             ->all();
 
+        if (! empty($data['published_at'])) {
+            $data['published_at'] = Carbon::parse($data['published_at'], self::ADMIN_TIMEZONE)->utc();
+        }
+
         if ($data['status'] === PortfolioItem::STATUS_PUBLISHED && empty($data['published_at'])) {
-            $data['published_at'] = now();
+            $data['published_at'] = now()->utc();
         }
 
         if ($data['status'] === PortfolioItem::STATUS_DRAFT) {
