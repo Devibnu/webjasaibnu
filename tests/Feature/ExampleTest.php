@@ -62,6 +62,41 @@ class ExampleTest extends TestCase
         $response->assertDontSee('href="#contact"', false);
     }
 
+    public function test_homepage_services_use_one_grid_and_preserve_supporting_links()
+    {
+        $this->withoutVite();
+
+        $response = $this->get('/')->assertOk();
+        $html = $response->getContent();
+
+        $document = new \DOMDocument();
+        @$document->loadHTML($html);
+        $xpath = new \DOMXPath($document);
+        $classToken = static fn (string $class): string => "contains(concat(' ', normalize-space(@class), ' '), ' {$class} ')";
+        $servicesGrid = $xpath->query("//*[{$classToken('homepage-services-grid')}]")->item(0);
+
+        $this->assertNotNull($servicesGrid);
+        $this->assertCount(6, $xpath->query(".//*[{$classToken('service-item')}]", $servicesGrid));
+        $this->assertCount(6, $xpath->query("./*[{$classToken('col-lg-4')} and {$classToken('col-md-6')}]", $servicesGrid));
+        $this->assertCount(1, $xpath->query(".//*[{$classToken('service-item')}][.//h3[normalize-space()='AI Integration']]", $servicesGrid));
+
+        $support = $xpath->query("//*[{$classToken('homepage-services-support')}]")->item(0);
+        $this->assertNotNull($support);
+        $this->assertSame($servicesGrid->parentNode, $support->parentNode);
+        $this->assertSame($servicesGrid, $support->previousElementSibling);
+
+        foreach ([
+            route('website-development') => 'layanan pembuatan website profesional',
+            route('website-development-banten') => 'Jasa pembuatan website Banten',
+            route('website-development-umkm-serang') => 'website UMKM Serang',
+        ] as $url => $anchorText) {
+            $this->assertCount(1, $xpath->query(".//a[@href='{$url}' and normalize-space()='{$anchorText}']", $support));
+        }
+
+        $response->assertDontSee('Diskusikan Layanan');
+        $this->assertLessThan(strpos($html, 'Butuh Solusi Digital yang Sesuai dengan Proses Bisnis Anda?'), strpos($html, 'homepage-services-support'));
+    }
+
     public function test_homepage_prioritizes_lcp_hero_and_lazy_loads_below_fold_images()
     {
         $this->withoutVite();

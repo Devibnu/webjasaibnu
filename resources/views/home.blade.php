@@ -781,6 +781,12 @@
                 margin-top: 1.5rem !important;
             }
         }
+
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .startup2-home .homepage-services-grid > .col-md-6 {
+                width: 50%;
+            }
+        }
     </style>
 @endpush
 
@@ -925,13 +931,14 @@
                 <h5 class="fw-bold text-primary text-uppercase">Our Services</h5>
                 <h2 class="h1 mb-0">Custom IT Solutions untuk Kebutuhan Bisnis Anda</h2>
             </div>
-            <div class="row g-5">
+            <div class="row g-5 homepage-services-grid">
                 @foreach ([
                     ['title' => 'Website Development', 'body' => 'Website perusahaan yang cepat, responsive, SEO-ready, dan mudah dikembangkan.', 'icon' => '01', 'url' => route('website-development-serang'), 'label' => 'Lihat Jasa Pembuatan Website di Serang'],
                     ['title' => 'SEO Services', 'body' => 'Optimasi teknis, struktur konten, dan fondasi search visibility yang rapi untuk membantu website bisnis lebih mudah dipahami Google.', 'icon' => '02', 'url' => route('seo-serang'), 'label' => 'Lihat layanan SEO di Serang'],
                     ['title' => 'Web Application', 'body' => 'Aplikasi web custom untuk workflow, data, dan proses operasional bisnis.', 'icon' => '03', 'url' => route('application-development'), 'label' => 'Lihat layanan Web Application'],
                     ['title' => 'Mobile Application', 'body' => 'Aplikasi mobile untuk kebutuhan internal, pelanggan, atau operasional lapangan.', 'icon' => '04', 'url' => route('services.index'), 'label' => 'Lihat layanan Mobile Application'],
                     ['title' => 'SaaS Development', 'body' => 'Platform SaaS dengan fondasi produk, akun pengguna, dan roadmap fitur.', 'icon' => '05', 'url' => route('services.index'), 'label' => 'Lihat layanan SaaS Development'],
+                    ['title' => 'AI Integration', 'body' => 'Integrasi AI dan automation yang relevan untuk mempercepat pekerjaan tim.', 'icon' => '06', 'url' => route('contact'), 'label' => 'Lihat layanan AI Integration'],
                 ] as $service)
                     <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="{{ 0.3 + (($loop->iteration - 1) % 3) * 0.3 }}s">
                         <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
@@ -944,21 +951,14 @@
                         </div>
                     </div>
                 @endforeach
-                <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
-                    <div class="position-relative bg-primary rounded h-100 d-flex flex-column align-items-center justify-content-center text-center p-5">
-                        <h3 class="text-white mb-3">AI Integration</h3>
-                        <p class="text-white mb-3">Integrasi AI dan automation yang relevan untuk mempercepat pekerjaan tim.</p>
-                        <a href="{{ route('contact') }}" class="btn btn-dark py-2 px-4">Diskusikan Layanan</a>
-                    </div>
-                    <p class="text-center mt-4 mb-0">
-                        Untuk kebutuhan lintas wilayah, pelajari <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a>.
-                        <a href="{{ route('website-development-banten') }}">Jasa pembuatan website Banten</a>
-                        dan
-                        <a href="{{ route('website-development-umkm-serang') }}">website UMKM Serang</a>
-                        tersedia untuk bisnis yang membutuhkan website praktis, cepat, dan siap dikembangkan.
-                    </p>
-                </div>
             </div>
+            <p class="homepage-services-support text-center mt-4 mb-0">
+                Untuk kebutuhan lintas wilayah, pelajari <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a>.
+                <a href="{{ route('website-development-banten') }}">Jasa pembuatan website Banten</a>
+                dan
+                <a href="{{ route('website-development-umkm-serang') }}">website UMKM Serang</a>
+                tersedia untuk bisnis yang membutuhkan website praktis, cepat, dan siap dikembangkan.
+            </p>
         </div>
     </div>
 
