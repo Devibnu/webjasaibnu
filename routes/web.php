@@ -71,6 +71,27 @@ Route::view('/jasa-pembuatan-website-banten', 'pages.website-development', [
         'badge' => 'Website menjadi pusat informasi bisnis yang siap melayani calon pelanggan dari Serang, Cilegon, Tangerang, Pandeglang, Lebak, dan area Banten lainnya.',
     ],
 ])->name('website-development-banten');
+Route::get('/jasa-pembuatan-website-pandeglang', function () {
+    return view('pages.website-development', [
+        'landing' => [
+            'title' => 'Jasa Pembuatan Website Pandeglang | JASAIBNU',
+            'meta_description' => 'Jasa pembuatan website Pandeglang untuk company profile, UMKM, katalog, dan website bisnis yang responsive, SEO-ready, aman, dan mudah dikembangkan.',
+            'canonical' => url('/jasa-pembuatan-website-pandeglang'),
+            'label' => 'Jasa Pembuatan Website Pandeglang',
+            'h1' => 'Jasa Pembuatan Website Pandeglang untuk Bisnis dan UMKM',
+            'hero_copy' => 'JASAIBNU membantu kebutuhan website bisnis yang melayani pelanggan di Pandeglang melalui proses konsultasi, peninjauan materi, desain, development, testing, dan persiapan go-live yang dapat dikoordinasikan secara remote.',
+            'impact_label' => 'Website untuk kebutuhan bisnis',
+            'impact_title' => 'Website yang disusun berdasarkan tujuan, informasi, dan proses bisnis Anda.',
+            'impact_copy' => 'Setiap project dimulai dengan memahami kebutuhan bisnis, calon pengguna, materi yang tersedia, halaman yang diperlukan, dan fungsi yang perlu diprioritaskan.',
+            'badge' => 'Koordinasi project dapat dilakukan secara remote tanpa mengharuskan bisnis dan tim pengembangan berada di lokasi yang sama.',
+        ],
+        'pandeglangPortfolioItems' => \App\Models\PortfolioItem::with('category')
+            ->published()
+            ->ordered()
+            ->limit(3)
+            ->get(),
+    ]);
+})->name('website-development-pandeglang');
 Route::view('/jasa-pembuatan-website-serang-murah', 'pages.website-development', [
     'landing' => [
         'title' => 'Jasa Pembuatan Website Serang Murah & Profesional | JASAIBNU',

@@ -34,12 +34,26 @@
     $primarySerangLink = $primarySerangLinks[request()->route()?->getName()] ?? null;
     $isNationalLanding = request()->routeIs('website-development');
     $isBantenLanding = request()->routeIs('website-development-banten');
+    $isPandeglangLanding = request()->routeIs('website-development-pandeglang');
     $isSerangMurahLanding = request()->routeIs('website-development-serang-murah');
     $isConversionLanding = $isNationalLanding || $isBantenLanding;
     $nationalPortfolioItems = $nationalPortfolioItems ?? collect();
     $conversionPortfolioItems = $isBantenLanding
         ? \App\Models\PortfolioItem::with('category')->published()->ordered()->limit(3)->get()
         : $nationalPortfolioItems;
+    $pandeglangPortfolioItems = $pandeglangPortfolioItems ?? collect();
+    $pandeglangFaqs = [
+        ['Apakah JASAIBNU dapat melayani pembuatan website untuk kebutuhan bisnis di Pandeglang?', 'Bisa. Konsultasi dan pelaksanaan project dapat dikoordinasikan secara remote sesuai kebutuhan, materi, fungsi, dan ruang lingkup website yang disepakati.'],
+        ['Apakah konsultasi harus dilakukan secara langsung?', 'Tidak harus. Diskusi kebutuhan, peninjauan materi, review desain, dan koordinasi pengembangan dapat dilakukan secara remote tanpa mengharuskan pertemuan langsung.'],
+        ['Jenis website apa yang dapat dibuat?', 'Website dapat berupa company profile, website UMKM atau layanan, katalog produk, ecommerce, website dengan CMS, serta fondasi web yang dapat dikembangkan menuju sistem bisnis.'],
+        ['Apakah website lama dapat didesain ulang?', 'Bisa, setelah platform, konten, akses, kondisi teknis, dan perubahan yang dibutuhkan ditinjau agar ruang lingkup redesign dapat dipetakan dengan jelas.'],
+        ['Apakah katalog produk atau ecommerce dapat ditambahkan?', 'Bisa. Fungsinya disesuaikan dengan jumlah produk, alur pemesanan, kebutuhan pembayaran atau pengiriman, serta cara pengelolaan katalog.'],
+        ['Apa yang memengaruhi biaya project?', 'Biaya dipengaruhi jumlah halaman, kompleksitas tampilan, kesiapan konten, kebutuhan CMS, volume katalog, ecommerce, integrasi, infrastruktur, domain atau hosting, dan dukungan setelah go-live.'],
+        ['Siapa yang memiliki website setelah project selesai?', 'Kepemilikan dan serah terima source code, CMS, domain, hosting, serta kredensial mengikuti ruang lingkup dan tanggung jawab yang disepakati sebelum project berjalan.'],
+        ['Apakah domain dan hosting sudah termasuk?', 'Domain dan hosting dapat dimasukkan dalam ruang lingkup atau dikelola secara terpisah. Pilihan, kepemilikan, akses, dan biaya perpanjangannya dijelaskan dalam penawaran project.'],
+        ['Apakah maintenance tersedia setelah go-live?', 'Maintenance dan pengembangan lanjutan dapat dibahas sesuai kebutuhan serta dapat menjadi ruang lingkup lanjutan atau layanan terpisah setelah website online.'],
+        ['Apakah website mobile-friendly dan SEO-ready?', 'Website dapat disiapkan dengan tampilan responsive dan fondasi SEO teknis seperti metadata, heading, canonical, sitemap, serta performa dasar. Posisi atau ranking Google tidak dijamin.'],
+    ];
     $conversionFaqs = [
         ['Berapa lama pembuatan website?', 'Durasi bergantung pada jumlah halaman dan fitur. Website company profile sederhana biasanya bisa dimulai dari kebutuhan konten dan desain yang sudah jelas.'],
         ['Apakah website sudah SEO?', 'Kami menyiapkan fondasi SEO teknis seperti title, meta description, struktur heading, sitemap, canonical, dan performa halaman. Ranking Google tetap membutuhkan waktu, konten, dan authority.'],
@@ -75,12 +89,31 @@
             'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq[1]],
         ])->values()->all(),
     ];
+    $pandeglangCanonical = route('website-development-pandeglang');
+    $pandeglangServiceSchema = [
+        '@context' => 'https://schema.org', '@type' => 'Service',
+        '@id' => $pandeglangCanonical . '#service',
+        'name' => 'Jasa Pembuatan Website Pandeglang',
+        'description' => 'Jasa pembuatan website Pandeglang untuk company profile, UMKM, katalog, dan website bisnis yang responsive, SEO-ready, aman, dan mudah dikembangkan.',
+        'url' => $pandeglangCanonical,
+        'serviceType' => 'Jasa pembuatan website',
+        'provider' => ['@id' => rtrim(route('home'), '/') . '#professional-service'],
+        'areaServed' => ['@type' => 'AdministrativeArea', 'name' => 'Kabupaten Pandeglang'],
+    ];
+    $pandeglangFaqSchema = [
+        '@context' => 'https://schema.org', '@type' => 'FAQPage',
+        '@id' => $pandeglangCanonical . '#faq',
+        'mainEntity' => collect($pandeglangFaqs)->map(fn ($faq) => [
+            '@type' => 'Question', 'name' => $faq[0],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq[1]],
+        ])->values()->all(),
+    ];
 @endphp
 
 @section('title', $landing['title'])
 @section('meta_description', $landing['meta_description'])
 @section('canonical', $landing['canonical'])
-@section('body_class', 'services-page startup2-home' . ($isNationalLanding ? ' national-conversion-page' : '') . ($isBantenLanding ? ' banten-conversion-page' : '') . ($isSerangMurahLanding ? ' serang-murah-simple-page' : ''))
+@section('body_class', 'services-page startup2-home' . ($isNationalLanding ? ' national-conversion-page' : '') . ($isBantenLanding ? ' banten-conversion-page' : '') . ($isPandeglangLanding ? ' pandeglang-service-page' : '') . ($isSerangMurahLanding ? ' serang-murah-simple-page' : ''))
 
 @push('head')
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2038,6 +2071,9 @@
     @if ($isNationalLanding)
         <script type="application/ld+json">@json($nationalServiceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
         <script type="application/ld+json">@json($nationalFaqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
+    @elseif ($isPandeglangLanding)
+        <script type="application/ld+json">@json($pandeglangServiceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
+        <script type="application/ld+json">@json($pandeglangFaqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
     @endif
 @endpush
 
@@ -2050,7 +2086,7 @@
                     <h1 id="website-service-title">{{ $landing['h1'] }}</h1>
                     <p class="seo-service-hero-copy">{{ $landing['hero_copy'] }}</p>
                     <div class="seo-service-actions">
-                        <a class="seo-service-button" href="{{ route('contact') }}" @if ($isConversionLanding || $isSerangMurahLanding) data-national-whatsapp-cta @endif>{{ ($isConversionLanding || $isSerangMurahLanding) ? 'Konsultasi via WhatsApp' : 'Konsultasi Website' }}</a>
+                        <a class="seo-service-button" href="{{ route('contact') }}" @if ($isConversionLanding || $isSerangMurahLanding || $isPandeglangLanding) data-national-whatsapp-cta @endif>{{ ($isConversionLanding || $isSerangMurahLanding || $isPandeglangLanding) ? 'Konsultasi via WhatsApp' : 'Konsultasi Website' }}</a>
                         <a class="seo-service-button secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio</a>
                     </div>
                 </div>
@@ -2091,6 +2127,147 @@
             </div>
         </div>
     </section>
+
+    @if ($isPandeglangLanding)
+        <section class="national-service-section alt" aria-labelledby="pandeglang-coverage-title">
+            <div class="seo-service-shell">
+                <div class="seo-service-heading">
+                    <p class="seo-service-label">Cakupan layanan</p>
+                    <h2 id="pandeglang-coverage-title">Pembuatan website untuk kebutuhan bisnis di Pandeglang</h2>
+                    <p>Project dimulai dengan diskusi kebutuhan, peninjauan materi dan konten, penyusunan arah desain, development, testing, serta persiapan go-live. Seluruh koordinasi dapat dilakukan secara remote agar keputusan dan hasil review tetap tercatat dengan jelas.</p>
+                </div>
+                <div class="national-process-grid">
+                    <article class="national-process-card"><span>01 — Kebutuhan</span><h3>Tujuan dan materi dipetakan</h3><p>Kami membahas target website, calon pengguna, halaman, konten, fitur, dan prioritas yang perlu disiapkan.</p></article>
+                    <article class="national-process-card"><span>02 — Produksi</span><h3>Desain dan development</h3><p>Struktur, tampilan, dan fungsi dikembangkan mengikuti ruang lingkup yang disepakati dan materi yang tersedia.</p></article>
+                    <article class="national-process-card"><span>03 — Peluncuran</span><h3>Testing dan persiapan go-live</h3><p>Halaman, tampilan responsive, jalur kontak, dan fungsi utama diperiksa sebelum website dipublikasikan.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="national-service-section" aria-labelledby="pandeglang-solutions-title">
+            <div class="seo-service-shell">
+                <div class="seo-service-heading">
+                    <p class="seo-service-label">Pilihan solusi</p>
+                    <h2 id="pandeglang-solutions-title">Website yang dapat disesuaikan dengan tujuan bisnis Anda</h2>
+                    <p>Bentuk website dipilih berdasarkan informasi yang perlu ditampilkan, cara pelanggan berinteraksi, kebutuhan pengelolaan, dan rencana pengembangan berikutnya.</p>
+                </div>
+                <div class="national-primary-grid">
+                    <article class="national-primary-card"><span aria-hidden="true">CP</span><h3>Company Profile</h3><p>Profil perusahaan untuk menjelaskan layanan, legalitas, pengalaman, portfolio, dan jalur kontak bisnis.</p></article>
+                    <article class="national-primary-card"><span aria-hidden="true">UM</span><h3>Website UMKM &amp; Layanan</h3><p>Website usaha dan jasa untuk merangkum penawaran, area layanan, bukti pekerjaan, serta kontak yang mudah ditemukan.</p></article>
+                    <article class="national-primary-card"><span aria-hidden="true">KT</span><h3>Katalog Produk atau Jasa</h3><p>Katalog terstruktur berdasarkan kategori, detail produk, spesifikasi, dan alur pertanyaan atau pemesanan.</p></article>
+                    <article class="national-primary-card"><span aria-hidden="true">EC</span><h3>Ecommerce</h3><p>Fungsi transaksi dapat disusun mengikuti kebutuhan produk, pembayaran, pengiriman, dan pengelolaan pesanan.</p></article>
+                    <article class="national-primary-card"><span aria-hidden="true">CM</span><h3>Website dengan CMS</h3><p>Admin panel dapat disiapkan untuk mengelola halaman, artikel, layanan, portfolio, atau katalog secara mandiri.</p></article>
+                    <article class="national-primary-card"><span aria-hidden="true">WB</span><h3>Fondasi Sistem Bisnis</h3><p>Website dapat dikembangkan bertahap menuju booking, dashboard, member area, atau fungsi aplikasi web lainnya.</p></article>
+                </div>
+                <p class="national-proof-more">Untuk kebutuhan yang lebih luas, pelajari <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a> atau lihat cakupan regional melalui <a href="{{ route('website-development-banten') }}">layanan website untuk wilayah Banten</a>.</p>
+            </div>
+        </section>
+
+        <section class="national-conversion-section alt" aria-labelledby="pandeglang-use-cases-title">
+            <div class="seo-service-shell">
+                <div class="national-conversion-heading">
+                    <p class="seo-service-label">Konteks penggunaan</p>
+                    <h2 id="pandeglang-use-cases-title">Kebutuhan website untuk berbagai jenis usaha dan organisasi</h2>
+                    <p>Contoh berikut menggambarkan kebutuhan yang dapat ditangani dan tidak menyatakan hubungan client atau project tertentu di Pandeglang.</p>
+                </div>
+                <div class="national-why-grid">
+                    <article class="national-why-card"><span aria-hidden="true">01</span><h3>Usaha jasa dan profesional</h3><p>Menjelaskan layanan, proses, cakupan kerja, pengalaman, dan cara calon pelanggan menghubungi bisnis.</p></article>
+                    <article class="national-why-card"><span aria-hidden="true">02</span><h3>UMKM, retail, dan katalog</h3><p>Menampilkan profil usaha, produk, kategori, detail, lokasi layanan, dan jalur pemesanan yang sesuai.</p></article>
+                    <article class="national-why-card"><span aria-hidden="true">03</span><h3>Akomodasi dan aktivitas wisata</h3><p>Menyusun informasi fasilitas, galeri, pilihan layanan, pertanyaan pelanggan, dan mekanisme reservasi bila dibutuhkan.</p></article>
+                    <article class="national-why-card"><span aria-hidden="true">04</span><h3>Pendidikan dan organisasi</h3><p>Menyediakan profil, program, informasi kegiatan, publikasi, dokumentasi, serta kanal kontak dalam struktur yang mudah dikelola.</p></article>
+                </div>
+            </div>
+        </section>
+
+        @if ($pandeglangPortfolioItems->isNotEmpty())
+            <section class="national-service-section" aria-labelledby="pandeglang-proof-title">
+                <div class="seo-service-shell">
+                    <div class="seo-service-heading">
+                        <p class="seo-service-label">Portfolio terpublikasi</p>
+                        <h2 id="pandeglang-proof-title">Contoh project dan capability JASAIBNU</h2>
+                        <p>Contoh berikut menunjukkan capability umum JASAIBNU dan tidak dipresentasikan sebagai client atau project yang berlokasi di Pandeglang.</p>
+                    </div>
+                    <div class="national-proof-grid">
+                        @foreach ($pandeglangPortfolioItems as $item)
+                            <article class="national-proof-card">
+                                <div class="national-proof-media">
+                                    @if ($item->imageUrl())
+                                        <img src="{{ $item->imageUrl() }}" alt="{{ $item->title }}" width="500" height="350" loading="lazy" decoding="async">
+                                    @else
+                                        <span class="national-proof-fallback" aria-hidden="true">{{ $item->code ?: Illuminate\Support\Str::of($item->title)->substr(0, 3)->upper() }}</span>
+                                    @endif
+                                </div>
+                                <div class="national-proof-body">
+                                    <span class="national-proof-category">{{ $item->categoryName() }}</span>
+                                    <h3>{{ $item->title }}</h3>
+                                    <p class="national-proof-excerpt">{{ $item->excerpt ?: $item->description }}</p>
+                                    @if ($item->technologyList())
+                                        <p class="national-proof-technology-label">Teknologi yang digunakan</p>
+                                        <div class="national-proof-tags" aria-label="Teknologi {{ $item->title }}">
+                                            @foreach ($item->technologyList() as $technology)<span>{{ $technology }}</span>@endforeach
+                                        </div>
+                                    @endif
+                                    @if ($item->project_url)
+                                        <a class="national-proof-link" href="{{ $item->project_url }}" target="_blank" rel="noopener noreferrer">Lihat project</a>
+                                    @endif
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                    <p class="national-proof-more"><a href="{{ route('portfolio.index') }}">Lihat portfolio JASAIBNU selengkapnya</a></p>
+                </div>
+            </section>
+        @endif
+
+        <section class="national-conversion-section" aria-labelledby="pandeglang-process-title">
+            <div class="seo-service-shell">
+                <div class="national-conversion-heading"><p class="seo-service-label">Proses project</p><h2 id="pandeglang-process-title">Proses project dari konsultasi sampai website online</h2></div>
+                <div class="national-process-grid">
+                    <article class="national-process-card"><span>01 — Requirement</span><h3>Requirement &amp; content mapping</h3><p>Tujuan, halaman, pengguna, materi, fungsi, dan tanggung jawab setiap pihak dipetakan sebelum produksi.</p></article>
+                    <article class="national-process-card"><span>02 — Development</span><h3>Design &amp; development</h3><p>Struktur dan tampilan dikembangkan mengikuti scope, kemudian ditinjau melalui tahapan review yang disepakati.</p></article>
+                    <article class="national-process-card"><span>03 — Go-live</span><h3>Review, testing &amp; go-live</h3><p>Konten dan fungsi utama diperiksa, perbaikan dalam scope diselesaikan, lalu deployment dilakukan pada lingkungan yang disepakati.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="national-conversion-section alt" aria-labelledby="pandeglang-cost-title">
+            <div class="seo-service-shell">
+                <div class="national-conversion-heading"><p class="seo-service-label">Ruang lingkup biaya</p><h2 id="pandeglang-cost-title">Faktor yang memengaruhi biaya pembuatan website</h2><p>Estimasi disusun setelah kebutuhan diketahui, bukan melalui paket atau harga yang dibuat tanpa memahami ruang lingkup project.</p></div>
+                <div class="national-deliverables-grid">
+                    <article class="national-deliverable"><h3>Halaman dan tampilan</h3><p>Jumlah halaman, kompleksitas UI, responsive behavior, dan kebutuhan visual memengaruhi pekerjaan desain serta development.</p></article>
+                    <article class="national-deliverable"><h3>Konten dan katalog</h3><p>Kesiapan materi, volume produk, struktur kategori, dan kebutuhan migrasi menentukan pekerjaan pengelolaan konten.</p></article>
+                    <article class="national-deliverable"><h3>CMS dan ecommerce</h3><p>Admin panel, role pengguna, transaksi, pembayaran, pengiriman, dan laporan menambah ruang lingkup fungsi.</p></article>
+                    <article class="national-deliverable"><h3>Integrasi dan infrastruktur</h3><p>API, layanan pihak ketiga, domain, hosting, deployment, keamanan, dan maintenance dinilai sesuai kebutuhan teknis.</p></article>
+                </div>
+                <p class="national-proof-more"><a href="{{ route('contact') }}">Diskusikan kebutuhan untuk memperoleh pemetaan scope project</a>.</p>
+            </div>
+        </section>
+
+        <section class="national-conversion-section" aria-labelledby="pandeglang-handover-title">
+            <div class="seo-service-shell">
+                <div class="national-conversion-heading"><p class="seo-service-label">Setelah go-live</p><h2 id="pandeglang-handover-title">Akses, kepemilikan, dan dukungan setelah go-live</h2><p>Serah terima source code atau akses CMS, tanggung jawab domain dan hosting, deployment, dokumentasi, serta maintenance mengikuti ruang lingkup dan kesepakatan project. Dukungan atau pengembangan lanjutan dapat dibahas sebagai scope lanjutan atau layanan terpisah.</p></div>
+            </div>
+        </section>
+
+        <section class="national-conversion-section alt" aria-labelledby="pandeglang-faq-title">
+            <div class="seo-service-shell">
+                <div class="national-conversion-heading"><p class="seo-service-label">FAQ</p><h2 id="pandeglang-faq-title">Pertanyaan tentang jasa website untuk Pandeglang</h2></div>
+                <div class="seo-service-faq-grid">
+                    @foreach ($pandeglangFaqs as [$question, $answer])
+                        <article class="seo-service-faq"><h3>{{ $question }}</h3><p>{{ $answer }}</p></article>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        <section class="national-final-cta" aria-labelledby="pandeglang-cta-title">
+            <div class="seo-service-shell national-final-cta-copy">
+                <h2 id="pandeglang-cta-title">Diskusikan kebutuhan website bisnis Anda</h2>
+                <p>Ceritakan konteks bisnis, halaman yang diinginkan, fungsi utama, materi atau konten yang tersedia, dan target project agar kebutuhan dapat dipetakan secara realistis.</p>
+                <a class="seo-service-button" href="{{ route('contact') }}" data-national-whatsapp-cta>Konsultasi via WhatsApp</a>
+            </div>
+        </section>
+    @endif
 
     @if ($isSerangMurahLanding)
         @php
@@ -2240,7 +2417,7 @@
                         <summary>Informasi lengkap layanan dan kolaborasi</summary>
                         @if ($isBantenLanding)
                         <p><strong>{{ $landing['impact_title'] }}</strong> {{ $landing['impact_copy'] }}</p>
-                        <p>{{ $landing['badge'] }}</p>
+                        <p>Website menjadi pusat informasi bisnis yang siap melayani calon pelanggan dari Serang, Cilegon, Tangerang, <a href="{{ route('website-development-pandeglang') }}">Pandeglang</a>, Lebak, dan area Banten lainnya.</p>
                         @if ($primarySerangLink)
                             <p>{{ $primarySerangLink['before'] }}<a href="{{ route('website-development-serang') }}">{{ $primarySerangLink['anchor'] }}</a>{{ $primarySerangLink['after'] }}</p>
                         @endif
@@ -2438,7 +2615,7 @@
         </section>
     @endif
 
-    @if (!$isConversionLanding && !$isSerangMurahLanding)
+    @if (!$isConversionLanding && !$isSerangMurahLanding && !$isPandeglangLanding)
     <section class="seo-service-impact" aria-labelledby="website-impact-title">
         <div class="seo-service-shell">
             <div class="seo-service-impact-grid">

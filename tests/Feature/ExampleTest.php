@@ -312,6 +312,146 @@ class ExampleTest extends TestCase
         $this->assertSame(1, count($h1Matches[0]));
     }
 
+    public function test_pandeglang_landing_preserves_locked_seo_content_schema_links_and_protected_pages()
+    {
+        $this->withoutVite();
+
+        $url = route('website-development-pandeglang');
+        $meta = 'Jasa pembuatan website Pandeglang untuk company profile, UMKM, katalog, dan website bisnis yang responsive, SEO-ready, aman, dan mudah dikembangkan.';
+        $h1 = 'Jasa Pembuatan Website Pandeglang untuk Bisnis dan UMKM';
+        $questions = [
+            'Apakah JASAIBNU dapat melayani pembuatan website untuk kebutuhan bisnis di Pandeglang?',
+            'Apakah konsultasi harus dilakukan secara langsung?',
+            'Jenis website apa yang dapat dibuat?',
+            'Apakah website lama dapat didesain ulang?',
+            'Apakah katalog produk atau ecommerce dapat ditambahkan?',
+            'Apa yang memengaruhi biaya project?',
+            'Siapa yang memiliki website setelah project selesai?',
+            'Apakah domain dan hosting sudah termasuk?',
+            'Apakah maintenance tersedia setelah go-live?',
+            'Apakah website mobile-friendly dan SEO-ready?',
+        ];
+
+        $category = PortfolioCategory::firstOrCreate(
+            ['slug' => 'pandeglang-proof-guard'],
+            ['name' => 'Pandeglang Proof Guard']
+        );
+        PortfolioItem::create([
+            'portfolio_category_id' => $category->id,
+            'title' => 'Pandeglang Draft Must Stay Private',
+            'slug' => 'pandeglang-draft-must-stay-private',
+            'status' => PortfolioItem::STATUS_DRAFT,
+            'published_at' => now()->subDay(),
+            'sort_order' => 0,
+        ]);
+        PortfolioItem::create([
+            'portfolio_category_id' => $category->id,
+            'title' => 'Pandeglang Future Must Stay Private',
+            'slug' => 'pandeglang-future-must-stay-private',
+            'status' => PortfolioItem::STATUS_PUBLISHED,
+            'published_at' => now()->addDay(),
+            'sort_order' => 0,
+        ]);
+
+        $response = $this->get($url)->assertOk();
+        $html = $response->getContent();
+        $response
+            ->assertSee('<title>Jasa Pembuatan Website Pandeglang | JASAIBNU</title>', false)
+            ->assertSee('<meta name="description" content="' . $meta . '">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . $url . '">', false)
+            ->assertSee('<h1 id="website-service-title">' . $h1 . '</h1>', false)
+            ->assertSee('Pembuatan website untuk kebutuhan bisnis di Pandeglang')
+            ->assertSee('Website yang dapat disesuaikan dengan tujuan bisnis Anda')
+            ->assertSee('Kebutuhan website untuk berbagai jenis usaha dan organisasi')
+            ->assertSee('Proses project dari konsultasi sampai website online')
+            ->assertSee('Faktor yang memengaruhi biaya pembuatan website')
+            ->assertSee('Akses, kepemilikan, dan dukungan setelah go-live')
+            ->assertSee('Diskusikan kebutuhan website bisnis Anda')
+            ->assertDontSee('Pandeglang Draft Must Stay Private')
+            ->assertDontSee('Pandeglang Future Must Stay Private');
+
+        $this->assertSame('/jasa-pembuatan-website-pandeglang', parse_url($url, PHP_URL_PATH));
+        $this->assertSame('website-development-pandeglang', app('router')->getRoutes()->getByName('website-development-pandeglang')?->getName());
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
+        $this->assertSame(1, substr_count($html, '<link rel="canonical" href="' . $url . '">'));
+
+        preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $jsonLdMatches);
+        $schemas = collect($jsonLdMatches[1])->map(fn ($json) => json_decode($json, true));
+        $service = $schemas->firstWhere('@id', $url . '#service');
+        $faqPage = $schemas->firstWhere('@id', $url . '#faq');
+
+        $this->assertSame('Service', $service['@type'] ?? null);
+        $this->assertSame('Jasa Pembuatan Website Pandeglang', $service['name'] ?? null);
+        $this->assertSame($url, $service['url'] ?? null);
+        $this->assertSame($meta, $service['description'] ?? null);
+        $this->assertSame('Jasa pembuatan website', $service['serviceType'] ?? null);
+        $this->assertSame(['@id' => rtrim(route('home'), '/') . '#professional-service'], $service['provider'] ?? null);
+        $this->assertSame(['@type' => 'AdministrativeArea', 'name' => 'Kabupaten Pandeglang'], $service['areaServed'] ?? null);
+        $this->assertSame('FAQPage', $faqPage['@type'] ?? null);
+        $this->assertCount(10, $faqPage['mainEntity'] ?? []);
+
+        $document = new \DOMDocument();
+        @$document->loadHTML($html);
+        $xpath = new \DOMXPath($document);
+        $visibleFaqs = $xpath->query("//*[@id='pandeglang-faq-title']/ancestor::section[1]//*[contains(concat(' ', normalize-space(@class), ' '), ' seo-service-faq ')]");
+        $this->assertCount(10, $visibleFaqs);
+        foreach ($questions as $index => $question) {
+            $this->assertSame($question, $faqPage['mainEntity'][$index]['name'] ?? null);
+            $this->assertSame($question, trim($xpath->query('.//h3', $visibleFaqs->item($index))->item(0)?->textContent ?? ''));
+            $this->assertSame($faqPage['mainEntity'][$index]['acceptedAnswer']['text'] ?? null, trim($xpath->query('.//p', $visibleFaqs->item($index))->item(0)?->textContent ?? ''));
+        }
+
+        $pageSchemas = json_encode([$service, $faqPage]);
+        foreach (['Product', 'Offer', 'Review', 'AggregateRating', 'LocalBusiness', 'PostalAddress'] as $forbiddenType) {
+            $this->assertStringNotContainsString('"@type":"' . $forbiddenType . '"', $pageSchemas);
+        }
+        foreach (['office in Pandeglang', 'branch in Pandeglang', 'Pandeglang team', 'Pandeglang clients', 'Pandeglang projects', 'guaranteed ranking', 'guaranteed response', 'guaranteed delivery', 'Tunas Toyota', '/login'] as $unsupportedClaim) {
+            $this->assertStringNotContainsStringIgnoringCase($unsupportedClaim, $html);
+        }
+        $this->assertLessThanOrEqual(3, preg_match_all('/class="national-proof-card"/', $html));
+        $response->assertSee('tidak dipresentasikan sebagai client atau project yang berlokasi di Pandeglang');
+
+        $aliases = [
+            '/jasa-website-pandeglang',
+            '/jasa-web-pandeglang',
+            '/jasa-pembuatan-web-pandeglang',
+            '/website-pandeglang',
+            '/jasa-pembuatan-website-di-pandeglang',
+        ];
+        foreach ($aliases as $alias) {
+            $this->get($alias)->assertNotFound();
+        }
+
+        $banten = $this->get(route('website-development-banten'))->assertOk();
+        $banten->assertSee('Tangerang, <a href="' . $url . '">Pandeglang</a>, Lebak', false);
+        $this->assertSame(1, $this->anchorCountForUrl($banten->getContent(), $url));
+
+        foreach ([
+            'website-development' => ['Jasa Pembuatan Website Profesional | JASAIBNU', 'Jasa Pembuatan Website Profesional untuk Bisnis yang Ingin Tumbuh'],
+            'website-development-serang' => ['Jasa Pembuatan Website Serang &amp; Banten | JASAIBNU', 'Jasa Pembuatan Website di Serang untuk Bisnis yang Ingin Tampil Profesional'],
+            'website-development-banten' => ['Jasa Pembuatan Website Banten | Website Bisnis &amp; UMKM', 'Jasa Pembuatan Website Banten untuk Bisnis, UMKM, dan Layanan Profesional'],
+            'website-development-serang-murah' => ['Jasa Pembuatan Website Serang Murah &amp; Profesional | JASAIBNU', 'Jasa Pembuatan Website Serang Murah untuk Bisnis yang Tetap Ingin Terlihat Profesional'],
+            'website-development-umkm-serang' => ['Jasa Website UMKM Serang | Website Usaha Lokal', 'Jasa Website UMKM Serang untuk Usaha Lokal yang Ingin Lebih Mudah Ditemukan'],
+        ] as $routeName => [$title, $protectedH1]) {
+            $protected = $this->get(route($routeName))->assertOk();
+            $protected->assertSee('<title>' . $title . '</title>', false);
+            $this->assertSame($protectedH1, $this->extractTagContent($protected->getContent(), 'h1'));
+            $this->assertSame(1, preg_match_all('/<h1\b/i', $protected->getContent()));
+            if ($routeName !== 'website-development-banten') {
+                $this->assertSame(0, $this->anchorCountForUrl($protected->getContent(), $url));
+                $this->assertStringNotContainsString('Pandeglang', $protected->getContent());
+            }
+        }
+
+        $sitemap = $this->get(route('sitemap'))->assertOk();
+        $this->assertSame(1, substr_count($sitemap->getContent(), '<loc>' . $url . '</loc>'));
+        $this->assertMatchesRegularExpression('/<loc>' . preg_quote($url, '/') . '<\/loc>\s*<changefreq>weekly<\/changefreq>\s*<priority>0\.85<\/priority>/', $sitemap->getContent());
+        foreach ($aliases as $alias) {
+            $this->assertStringNotContainsString('<loc>' . rtrim(route('home'), '/') . $alias . '</loc>', $sitemap->getContent());
+        }
+    }
+
     public function test_banten_geographic_schema_and_minimal_internal_link_preserve_locked_contracts()
     {
         $this->withoutVite();

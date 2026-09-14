@@ -18,6 +18,7 @@ class SitemapController extends Controller
             ['loc' => route('website-development-ecommerce'), 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => route('website-development-serang'), 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => route('website-development-banten'), 'changefreq' => 'weekly', 'priority' => '0.9'],
+            ['loc' => route('website-development-pandeglang'), 'changefreq' => 'weekly', 'priority' => '0.85'],
             ['loc' => route('website-development-serang-murah'), 'changefreq' => 'weekly', 'priority' => '0.85'],
             ['loc' => route('website-development-umkm-serang'), 'changefreq' => 'weekly', 'priority' => '0.85'],
             ['loc' => route('seo-serang'), 'changefreq' => 'weekly', 'priority' => '0.9'],
