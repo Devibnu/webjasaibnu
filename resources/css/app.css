@@ -2744,7 +2744,17 @@ body.startup2-home .homepage-consultation-section > .container {
 
 .startup2-home .homepage-services-grid .service-item {
     overflow: hidden;
+    justify-content: flex-start !important;
+    padding-top: 16px !important;
     padding-bottom: 64px !important;
+}
+
+.startup2-home .homepage-services-grid .service-icon {
+    margin-bottom: 18px;
+}
+
+.startup2-home .homepage-services-grid .service-item h3 {
+    margin-bottom: 10px !important;
 }
 
 .startup2-home .homepage-services-grid .service-item a.btn {

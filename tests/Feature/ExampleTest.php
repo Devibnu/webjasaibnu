@@ -81,6 +81,17 @@ class ExampleTest extends TestCase
         $this->assertCount(1, $xpath->query(".//*[{$classToken('service-item')}][.//h3[normalize-space()='AI Integration']]", $servicesGrid));
 
         foreach ([
+            'Website Development' => 'Website perusahaan yang cepat, responsive, SEO-ready, dan mudah dikembangkan.',
+            'SEO Services' => 'Optimasi teknis, struktur konten, dan fondasi search visibility yang rapi untuk membantu website bisnis lebih mudah dipahami Google.',
+            'Web Application' => 'Aplikasi web custom untuk workflow, data, dan proses operasional bisnis.',
+            'Mobile Application' => 'Aplikasi mobile untuk kebutuhan internal, pelanggan, atau operasional lapangan.',
+            'SaaS Development' => 'Platform SaaS dengan fondasi produk, akun pengguna, dan roadmap fitur.',
+            'AI Integration' => 'Integrasi AI dan automation yang relevan untuk mempercepat pekerjaan tim.',
+        ] as $title => $description) {
+            $this->assertCount(1, $xpath->query(".//*[{$classToken('service-item')}][.//h3[normalize-space()='{$title}'] and .//p[normalize-space()='{$description}']]", $servicesGrid));
+        }
+
+        foreach ([
             route('website-development-serang') => 'Lihat Jasa Pembuatan Website di Serang',
             route('seo-serang') => 'Lihat layanan SEO di Serang',
             route('application-development') => 'Lihat layanan Web Application',
@@ -122,7 +133,9 @@ class ExampleTest extends TestCase
 
         $css = file_get_contents(resource_path('css/app.css'));
 
-        $this->assertStringContainsString('.startup2-home .homepage-services-grid .service-item', $css);
+        $this->assertMatchesRegularExpression('/\.startup2-home \.homepage-services-grid \.service-item\s*\{[^}]*overflow:\s*hidden;[^}]*justify-content:\s*flex-start\s*!important;[^}]*padding-top:\s*16px\s*!important;[^}]*padding-bottom:\s*64px\s*!important;/s', $css);
+        $this->assertMatchesRegularExpression('/\.startup2-home \.homepage-services-grid \.service-icon\s*\{[^}]*margin-bottom:\s*18px;/s', $css);
+        $this->assertMatchesRegularExpression('/\.startup2-home \.homepage-services-grid \.service-item h3\s*\{[^}]*margin-bottom:\s*10px\s*!important;/s', $css);
         $this->assertStringContainsString('.startup2-home .homepage-services-grid .service-item:hover a.btn', $css);
         $this->assertStringContainsString('.startup2-home .homepage-services-grid .service-item:focus-within a.btn', $css);
         $this->assertStringContainsString('.startup2-home .homepage-services-grid .service-item a.btn:focus-visible', $css);
