@@ -139,6 +139,45 @@ class ExampleTest extends TestCase
         }
     }
 
+    public function test_services_page_uses_unified_cards_and_separates_contextual_links()
+    {
+        $this->withoutVite();
+
+        $response = $this->get(route('services.index'))->assertOk();
+        $document = new \DOMDocument();
+        @$document->loadHTML($response->getContent());
+        $xpath = new \DOMXPath($document);
+        $classToken = static fn (string $class): string => "contains(concat(' ', normalize-space(@class), ' '), ' {$class} ')";
+        $servicesGrid = $xpath->query("//*[{$classToken('services-grid')}]")->item(0);
+
+        $this->assertNotNull($servicesGrid);
+        $cards = $xpath->query("./article[{$classToken('services-card')}]", $servicesGrid);
+        $this->assertCount(6, $cards);
+
+        foreach (['Website Development', 'SEO Services', 'Web Application', 'Mobile Application', 'SaaS Development', 'AI Integration'] as $title) {
+            $this->assertCount(1, $xpath->query("./article[.//h2[normalize-space()='{$title}']]", $servicesGrid));
+        }
+
+        foreach ($cards as $card) {
+            $this->assertCount(1, $xpath->query(".//a[{$classToken('services-card-link')}]", $card));
+            $this->assertCount(0, $xpath->query('.//a[contains(@href, "landing-page") or contains(@href, "jasa-seo-serang")]', $card));
+        }
+
+        $contextLinks = $xpath->query("//*[{$classToken('services-context-links')}]")->item(0);
+        $this->assertNotNull($contextLinks);
+        $this->assertSame($servicesGrid->parentNode, $contextLinks->parentNode);
+        $this->assertSame($servicesGrid, $contextLinks->previousElementSibling);
+
+        foreach ([
+            route('landing-page-development') => 'Jasa pembuatan landing page untuk campaign bisnis',
+            route('application-development') => 'Pelajari pengembangan aplikasi bisnis',
+            route('seo-serang') => 'Pelajari jasa SEO Serang',
+        ] as $url => $anchorText) {
+            $this->assertCount(1, $xpath->query("//a[@href='{$url}' and normalize-space()='{$anchorText}']"));
+            $this->assertCount(1, $xpath->query(".//a[@href='{$url}' and normalize-space()='{$anchorText}']", $contextLinks));
+        }
+    }
+
     public function test_serang_website_development_landing_page_targets_local_keyword()
     {
         $this->withoutVite();

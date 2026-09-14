@@ -129,21 +129,16 @@
             }
         }
 
-        .services-page .services-card-link.services-card-link-text {
-            width: auto;
-            min-width: 176px;
-            padding-inline: 12px;
-            margin-left: 0;
-            transform: translateX(-50%);
-            font-size: .78rem;
-            line-height: 1.2;
+        .services-page .services-context-links {
+            max-width: 900px;
+            margin: 32px auto 0;
+            color: #6b7280;
+            line-height: 1.7;
+            text-align: center;
         }
 
-        .services-page .services-context-link {
-            display: inline-block;
-            margin-top: 10px;
+        .services-page .services-context-links a {
             color: var(--primary);
-            font-size: .84rem;
             font-weight: 600;
         }
     </style>
@@ -163,21 +158,18 @@
                         <div class="services-card-icon" aria-hidden="true"><span>{{ $service->icon }}</span></div>
                         <h2>{{ $service->title }}</h2>
                         <p>{{ $service->description }}</p>
-                        @if ($service->slug === 'website-development')
-                            <a class="services-context-link" href="{{ route('landing-page-development') }}">Jasa pembuatan landing page untuk campaign bisnis</a>
-                        @endif
-                        @if ($service->slug === 'web-application')
-                            <a class="services-card-link services-card-link-text" href="{{ route('application-development') }}">Pelajari pengembangan aplikasi bisnis</a>
-                        @elseif ($service->slug === 'seo-services')
-                            <a class="services-card-link services-card-link-text" href="{{ route('seo-serang') }}">Pelajari jasa SEO Serang</a>
-                        @else
-                            <a class="services-card-link" href="{{ route('contact') }}" aria-label="Diskusikan {{ $service->title }}">
-                                <span aria-hidden="true">→</span>
-                            </a>
-                        @endif
+                        <a class="services-card-link" href="{{ route('contact') }}" aria-label="Diskusikan {{ $service->title }}">
+                            <span aria-hidden="true">→</span>
+                        </a>
                     </article>
                 @endforeach
             </div>
+            <p class="services-context-links">
+                Pelajari layanan terkait:
+                <a href="{{ route('landing-page-development') }}">Jasa pembuatan landing page untuk campaign bisnis</a>,
+                <a href="{{ route('application-development') }}">Pelajari pengembangan aplikasi bisnis</a>, dan
+                <a href="{{ route('seo-serang') }}">Pelajari jasa SEO Serang</a>.
+            </p>
         </div>
     </section>
 
