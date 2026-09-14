@@ -1375,6 +1375,7 @@ class ExampleTest extends TestCase
             'portfolio-title', 'portfolio-slug', 'portfolio-excerpt', 'portfolio-description',
             'portfolio-technologies', 'portfolio-category', 'portfolio-status', 'portfolio-image',
             'portfolio-project-url', 'portfolio-seo-title', 'portfolio-seo-desc',
+            'portfolio-image-optimization-status', 'portfolio-image-client-error',
         ] as $hookId) {
             $create->assertSee('id="' . $hookId . '"', false);
         }
@@ -1388,6 +1389,15 @@ class ExampleTest extends TestCase
             ->assertSee('https://example.com/existing-project', false)
             ->assertSee('id="portfolio-image-preview" src="' . $item->imageUrl() . '"', false)
             ->assertSee('Current featured image for Synthetic Existing Project');
+
+        $create
+            ->assertSee('URL.createObjectURL', false)
+            ->assertSee('URL.revokeObjectURL', false)
+            ->assertSee('canvas.toBlob', false)
+            ->assertSee('new DataTransfer()', false)
+            ->assertSee('Image optimized automatically for web.')
+            ->assertSee('MAX_IMAGE_BYTES', false)
+            ->assertSee('MAX_IMAGE_DIMENSION', false);
     }
 
     public function test_portfolio_page_settings_control_public_intro_and_cta_copy()

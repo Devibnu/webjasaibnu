@@ -125,9 +125,11 @@
                     </div>
                     <div class="card-body">
                         <label class="form-label font-weight-bold" for="portfolio-image">Featured Image</label>
-                        <input type="file" name="featured_image" id="portfolio-image" class="{{ $fieldClass('featured_image') }}" accept="image/jpeg,image/png,image/webp" aria-describedby="{{ $describedBy('featured_image', 'portfolio-image-help') }}" @if($errors->has('featured_image')) aria-invalid="true" @endif>
+                        <input type="file" name="featured_image" id="portfolio-image" class="{{ $fieldClass('featured_image') }}" accept="image/jpeg,image/png,image/webp" aria-describedby="{{ $describedBy('featured_image', 'portfolio-image-help portfolio-image-optimization-status portfolio-image-client-error') }}" @if($errors->has('featured_image')) aria-invalid="true" @endif>
                         <div class="text-xs text-secondary mt-1" id="portfolio-image-help">JPG, PNG, or WebP • Max 2 MB</div>
                         @error('featured_image')<div class="invalid-feedback" id="portfolio-featured-image-error">{{ $message }}</div>@enderror
+                        <div class="text-xs text-info font-weight-bold mt-2" id="portfolio-image-optimization-status" role="status" aria-live="polite"></div>
+                        <div class="text-xs text-danger font-weight-bold mt-2" id="portfolio-image-client-error" role="alert" hidden></div>
                         <input type="hidden" id="portfolio-has-existing-image" value="{{ ($item->exists && $item->imageUrl()) ? '1' : '0' }}">
                         <div class="image-preview mt-3" id="portfolio-image-preview-container" @if(! ($item->exists && $item->imageUrl())) hidden @endif>
                             <img id="portfolio-image-preview" src="{{ ($item->exists && $item->imageUrl()) ? $item->imageUrl() : '' }}" data-existing-src="{{ ($item->exists && $item->imageUrl()) ? $item->imageUrl() : '' }}" alt="{{ ($item->exists && $item->imageUrl()) ? 'Current featured image for ' . $item->title : 'Selected featured image preview' }}">
