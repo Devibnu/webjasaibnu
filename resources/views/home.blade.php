@@ -835,7 +835,7 @@
         </div>
     </div>
 
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container-fluid py-5 wow fadeInUp homepage-services-section" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-7">
@@ -952,17 +952,21 @@
                     </div>
                 @endforeach
             </div>
-            <p class="homepage-services-support text-center mt-4 mb-0">
-                Untuk kebutuhan lintas wilayah, pelajari <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a>.
-                <a href="{{ route('website-development-banten') }}">Jasa pembuatan website Banten</a>
-                dan
-                <a href="{{ route('website-development-umkm-serang') }}">website UMKM Serang</a>
-                tersedia untuk bisnis yang membutuhkan website praktis, cepat, dan siap dikembangkan.
-            </p>
+            <div class="homepage-services-support" aria-labelledby="homepage-website-services-title">
+                <div class="homepage-services-support-copy">
+                    <p class="homepage-services-support-eyebrow" id="homepage-website-services-title">LAYANAN WEBSITE</p>
+                    <p>Untuk kebutuhan website berdasarkan cakupan layanan dan lokasi, pilih layanan yang paling sesuai dengan kebutuhan bisnis Anda.</p>
+                </div>
+                <nav class="homepage-services-support-links" aria-label="Layanan website terkait">
+                    <a href="{{ route('website-development') }}">layanan pembuatan website profesional</a>
+                    <a href="{{ route('website-development-banten') }}">Jasa pembuatan website Banten</a>
+                    <a href="{{ route('website-development-umkm-serang') }}">website UMKM Serang</a>
+                </nav>
+            </div>
         </div>
     </div>
 
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container-fluid py-5 wow fadeInUp homepage-consultation-section" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-7">

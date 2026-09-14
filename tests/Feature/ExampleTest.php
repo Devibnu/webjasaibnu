@@ -84,6 +84,9 @@ class ExampleTest extends TestCase
         $this->assertNotNull($support);
         $this->assertSame($servicesGrid->parentNode, $support->parentNode);
         $this->assertSame($servicesGrid, $support->previousElementSibling);
+        $this->assertCount(1, $xpath->query(".//*[{$classToken('homepage-services-support-eyebrow')} and normalize-space()='LAYANAN WEBSITE']", $support));
+        $this->assertCount(1, $xpath->query("./nav[{$classToken('homepage-services-support-links')}]", $support));
+        $this->assertCount(3, $xpath->query("./nav[{$classToken('homepage-services-support-links')}]/a", $support));
 
         foreach ([
             route('website-development') => 'layanan pembuatan website profesional',
@@ -91,10 +94,19 @@ class ExampleTest extends TestCase
             route('website-development-umkm-serang') => 'website UMKM Serang',
         ] as $url => $anchorText) {
             $this->assertCount(1, $xpath->query(".//a[@href='{$url}' and normalize-space()='{$anchorText}']", $support));
+            $this->assertCount(1, $xpath->query("//a[@href='{$url}' and normalize-space()='{$anchorText}' and not(contains(concat(' ', normalize-space(@rel), ' '), ' nofollow '))]"));
         }
 
         $response->assertDontSee('Diskusikan Layanan');
         $this->assertLessThan(strpos($html, 'Butuh Solusi Digital yang Sesuai dengan Proses Bisnis Anda?'), strpos($html, 'homepage-services-support'));
+        $this->assertLessThan(strpos($html, 'homepage-consultation-section'), strpos($html, 'homepage-services-support'));
+        $this->assertCount(1, $xpath->query("//h1"));
+        $response
+            ->assertSee('<title>Jasa Pembuatan Website, Aplikasi &amp; SEO | JASAIBNU</title>', false)
+            ->assertSee('<meta name="description" content="JASAIBNU menyediakan jasa pembuatan website, aplikasi bisnis, SaaS, SEO, integrasi sistem, dan AI untuk bisnis yang ingin tumbuh secara digital.">', false)
+            ->assertSee('<meta name="robots" content="index,follow">', false)
+            ->assertSee('<link rel="canonical" href="' . route('home') . '">', false)
+            ->assertSee('Diskusikan kebutuhan website, aplikasi, SaaS, SEO, integrasi AI, atau sistem internal yang ingin Anda bangun bersama JASAIBNU.', false);
     }
 
     public function test_homepage_prioritizes_lcp_hero_and_lazy_loads_below_fold_images()

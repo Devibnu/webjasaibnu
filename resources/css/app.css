@@ -2726,6 +2726,120 @@ h3 {
     }
 }
 
+body.startup2-home .homepage-services-section {
+    padding-bottom: 1.5rem !important;
+}
+
+body.startup2-home .homepage-services-section > .container {
+    padding-bottom: 1.5rem !important;
+}
+
+body.startup2-home .homepage-consultation-section {
+    padding-top: 1.5rem !important;
+}
+
+body.startup2-home .homepage-consultation-section > .container {
+    padding-top: 1.5rem !important;
+}
+
+.startup2-home .homepage-services-support {
+    width: min(100%, 980px);
+    margin: 30px auto 0;
+    border: 1px solid #dcecf5;
+    border-radius: 8px;
+    background: #f7fcff;
+    padding: 22px 24px 24px;
+}
+
+.startup2-home .homepage-services-support-copy {
+    max-width: 720px;
+    margin: 0 auto 18px;
+    text-align: center;
+}
+
+.startup2-home .homepage-services-support-copy p {
+    margin: 0;
+    color: #5f6b7a;
+    line-height: 1.55;
+}
+
+.startup2-home .homepage-services-support-copy .homepage-services-support-eyebrow {
+    margin-bottom: 6px;
+    color: #06a3da;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.startup2-home .homepage-services-support-links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.startup2-home .homepage-services-support-links a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border: 1px solid #d8e8f1;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #091e3e;
+    padding: 10px 13px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    line-height: 1.35;
+    transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.startup2-home .homepage-services-support-links a::after {
+    flex: 0 0 auto;
+    color: #06a3da;
+    content: "→";
+}
+
+.startup2-home .homepage-services-support-links a:hover,
+.startup2-home .homepage-services-support-links a:focus-visible {
+    border-color: rgba(6, 163, 218, 0.58);
+    color: #06a3da;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 991.98px) {
+    .startup2-home .homepage-services-support-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .startup2-home .homepage-services-support-links a:last-child {
+        grid-column: 1 / -1;
+        width: min(100%, 340px);
+        justify-self: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .startup2-home .homepage-services-support {
+        margin-top: 24px;
+        padding: 20px 16px;
+    }
+
+    .startup2-home .homepage-services-support-copy {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .startup2-home .homepage-services-support-links {
+        grid-template-columns: 1fr;
+    }
+
+    .startup2-home .homepage-services-support-links a:last-child {
+        grid-column: auto;
+        width: 100%;
+    }
+}
+
 /* Services page Startup2 rebuild: scoped because Bootstrap is not loaded in this app. */
 .services-page {
     background: #ffffff;
