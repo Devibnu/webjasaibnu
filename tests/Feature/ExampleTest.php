@@ -361,12 +361,11 @@ class ExampleTest extends TestCase
             ->assertSee('<meta name="robots" content="index,follow">', false)
             ->assertSee('<link rel="canonical" href="' . $url . '">', false)
             ->assertSee('<h1 id="website-service-title">' . $h1 . '</h1>', false)
+            ->assertDontSee('<p class="seo-service-label">Jasa Pembuatan Website Pandeglang</p>', false)
             ->assertSee('Pembuatan website untuk kebutuhan bisnis di Pandeglang')
             ->assertSee('Website yang dapat disesuaikan dengan tujuan bisnis Anda')
-            ->assertSee('Kebutuhan website untuk berbagai jenis usaha dan organisasi')
+            ->assertSee('Jasa Profesional')
             ->assertSee('Proses project dari konsultasi sampai website online')
-            ->assertSee('Faktor yang memengaruhi biaya pembuatan website')
-            ->assertSee('Akses, kepemilikan, dan dukungan setelah go-live')
             ->assertSee('Diskusikan kebutuhan website bisnis Anda')
             ->assertDontSee('Pandeglang Draft Must Stay Private')
             ->assertDontSee('Pandeglang Future Must Stay Private');
@@ -375,6 +374,35 @@ class ExampleTest extends TestCase
         $this->assertSame('website-development-pandeglang', app('router')->getRoutes()->getByName('website-development-pandeglang')?->getName());
         $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
         $this->assertSame(1, substr_count($html, '<link rel="canonical" href="' . $url . '">'));
+        $this->assertMatchesRegularExpression('/\.pandeglang-service-page \.seo-service-hero\s*\{[^}]*margin-top:\s*0;[^}]*padding:\s*140\.5px 0 0;[^}]*linear-gradient\(180deg,\s*#0a213f/s', file_get_contents(resource_path('css/app.css')));
+        $this->assertMatchesRegularExpression('/@media \(max-width:\s*991\.98px\)\s*\{\s*\.pandeglang-service-page \.seo-service-hero\s*\{[^}]*padding-top:\s*44px;[^}]*linear-gradient\(145deg/s', file_get_contents(resource_path('css/app.css')));
+        foreach ([
+            'pandeglang-hero-visual',
+            'pandeglang-hero-highlights',
+            'pandeglang-solutions',
+            'pandeglang-use-case-strip',
+            'pandeglang-website-placeholder',
+            'pandeglang-proof',
+            'pandeglang-process',
+            'pandeglang-faq',
+            'pandeglang-final-cta',
+        ] as $uiHook) {
+            $response->assertSee($uiHook, false);
+        }
+        $this->assertSame(6, preg_match_all('/class="national-primary-card"/', $html));
+        $this->assertSame(3, preg_match_all('/class="pandeglang-hero-highlight"/', $html));
+        $this->assertSame(6, preg_match_all('/class="national-primary-card"><span aria-hidden="true"><svg/', $html));
+        $this->assertSame(3, preg_match_all('/class="national-process-card"/', $html));
+        $this->assertSame(6, preg_match_all('/class="pandeglang-use-case-item"/', $html));
+        foreach (['Jasa Profesional', 'UMKM', 'Katalog', 'Pariwisata', 'Pendidikan', 'Organisasi'] as $useCase) {
+            $response->assertSee($useCase);
+        }
+        foreach (['pandeglang-hero-points', 'pandeglang-use-cases', 'pandeglang-use-case-grid', 'pandeglang-use-cases-title'] as $removedUiHook) {
+            $response->assertDontSee($removedUiHook, false);
+        }
+        foreach (['Company Profile', 'Website UMKM &amp; Layanan', 'Katalog Produk atau Jasa', 'Ecommerce', 'Website dengan CMS', 'Pengembangan Lanjutan'] as $solution) {
+            $response->assertSee($solution, false);
+        }
 
         preg_match_all('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $jsonLdMatches);
         $schemas = collect($jsonLdMatches[1])->map(fn ($json) => json_decode($json, true));
