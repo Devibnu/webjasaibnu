@@ -2197,7 +2197,38 @@
                                     @if ($item->imageUrl())
                                         <img src="{{ $item->imageUrl() }}" alt="{{ $item->title }}" width="500" height="350" loading="lazy" decoding="async">
                                     @else
-                                        <span class="national-proof-fallback" aria-hidden="true"><i class="pandeglang-website-placeholder"></i></span>
+                                        @php
+                                            $fallbackType = match ($item->categoryName()) {
+                                                'Business Application' => 'dashboard',
+                                                'Education SaaS' => 'examination',
+                                                default => 'website',
+                                            };
+                                        @endphp
+                                        <span class="national-proof-fallback pandeglang-capability-illustration is-{{ $fallbackType }}" aria-hidden="true">
+                                            <svg viewBox="0 0 320 160" focusable="false">
+                                                <rect class="screen" x="18" y="14" width="284" height="132" rx="10"/>
+                                                <rect class="topbar" x="18" y="14" width="284" height="25" rx="10"/>
+                                                <circle cx="34" cy="27" r="3"/><circle cx="45" cy="27" r="3"/><circle cx="56" cy="27" r="3"/>
+                                                @if ($fallbackType === 'dashboard')
+                                                    <rect class="sidebar" x="31" y="51" width="48" height="79" rx="5"/>
+                                                    <path d="M42 67h25M42 79h18M42 91h22"/>
+                                                    <rect class="panel" x="92" y="51" width="58" height="30" rx="5"/><rect class="panel" x="160" y="51" width="58" height="30" rx="5"/><rect class="panel" x="228" y="51" width="58" height="30" rx="5"/>
+                                                    <path class="accent" d="M102 118l28-18 23 10 31-25 29 17 29-12 34 24"/>
+                                                    <path d="M94 130h190"/>
+                                                @elseif ($fallbackType === 'examination')
+                                                    <rect class="sidebar" x="31" y="51" width="58" height="79" rx="5"/>
+                                                    <circle class="accent-fill" cx="60" cy="75" r="12"/><path class="check" d="m54 75 4 4 8-9"/>
+                                                    <path d="M43 103h34M47 115h26"/>
+                                                    <rect class="panel" x="102" y="51" width="184" height="79" rx="6"/>
+                                                    <path d="M117 67h91M117 80h142M117 103h118M117 116h77"/>
+                                                    <circle class="option" cx="269" cy="67" r="5"/><circle class="option" cx="269" cy="103" r="5"/>
+                                                @else
+                                                    <rect class="hero-panel" x="31" y="51" width="258" height="43" rx="6"/>
+                                                    <path class="accent" d="M45 65h54M45 76h89"/><rect class="accent-fill" x="45" y="82" width="37" height="5" rx="2.5"/>
+                                                    <rect class="panel" x="31" y="105" width="76" height="25" rx="5"/><rect class="panel" x="122" y="105" width="76" height="25" rx="5"/><rect class="panel" x="213" y="105" width="76" height="25" rx="5"/>
+                                                @endif
+                                            </svg>
+                                        </span>
                                     @endif
                                 </div>
                                 <div class="national-proof-body">
@@ -2210,7 +2241,9 @@
                             </article>
                         @endforeach
                     </div>
-                    <p class="national-proof-more"><a href="{{ route('portfolio.index') }}">Lihat portfolio JASAIBNU selengkapnya</a></p>
+                    <div class="pandeglang-portfolio-cta">
+                        <a href="{{ route('portfolio.index') }}"><span>Lihat portfolio JASAIBNU selengkapnya</span><i aria-hidden="true">→</i></a>
+                    </div>
                 </div>
             </section>
         @endif

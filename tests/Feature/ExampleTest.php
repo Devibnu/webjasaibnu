@@ -374,15 +374,16 @@ class ExampleTest extends TestCase
         $this->assertSame('website-development-pandeglang', app('router')->getRoutes()->getByName('website-development-pandeglang')?->getName());
         $this->assertSame(1, preg_match_all('/<h1\b/i', $html));
         $this->assertSame(1, substr_count($html, '<link rel="canonical" href="' . $url . '">'));
-        $this->assertMatchesRegularExpression('/\.pandeglang-service-page \.seo-service-hero\s*\{[^}]*margin-top:\s*0;[^}]*padding:\s*140\.5px 0 0;[^}]*linear-gradient\(180deg,\s*#0a213f/s', file_get_contents(resource_path('css/app.css')));
+        $this->assertMatchesRegularExpression('/\.pandeglang-service-page \.seo-service-hero\s*\{[^}]*margin-top:\s*0;[^}]*padding:\s*140\.5px 0 0;[^}]*background:\s*#103f64;/s', file_get_contents(resource_path('css/app.css')));
         $this->assertMatchesRegularExpression('/@media \(max-width:\s*991\.98px\)\s*\{\s*\.pandeglang-service-page \.seo-service-hero\s*\{[^}]*padding-top:\s*44px;[^}]*linear-gradient\(145deg/s', file_get_contents(resource_path('css/app.css')));
         foreach ([
             'pandeglang-hero-visual',
             'pandeglang-hero-highlights',
             'pandeglang-solutions',
             'pandeglang-use-case-strip',
-            'pandeglang-website-placeholder',
+            'pandeglang-capability-illustration',
             'pandeglang-proof',
+            'pandeglang-portfolio-cta',
             'pandeglang-process',
             'pandeglang-faq',
             'pandeglang-final-cta',
@@ -391,6 +392,9 @@ class ExampleTest extends TestCase
         }
         $this->assertSame(6, preg_match_all('/class="national-primary-card"/', $html));
         $this->assertSame(3, preg_match_all('/class="pandeglang-hero-highlight"/', $html));
+        $this->assertSame(1, preg_match_all('/class="pandeglang-portfolio-cta"/', $html));
+        $response->assertSee('<a href="' . route('portfolio.index') . '"><span>Lihat portfolio JASAIBNU selengkapnya</span><i aria-hidden="true">→</i></a>', false);
+        $this->assertSame(3, preg_match_all('/pandeglang-capability-illustration is-(dashboard|website|examination)/', $html));
         $this->assertSame(6, preg_match_all('/class="national-primary-card"><span aria-hidden="true"><svg/', $html));
         $this->assertSame(3, preg_match_all('/class="national-process-card"/', $html));
         $this->assertSame(6, preg_match_all('/class="pandeglang-use-case-item"/', $html));
@@ -478,6 +482,21 @@ class ExampleTest extends TestCase
         foreach ($aliases as $alias) {
             $this->assertStringNotContainsString('<loc>' . rtrim(route('home'), '/') . $alias . '</loc>', $sitemap->getContent());
         }
+    }
+
+    public function test_pandeglang_portfolio_uses_real_image_and_only_falls_back_when_missing()
+    {
+        $this->withoutVite();
+
+        $withImage = PortfolioItem::published()->ordered()->firstOrFail();
+        $withImage->update(['featured_image' => 'assets/startup2/img/blog-1.jpg']);
+
+        $response = $this->get(route('website-development-pandeglang'))->assertOk();
+        $html = $response->getContent();
+
+        $response->assertSee('<img src="' . asset('assets/startup2/img/blog-1.jpg') . '" alt="' . $withImage->title . '"', false);
+        $this->assertSame(1, preg_match_all('/<img src="[^"]+" alt="' . preg_quote($withImage->title, '/') . '"/', $html));
+        $this->assertSame(2, preg_match_all('/pandeglang-capability-illustration is-(dashboard|website|examination)/', $html));
     }
 
     public function test_banten_geographic_schema_and_minimal_internal_link_preserve_locked_contracts()

@@ -30,15 +30,15 @@
     margin-top: 0;
     overflow: visible;
     padding: 140.5px 0 0;
-    background: linear-gradient(180deg, #0a213f 0, #143b5d 52px, #2d5877 88px, #7198b2 112px, #c7dfec 136px, #eef7fc 166px, #f8fbff 230px, #fff 100%);
-    color: #172b43;
+    background: #103f64;
+    color: #fff;
 }
 
 .pandeglang-service-page .seo-service-hero::after { display: none; }
 .pandeglang-service-page .seo-service-hero-grid { grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 48px; align-items: center; }
 .pandeglang-service-page .seo-service-copy-block { max-width: 650px; text-align: left; }
-.pandeglang-service-page .seo-service-hero h1 { max-width: 650px; margin-bottom: 18px; color: #10243d; font-size: clamp(3rem, 3.7vw, 3.35rem); line-height: 1.07; letter-spacing: -.035em; }
-.pandeglang-service-page .seo-service-hero-copy { max-width: 600px; margin-bottom: 22px; color: #5c6e80; font-size: .98rem; line-height: 1.65; }
+.pandeglang-service-page .seo-service-hero h1 { max-width: 650px; margin-bottom: 18px; color: #fff; font-size: clamp(3rem, 3.7vw, 3.35rem); line-height: 1.07; letter-spacing: -.035em; }
+.pandeglang-service-page .seo-service-hero-copy { max-width: 600px; margin-bottom: 22px; color: #d9eaf4; font-size: .98rem; line-height: 1.65; }
 .pandeglang-service-page .seo-service-actions { justify-content: flex-start; gap: 10px; }
 .pandeglang-service-page .seo-service-button { min-height: 46px; padding: 11px 20px; border-radius: 7px; }
 .pandeglang-service-page .seo-service-hero .seo-service-button.secondary { border-color: #087cf0; background: #fff; color: #087cf0; }
@@ -100,16 +100,32 @@
 .pandeglang-service-page .pandeglang-proof .national-proof-media,
 .pandeglang-service-page .pandeglang-proof .national-proof-media img,
 .pandeglang-service-page .pandeglang-proof .national-proof-fallback { width: 100%; height: 178px; min-height: 178px; object-fit: cover; object-position: top; }
-.pandeglang-service-page .pandeglang-proof .national-proof-media.is-fallback { height: 138px; min-height: 138px; }
+.pandeglang-service-page .pandeglang-proof .national-proof-media.is-fallback { height: 178px; min-height: 178px; }
 .pandeglang-service-page .pandeglang-proof .national-proof-fallback { display: grid; place-items: center; height: 100%; min-height: 100%; background: linear-gradient(145deg, #edf8fc, #e4f2f8); color: #06a3da; }
-.pandeglang-service-page .pandeglang-website-placeholder { position: relative; display: block; width: 38px; height: 29px; border: 2px solid currentColor; border-radius: 4px; opacity: .85; }
-.pandeglang-service-page .pandeglang-website-placeholder::before { position: absolute; top: 6px; left: 6px; width: 19px; height: 2px; border-radius: 2px; background: currentColor; box-shadow: 0 6px 0 currentColor; content: ""; }
-.pandeglang-service-page .pandeglang-website-placeholder::after { position: absolute; right: 6px; bottom: 5px; width: 8px; height: 8px; border-radius: 2px; background: #b9dfe9; content: ""; }
+.pandeglang-service-page .pandeglang-capability-illustration { padding: 14px 24px; background: linear-gradient(145deg, #f3fbfe, #dceff7); }
+.pandeglang-service-page .pandeglang-capability-illustration svg { width: min(100%, 300px); height: 150px; fill: none; stroke: #78aabd; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 10px 12px rgba(19, 65, 92, .09)); }
+.pandeglang-service-page .pandeglang-capability-illustration .screen { fill: #fff; stroke: #b9d8e5; }
+.pandeglang-service-page .pandeglang-capability-illustration .topbar { fill: #173f61; stroke: #173f61; }
+.pandeglang-service-page .pandeglang-capability-illustration .topbar ~ circle { fill: #8fbdcf; stroke: none; }
+.pandeglang-service-page .pandeglang-capability-illustration .sidebar { fill: #e0f3f9; stroke: #9bc6d6; }
+.pandeglang-service-page .pandeglang-capability-illustration .panel { fill: #f3f9fc; stroke: #b9d8e5; }
+.pandeglang-service-page .pandeglang-capability-illustration .hero-panel { fill: #e5f5fa; stroke: #9ccada; }
+.pandeglang-service-page .pandeglang-capability-illustration .accent { stroke: #06a3da; stroke-width: 3; }
+.pandeglang-service-page .pandeglang-capability-illustration .accent-fill { fill: #06a3da; stroke: #06a3da; }
+.pandeglang-service-page .pandeglang-capability-illustration .check { stroke: #fff; stroke-width: 2; }
+.pandeglang-service-page .pandeglang-capability-illustration .option { fill: #fff; stroke: #06a3da; }
 .pandeglang-service-page .pandeglang-proof .national-proof-body { display: flex; min-height: 122px; padding: 16px 18px; flex-direction: column; }
 .pandeglang-service-page .pandeglang-proof .national-proof-category { margin-bottom: 5px; font-size: .72rem; }
 .pandeglang-service-page .pandeglang-proof .national-proof-card h3 { margin-bottom: 12px; font-size: 1.05rem; }
 .pandeglang-service-page .pandeglang-proof .national-proof-link { margin-top: auto; font-size: .82rem; }
 .pandeglang-service-page .pandeglang-proof .national-proof-more { margin-top: 14px; font-size: .8rem; }
+.pandeglang-service-page .pandeglang-portfolio-cta { display: flex; justify-content: flex-end; margin-top: 20px; }
+.pandeglang-service-page .pandeglang-portfolio-cta a { display: inline-flex; min-height: 46px; gap: 16px; align-items: center; padding: 11px 14px 11px 20px; border: 1px solid #b9dfed; border-radius: 4px; background: #eaf8fd; color: #0879b1; font-size: .84rem; font-weight: 800; text-decoration: none; transition: border-color .2s ease, background-color .2s ease, color .2s ease; }
+.pandeglang-service-page .pandeglang-portfolio-cta a:hover,
+.pandeglang-service-page .pandeglang-portfolio-cta a:focus-visible { border-color: #06a3da; background: #06a3da; color: #fff; }
+.pandeglang-service-page .pandeglang-portfolio-cta i { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 3px; background: #06a3da; color: #fff; font-size: .9rem; font-style: normal; }
+.pandeglang-service-page .pandeglang-portfolio-cta a:hover i,
+.pandeglang-service-page .pandeglang-portfolio-cta a:focus-visible i { background: #fff; color: #0879b1; }
 
 .pandeglang-service-page .pandeglang-process { padding-block: 46px; }
 .pandeglang-service-page .pandeglang-process .national-process-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
@@ -151,6 +167,8 @@
 
 @media (max-width: 991.98px) {
     .pandeglang-service-page .seo-service-hero { padding-top: 44px; background: linear-gradient(145deg, #f8fbff, #fff 68%); }
+    .pandeglang-service-page .seo-service-hero h1 { color: #10243d; }
+    .pandeglang-service-page .seo-service-hero-copy { color: #5c6e80; }
 }
 
 @media (max-width: 768px) {
@@ -166,6 +184,7 @@
     .pandeglang-service-page .pandeglang-hero-highlight { min-height: 112px; padding: 20px 24px; }
     .pandeglang-service-page .national-service-section.pandeglang-solutions { padding-top: 104px; }
     .pandeglang-service-page .pandeglang-proof .national-proof-grid { grid-template-columns: 1fr; }
+    .pandeglang-service-page .pandeglang-portfolio-cta { justify-content: flex-start; }
     .pandeglang-service-page .pandeglang-process .national-process-grid { grid-template-columns: 1fr; }
     .pandeglang-service-page .pandeglang-process .national-process-card { padding-block: 13px; }
     .pandeglang-service-page .pandeglang-process .national-process-card:not(:last-child) { border-right: 0; border-bottom: 1px solid #dce8f0; }
@@ -192,6 +211,7 @@
     .pandeglang-service-page .pandeglang-faq .seo-service-faq-grid { grid-template-columns: 1fr; }
     .pandeglang-service-page .pandeglang-final-cta .seo-service-button,
     .pandeglang-service-page .pandeglang-final-cta-link { width: 100%; margin: 10px 0 0; justify-content: center; }
+    .pandeglang-service-page .pandeglang-portfolio-cta a { justify-content: space-between; width: 100%; }
     .pandeglang-service-page .pandeglang-final-cta .national-final-cta-copy { gap: 18px; padding: 26px 20px; text-align: center; }
     .pandeglang-service-page .pandeglang-final-actions { flex-direction: column; gap: 4px; }
 }
