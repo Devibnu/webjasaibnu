@@ -83,7 +83,7 @@
         @if (request()->routeIs('services.index'))
             <section class="services-page-hero" aria-labelledby="services-page-title">
                 <div class="services-page-hero-content">
-                    <h1 id="services-page-title">Services</h1>
+                    <h1 id="services-page-title">Jasa Website, Aplikasi, SEO & AI Integration</h1>
                     <nav aria-label="Breadcrumb">
                         <ol class="services-breadcrumb">
                             <li><a href="{{ route('home') }}">Home</a></li>
