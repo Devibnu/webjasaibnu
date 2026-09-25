@@ -41,18 +41,6 @@ class TrackVisitorEvent
             return false;
         }
 
-        if (! Schema::hasTable('visitor_events')) {
-            return false;
-        }
-
-        if ($request->user()?->is_admin) {
-            return false;
-        }
-
-        if ($request->expectsJson() || str_starts_with((string) $request->headers->get('accept'), 'application/json')) {
-            return false;
-        }
-
         if ($request->is([
             'admin',
             'admin/*',
@@ -65,6 +53,18 @@ class TrackVisitorEvent
             'robots.txt',
             'sitemap.xml',
         ])) {
+            return false;
+        }
+
+        if ($request->expectsJson() || str_starts_with((string) $request->headers->get('accept'), 'application/json')) {
+            return false;
+        }
+
+        if ($request->user()?->is_admin) {
+            return false;
+        }
+
+        if (! Schema::hasTable('visitor_events')) {
             return false;
         }
 
