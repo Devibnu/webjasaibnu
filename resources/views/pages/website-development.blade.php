@@ -2644,6 +2644,8 @@
                     <p>{{ $landing['impact_copy'] }}</p>
                     @if ($primarySerangLink)
                         <p>{{ $primarySerangLink['before'] }}<a href="{{ route('website-development-serang') }}">{{ $primarySerangLink['anchor'] }}</a>{{ $primarySerangLink['after'] }}</p>
+                    @elseif(request()->routeIs('website-development-serang'))
+                        <p>Bagi bisnis lokal, pastikan Anda mengetahui <a href="{{ route('insights.show', 'cara-memilih-jasa-pembuatan-website-di-serang') }}">cara memilih jasa pembuatan website di Serang</a> agar mendapatkan partner yang tepat.</p>
                     @endif
                     <div class="seo-service-impact-points">
                         <div class="seo-service-impact-point">
