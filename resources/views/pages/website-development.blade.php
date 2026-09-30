@@ -2300,13 +2300,64 @@
     @endif
 
     @if ($isCilegonLanding)
+        <style>
+            /* Cilegon Specific UI Refinements */
+            .cilegon-process-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin-top: 48px; }
+            .cilegon-process-card { background: #fff; border-radius: 12px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); text-align: left; border: 1px solid #edf2f7; }
+            .cilegon-process-card > span { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: #06a3da; color: #fff; font-weight: 700; font-size: 1.125rem; margin-bottom: 20px; font-style: normal; }
+            .cilegon-process-card h3 { font-size: 1.25rem; margin-bottom: 12px; color: #091e3e; font-weight: 700; }
+            .cilegon-process-card p { font-size: 1rem; color: #6b7280; line-height: 1.6; margin-bottom: 0; }
+
+            .cilegon-faq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 48px; align-items: start; }
+            .cilegon-faq-item { background: #fff; border-radius: 8px; border: 1px solid #edf2f7; box-shadow: 0 2px 10px rgba(0,0,0,0.02); overflow: hidden; }
+            .cilegon-faq-item summary { list-style: none; padding: 20px 24px; cursor: pointer; position: relative; font-weight: 600; color: #091e3e; padding-right: 48px; transition: background 0.2s; }
+            .cilegon-faq-item summary::-webkit-details-marker { display: none; }
+            .cilegon-faq-item summary:hover { background: #f8fafc; }
+            .cilegon-faq-item summary h3 { margin: 0; font-size: 1.1rem; line-height: 1.4; font-weight: 600; }
+            .cilegon-faq-item summary::after { content: "+"; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: #06a3da; transition: transform 0.3s; line-height: 1; }
+            .cilegon-faq-item[open] summary::after { content: "−"; transform: translateY(-50%); }
+            .cilegon-faq-item p { padding: 0 24px 24px; margin: 0; color: #6b7280; line-height: 1.6; }
+
+            .cilegon-final-cta { padding: 64px 0; background: #06a3da; color: #fff; margin-top: 48px; }
+            .cilegon-final-cta-container { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+            .cilegon-final-cta-text { max-width: 640px; }
+            .cilegon-final-cta-text h2 { color: #fff; font-size: clamp(28px, 3vw, 36px); font-weight: 700; margin-bottom: 16px; margin-top: 0; }
+            .cilegon-final-cta-text p { color: rgba(255, 255, 255, 0.9); font-size: 1.125rem; line-height: 1.6; margin-bottom: 16px; }
+            .cilegon-final-cta-text p.cilegon-contextual-link { font-size: 0.95rem; margin-bottom: 0; opacity: 0.9; }
+            .cilegon-final-cta-text p.cilegon-contextual-link a { color: #fff; text-decoration: underline; font-weight: 500; }
+            .cilegon-final-cta-text p.cilegon-contextual-link a:hover { text-decoration: none; }
+
+            .cilegon-final-actions { display: flex; flex-direction: column; gap: 16px; flex-shrink: 0; min-width: 260px; }
+            .cilegon-button { display: inline-flex; align-items: center; justify-content: center; padding: 16px 32px; border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.2s; font-size: 1.05rem; border: none; cursor: pointer; }
+            .cilegon-button-primary { background: #fff; color: #06a3da; }
+            .cilegon-button-primary:hover { background: #f8fafc; color: #058cbb; }
+            .cilegon-button-secondary { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+            .cilegon-button-secondary:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.5); color: #fff; }
+
+            @media (max-width: 991.98px) {
+                .cilegon-process-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                .cilegon-faq-grid { grid-template-columns: 1fr; }
+                .cilegon-final-cta-container { flex-direction: column; align-items: flex-start; gap: 32px; }
+                .cilegon-final-actions { width: 100%; flex-direction: row; flex-wrap: wrap; }
+                .cilegon-button { flex: 1; text-align: center; }
+            }
+            @media (max-width: 767.98px) {
+                .cilegon-process-grid { grid-template-columns: 1fr; gap: 24px; }
+            }
+            @media (max-width: 575.98px) {
+                .cilegon-final-cta { padding: 48px 0; }
+                .cilegon-final-actions { flex-direction: column; }
+                .cilegon-button { width: 100%; }
+            }
+        </style>
+
         <section class="national-conversion-section cilegon-process" aria-labelledby="cilegon-process-title">
             <div class="seo-service-shell">
                 <div class="national-conversion-heading"><h2 id="cilegon-process-title">Proses project dari konsultasi sampai website online</h2></div>
-                <div class="national-process-grid">
-                    <article class="national-process-card"><span><i>01</i></span><h3>Analisis kebutuhan</h3><p>Tujuan, halaman, pengguna, materi, fungsi, dan tanggung jawab setiap pihak dipetakan sebelum produksi.</p></article>
-                    <article class="national-process-card"><span><i>02</i></span><h3>Desain &amp; pengembangan</h3><p>Struktur dan tampilan dikembangkan mengikuti scope, kemudian ditinjau melalui tahapan review yang disepakati.</p></article>
-                    <article class="national-process-card"><span><i>03</i></span><h3>Review &amp; go-live</h3><p>Konten dan fungsi utama diperiksa, perbaikan dalam scope diselesaikan, lalu deployment dilakukan pada lingkungan yang disepakati.</p></article>
+                <div class="cilegon-process-grid">
+                    <article class="cilegon-process-card"><span>01</span><h3>Analisis kebutuhan</h3><p>Tujuan, halaman, pengguna, materi, fungsi, dan tanggung jawab setiap pihak dipetakan sebelum produksi.</p></article>
+                    <article class="cilegon-process-card"><span>02</span><h3>Desain &amp; pengembangan</h3><p>Struktur dan tampilan dikembangkan mengikuti scope, kemudian ditinjau melalui tahapan review yang disepakati.</p></article>
+                    <article class="cilegon-process-card"><span>03</span><h3>Review &amp; go-live</h3><p>Konten dan fungsi utama diperiksa, perbaikan dalam scope diselesaikan, lalu deployment dilakukan pada lingkungan yang disepakati.</p></article>
                 </div>
             </div>
         </section>
@@ -2314,22 +2365,25 @@
         <section class="national-conversion-section alt cilegon-faq" aria-labelledby="cilegon-faq-title">
             <div class="seo-service-shell">
                 <div class="national-conversion-heading"><h2 id="cilegon-faq-title">Pertanyaan tentang jasa website untuk Cilegon</h2></div>
-                <div class="seo-service-faq-grid">
+                <div class="cilegon-faq-grid">
                     @foreach ($cilegonFaqs as [$question, $answer])
-                        <details class="seo-service-faq"><summary><h3>{{ $question }}</h3></summary><p>{{ $answer }}</p></details>
+                        <details class="cilegon-faq-item"><summary><h3>{{ $question }}</h3></summary><p>{{ $answer }}</p></details>
                     @endforeach
                 </div>
             </div>
         </section>
 
-        <section class="national-final-cta cilegon-final-cta" aria-labelledby="cilegon-cta-title">
-            <div class="seo-service-shell national-final-cta-copy">
-                <div><h2 id="cilegon-cta-title">Diskusikan kebutuhan website bisnis Anda</h2>
-                <p>Ceritakan konteks bisnis, halaman yang diinginkan, fungsi utama, materi atau konten yang tersedia, dan target project agar kebutuhan dapat dipetakan secara realistis.</p>
-                <p class="mt-3">Bagi bisnis yang beroperasi di wilayah Banten, lihat juga <a href="{{ route('website-development-banten') }}" style="color: #fff; text-decoration: underline;">jasa pembuatan website Banten</a>.</p>
+        <section class="cilegon-final-cta" aria-labelledby="cilegon-cta-title">
+            <div class="seo-service-shell cilegon-final-cta-container">
+                <div class="cilegon-final-cta-text">
+                    <h2 id="cilegon-cta-title">Diskusikan kebutuhan website bisnis Anda</h2>
+                    <p>Ceritakan konteks bisnis, halaman yang diinginkan, fungsi utama, materi atau konten yang tersedia, dan target project agar kebutuhan dapat dipetakan secara realistis.</p>
+                    <p class="cilegon-contextual-link">Bagi bisnis yang beroperasi di wilayah Banten, lihat juga <a href="{{ route('website-development-banten') }}">jasa pembuatan website Banten</a>.</p>
                 </div>
-                <div class="pandeglang-final-actions"><a class="seo-service-button" href="{{ route('contact') }}" data-national-whatsapp-cta>Konsultasi via WhatsApp</a>
-                <a class="pandeglang-final-cta-link" href="{{ route('portfolio.index') }}">Lihat Portfolio <span aria-hidden="true">→</span></a></div>
+                <div class="cilegon-final-actions">
+                    <a class="cilegon-button cilegon-button-primary" href="{{ route('contact') }}" data-national-whatsapp-cta>Konsultasi via WhatsApp</a>
+                    <a class="cilegon-button cilegon-button-secondary" href="{{ route('portfolio.index') }}">Lihat Portfolio <span aria-hidden="true">→</span></a>
+                </div>
             </div>
         </section>
     @endif
