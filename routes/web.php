@@ -71,6 +71,20 @@ Route::view('/jasa-pembuatan-website-banten', 'pages.website-development', [
         'badge' => 'Website menjadi pusat informasi bisnis yang siap melayani calon pelanggan dari Serang, Cilegon, Tangerang, Pandeglang, Lebak, dan area Banten lainnya.',
     ],
 ])->name('website-development-banten');
+Route::view('/jasa-pembuatan-website-cilegon', 'pages.website-development', [
+    'landing' => [
+        'title' => 'Jasa Pembuatan Website Cilegon | JASAIBNU',
+        'meta_description' => 'Jasa pembuatan website Cilegon untuk bisnis, UMKM, company profile, landing page, dan website layanan yang profesional, mobile-friendly, dan SEO-ready.',
+        'canonical' => url('/jasa-pembuatan-website-cilegon'),
+        'label' => 'Jasa Pembuatan Website Cilegon',
+        'h1' => 'Jasa Pembuatan Website Cilegon untuk Bisnis dan UMKM',
+        'hero_copy' => 'JASAIBNU membantu bisnis dan UMKM di Cilegon membangun website profesional untuk memperkenalkan layanan, produk, portfolio, dan informasi bisnis kepada calon pelanggan secara online.',
+        'impact_label' => 'Website untuk bisnis Cilegon',
+        'impact_title' => 'Website membantu bisnis Cilegon tampil lebih profesional dan lebih mudah ditemukan calon pelanggan.',
+        'impact_copy' => 'Website dapat menjadi pusat informasi resmi bisnis yang memuat layanan, produk, portfolio, alamat, kontak WhatsApp, dan informasi penting lainnya sehingga calon pelanggan dapat mengenal bisnis sebelum menghubungi Anda.',
+        'badge' => 'JASAIBNU melayani kebutuhan bisnis di Cilegon dan area Banten secara remote.',
+    ],
+])->name('website-development-cilegon');
 Route::get('/jasa-pembuatan-website-pandeglang', function () {
     return view('pages.website-development', [
         'landing' => [

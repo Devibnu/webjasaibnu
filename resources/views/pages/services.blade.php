@@ -289,6 +289,7 @@
                         <p>
                             Untuk kebutuhan lokal, JASAIBNU juga menyediakan
                             <a href="{{ route('website-development-serang') }}">Jasa Pembuatan Website di Serang</a>,
+                            <a href="{{ route('website-development-cilegon') }}">Jasa Pembuatan Website Cilegon</a>,
                             <a href="{{ route('website-development-banten') }}">layanan website Banten</a>, dan
                             <a href="{{ route('website-development-umkm-serang') }}">website UMKM Serang</a>
                             dengan arah kebutuhan yang berbeda.

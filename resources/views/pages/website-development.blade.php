@@ -34,6 +34,7 @@
     $primarySerangLink = $primarySerangLinks[request()->route()?->getName()] ?? null;
     $isNationalLanding = request()->routeIs('website-development');
     $isBantenLanding = request()->routeIs('website-development-banten');
+    $isCilegonLanding = request()->routeIs('website-development-cilegon');
     $isPandeglangLanding = request()->routeIs('website-development-pandeglang');
     $isSerangMurahLanding = request()->routeIs('website-development-serang-murah');
     $isConversionLanding = $isNationalLanding || $isBantenLanding;
@@ -42,6 +43,13 @@
         ? \App\Models\PortfolioItem::with('category')->published()->ordered()->limit(3)->get()
         : $nationalPortfolioItems;
     $pandeglangPortfolioItems = $pandeglangPortfolioItems ?? collect();
+    $cilegonFaqs = [
+        ['Apakah JASAIBNU melayani pembuatan website untuk bisnis di Cilegon?', 'Ya. Kebutuhan website dapat dikonsultasikan dan dikerjakan secara remote sesuai kebutuhan bisnis, materi, fungsi, dan ruang lingkup project.'],
+        ['Jenis website apa yang dapat dibuat untuk bisnis Cilegon?', 'Company profile, website UMKM, landing page, katalog produk, ecommerce, website layanan, CMS, dan sistem web yang dapat dikembangkan sesuai kebutuhan.'],
+        ['Apakah konsultasi harus dilakukan langsung di Cilegon?', 'Tidak harus. Konsultasi, peninjauan materi, desain, development, testing, dan koordinasi project dapat dilakukan secara remote.'],
+        ['Apakah website bisa terhubung ke WhatsApp?', 'Ya. Website dapat menyediakan CTA dan jalur kontak WhatsApp agar calon pelanggan lebih mudah menghubungi bisnis.'],
+        ['Apakah website Cilegon sudah SEO-ready?', 'Website dapat disiapkan dengan fondasi SEO teknis seperti metadata, heading, canonical, sitemap, internal linking, dan struktur halaman yang sesuai. Ranking Google tidak dijamin.'],
+    ];
     $pandeglangFaqs = [
         ['Apakah JASAIBNU dapat melayani pembuatan website untuk kebutuhan bisnis di Pandeglang?', 'Bisa. Konsultasi dan pelaksanaan project dapat dikoordinasikan secara remote sesuai kebutuhan, materi, fungsi, dan ruang lingkup website yang disepakati.'],
         ['Apakah konsultasi harus dilakukan secara langsung?', 'Tidak harus. Diskusi kebutuhan, peninjauan materi, review desain, dan koordinasi pengembangan dapat dilakukan secara remote tanpa mengharuskan pertemuan langsung.'],
@@ -89,6 +97,25 @@
             'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq[1]],
         ])->values()->all(),
     ];
+    $cilegonCanonical = route('website-development-cilegon');
+    $cilegonServiceSchema = [
+        '@context' => 'https://schema.org', '@type' => 'Service',
+        '@id' => $cilegonCanonical . '#service',
+        'name' => 'Jasa Pembuatan Website Cilegon',
+        'description' => $landing['meta_description'] ?? 'Jasa pembuatan website Cilegon profesional.',
+        'url' => $cilegonCanonical,
+        'serviceType' => 'Jasa pembuatan website',
+        'provider' => ['@id' => rtrim(route('home'), '/') . '#professional-service'],
+        'areaServed' => ['@type' => 'AdministrativeArea', 'name' => 'Kota Cilegon'],
+    ];
+    $cilegonFaqSchema = [
+        '@context' => 'https://schema.org', '@type' => 'FAQPage',
+        '@id' => $cilegonCanonical . '#faq',
+        'mainEntity' => collect($cilegonFaqs)->map(fn ($faq) => [
+            '@type' => 'Question', 'name' => $faq[0],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq[1]],
+        ])->values()->all(),
+    ];
     $pandeglangCanonical = route('website-development-pandeglang');
     $pandeglangServiceSchema = [
         '@context' => 'https://schema.org', '@type' => 'Service',
@@ -113,7 +140,7 @@
 @section('title', $landing['title'])
 @section('meta_description', $landing['meta_description'])
 @section('canonical', $landing['canonical'])
-@section('body_class', 'services-page startup2-home' . ($isNationalLanding ? ' national-conversion-page' : '') . ($isBantenLanding ? ' banten-conversion-page' : '') . ($isPandeglangLanding ? ' pandeglang-service-page' : '') . ($isSerangMurahLanding ? ' serang-murah-simple-page' : ''))
+@section('body_class', 'services-page startup2-home' . ($isNationalLanding ? ' national-conversion-page' : '') . ($isBantenLanding ? ' banten-conversion-page' : '') . ($isPandeglangLanding ? ' pandeglang-service-page' : '') . ($isCilegonLanding ? ' cilegon-service-page' : '') . ($isSerangMurahLanding ? ' serang-murah-simple-page' : ''))
 
 @push('head')
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2063,6 +2090,9 @@
     @elseif ($isPandeglangLanding)
         <script type="application/ld+json">@json($pandeglangServiceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
         <script type="application/ld+json">@json($pandeglangFaqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
+    @elseif ($isCilegonLanding)
+        <script type="application/ld+json">@json($cilegonServiceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
+        <script type="application/ld+json">@json($cilegonFaqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
     @endif
 @endpush
 
@@ -2269,6 +2299,41 @@
         </section>
     @endif
 
+    @if ($isCilegonLanding)
+        <section class="national-conversion-section cilegon-process" aria-labelledby="cilegon-process-title">
+            <div class="seo-service-shell">
+                <div class="national-conversion-heading"><h2 id="cilegon-process-title">Proses project dari konsultasi sampai website online</h2></div>
+                <div class="national-process-grid">
+                    <article class="national-process-card"><span><i>01</i></span><h3>Analisis kebutuhan</h3><p>Tujuan, halaman, pengguna, materi, fungsi, dan tanggung jawab setiap pihak dipetakan sebelum produksi.</p></article>
+                    <article class="national-process-card"><span><i>02</i></span><h3>Desain &amp; pengembangan</h3><p>Struktur dan tampilan dikembangkan mengikuti scope, kemudian ditinjau melalui tahapan review yang disepakati.</p></article>
+                    <article class="national-process-card"><span><i>03</i></span><h3>Review &amp; go-live</h3><p>Konten dan fungsi utama diperiksa, perbaikan dalam scope diselesaikan, lalu deployment dilakukan pada lingkungan yang disepakati.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="national-conversion-section alt cilegon-faq" aria-labelledby="cilegon-faq-title">
+            <div class="seo-service-shell">
+                <div class="national-conversion-heading"><h2 id="cilegon-faq-title">Pertanyaan tentang jasa website untuk Cilegon</h2></div>
+                <div class="seo-service-faq-grid">
+                    @foreach ($cilegonFaqs as [$question, $answer])
+                        <details class="seo-service-faq"><summary><h3>{{ $question }}</h3></summary><p>{{ $answer }}</p></details>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        <section class="national-final-cta cilegon-final-cta" aria-labelledby="cilegon-cta-title">
+            <div class="seo-service-shell national-final-cta-copy">
+                <div><h2 id="cilegon-cta-title">Diskusikan kebutuhan website bisnis Anda</h2>
+                <p>Ceritakan konteks bisnis, halaman yang diinginkan, fungsi utama, materi atau konten yang tersedia, dan target project agar kebutuhan dapat dipetakan secara realistis.</p>
+                <p class="mt-3">Bagi bisnis yang beroperasi di wilayah Banten, lihat juga <a href="{{ route('website-development-banten') }}" style="color: #fff; text-decoration: underline;">jasa pembuatan website Banten</a>.</p>
+                </div>
+                <div class="pandeglang-final-actions"><a class="seo-service-button" href="{{ route('contact') }}" data-national-whatsapp-cta>Konsultasi via WhatsApp</a>
+                <a class="pandeglang-final-cta-link" href="{{ route('portfolio.index') }}">Lihat Portfolio <span aria-hidden="true">→</span></a></div>
+            </div>
+        </section>
+    @endif
+
     @if ($isSerangMurahLanding)
         @php
             $serangMurahFaqs = [
@@ -2417,7 +2482,7 @@
                         <summary>Informasi lengkap layanan dan kolaborasi</summary>
                         @if ($isBantenLanding)
                         <p><strong>{{ $landing['impact_title'] }}</strong> {{ $landing['impact_copy'] }}</p>
-                        <p>Website menjadi pusat informasi bisnis yang siap melayani calon pelanggan dari Serang, Cilegon, Tangerang, <a href="{{ route('website-development-pandeglang') }}">Pandeglang</a>, Lebak, dan area Banten lainnya.</p>
+                        <p>Website menjadi pusat informasi bisnis yang siap melayani calon pelanggan dari Serang, <a href="{{ route('website-development-cilegon') }}">Cilegon</a>, Tangerang, <a href="{{ route('website-development-pandeglang') }}">Pandeglang</a>, Lebak, dan area Banten lainnya.</p>
                         @if ($primarySerangLink)
                             <p>{{ $primarySerangLink['before'] }}<a href="{{ route('website-development-serang') }}">{{ $primarySerangLink['anchor'] }}</a>{{ $primarySerangLink['after'] }}</p>
                         @endif
@@ -2615,7 +2680,7 @@
         </section>
     @endif
 
-    @if (!$isConversionLanding && !$isSerangMurahLanding && !$isPandeglangLanding)
+    @if (!$isConversionLanding && !$isSerangMurahLanding && !$isPandeglangLanding && !$isCilegonLanding)
     <section class="seo-service-impact" aria-labelledby="website-impact-title">
         <div class="seo-service-shell">
             <div class="seo-service-impact-grid">
@@ -2635,6 +2700,7 @@
                         <p>{{ $primarySerangLink['before'] }}<a href="{{ route('website-development-serang') }}">{{ $primarySerangLink['anchor'] }}</a>{{ $primarySerangLink['after'] }}</p>
                     @elseif(request()->routeIs('website-development-serang'))
                         <p>Bagi bisnis lokal, pastikan Anda mengetahui <a href="{{ route('insights.show', 'cara-memilih-jasa-pembuatan-website-di-serang') }}">cara memilih jasa pembuatan website di Serang</a> agar mendapatkan partner yang tepat.</p>
+                        <p>Untuk kebutuhan di wilayah sekitarnya, kami juga melayani <a href="{{ route('website-development-cilegon') }}">jasa pembuatan website Cilegon</a>.</p>
                     @endif
                     <div class="seo-service-impact-points">
                         <div class="seo-service-impact-point">
