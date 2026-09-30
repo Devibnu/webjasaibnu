@@ -39,7 +39,10 @@
 
     @if($siteSettings && !empty($siteSettings->favicon_path))
         <link rel="icon" href="{{ asset('storage/' . $siteSettings->favicon_path) }}">
+    @else
+        <link rel="icon" href="{{ asset('favicon.png') }}">
     @endif
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
 
     @php
         $shouldSplitHomeAssets = request()->routeIs('home') && ! app()->runningUnitTests();
